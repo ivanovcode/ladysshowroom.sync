@@ -88,7 +88,7 @@ foreach($rows as $row){
 		) VALUES (
 			NULL, 
 			".$row['size_id'].", 
-			".$row['product_id'].", 
+			".$row['variety_id'].", 
 			5, 
 			".$row['amount']."
 		);
