@@ -2,10 +2,13 @@
 $p = parse_ini_file('sync.ini', true);
 $db = mysqli_connect($p['db']['host'], $p['db']['user'], $p['db']['password'], $p['db']['dbname']) or require('install.php'); 
 $showcase_db = mysqli_connect($p['showcase']['host'], $p['showcase']['user'], $p['showcase']['password'], $p['showcase']['dbname']) or require('install.php');
+
 mysqli_query($db, "set names utf8");
 mysqli_query($db, "SET sql_mode = ''");
 mysqli_query($showcase_db, "set names utf8");
 mysqli_query($showcase_db, "SET sql_mode = ''");
+
+$rows = [];
 $rows = mysqli_query($db, "
 	SELECT 
 	product.id,
@@ -22,9 +25,7 @@ $rows = mysqli_query($db, "
 	WHERE product.visible = 1 
 	AND product.group_id = 1468
 ");
-
 mysqli_query($showcase_db, "TRUNCATE TABLE `varieties`");
-$rows = [];
 foreach($rows as $row){
 	mysqli_query($showcase_db, "
 	        INSERT INTO `varieties` (
@@ -67,7 +68,7 @@ foreach($rows as $row){
 	");
 }
 
-mysqli_query($showcase_db, "TRUNCATE TABLE `products_sizes`");
+
 $rows = [];
 $rows = mysqli_query($db, "
 	SELECT 
@@ -77,6 +78,7 @@ $rows = mysqli_query($db, "
 		sizes.amount
 	FROM `size_variety` AS sizes
 ");
+mysqli_query($showcase_db, "TRUNCATE TABLE `products_sizes`");
 foreach($rows as $row){
 	mysqli_query($showcase_db, "
 		INSERT INTO `products_sizes` (
