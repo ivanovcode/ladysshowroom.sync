@@ -23,7 +23,6 @@ $rows = mysqli_query($db, "
 	LEFT JOIN groups ON groups.id = product.group_id
 	LEFT JOIN categories ON categories.id = groups.category_id
 	WHERE product.visible = 1 
-	AND product.group_id = 1468
 ");
 mysqli_query($showcase_db, "TRUNCATE TABLE `varieties`");
 foreach($rows as $row){
