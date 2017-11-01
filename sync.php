@@ -22,7 +22,9 @@ $rows = mysqli_query($db, "
 	WHERE product.visible = 1 
 	AND product.group_id = 1468
 ");
+
 mysqli_query($showcase_db, "TRUNCATE TABLE `varieties`");
+$rows = [];
 foreach($rows as $row){
 	mysqli_query($showcase_db, "
 	        INSERT INTO `varieties` (
@@ -64,6 +66,35 @@ foreach($rows as $row){
         	);
 	");
 }
+
+mysqli_query($showcase_db, "TRUNCATE TABLE `products_sizes`");
+$rows = [];
+$rows = mysqli_query($db, "
+	SELECT 
+		sizes.id,
+		sizes.size_id,
+		sizes.variety_id,
+		sizes.amount
+	FROM `size_variety` AS sizes
+");
+foreach($rows as $row){
+	mysqli_query($showcase_db, "
+		INSERT INTO `products_sizes` (
+			`id`, 
+			`size_id`, 
+			`product_id`, 
+			`showroom_id`, 
+			`amount`
+		) VALUES (
+			NULL, 
+			".$row['size_id'].", 
+			".$row['product_id'].", 
+			5, 
+			".$row['amount']."
+		);
+	");
+}
+
 //mysqli_query($showcase_db, "DROP TABLE `products_sizes`");
 //mysqli_query($db, "RENAME TABLE `admin.ladyshowroom`.`products_sizes` TO `ladyshowroom`.`products_sizes`");
 mysqli_close($db);
