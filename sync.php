@@ -47,7 +47,7 @@ foreach($rows as $row){
 	                `updated_at`, 
 	                `sortPos`
 	        ) VALUES (
-	                NULL, 
+	                ".$row['id'].", 
 	                '".$row['name']."', 
 	                '".$row['title']."', 
 	                '".$row['title']."', 
@@ -97,6 +97,8 @@ foreach($rows as $row){
 	");
 }
 
+mysqli_query($showcase_db, "CREATE TABLE `ladyshowroom`.`photos` SELECT * FROM `admin.ladyshowroom`.`photos`");
+mysqli_query($db, "DROP TABLE `ladyshowroom`.`photos`; CREATE TABLE `ladyshowroom`.`photos` SELECT * FROM `admin.ladyshowroom`.`photos`");
 //mysqli_query($showcase_db, "DROP TABLE `products_sizes`");
 //mysqli_query($db, "RENAME TABLE `admin.ladyshowroom`.`products_sizes` TO `ladyshowroom`.`products_sizes`");
 mysqli_close($db);
