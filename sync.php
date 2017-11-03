@@ -18,7 +18,8 @@ $rows = mysqli_query($db, "
 	product.name,
 	product.title,
 	product.cost,
-	product.visible
+	product.visible,
+	product.article 
 	FROM 
 	`varieties` as product 
 	LEFT JOIN groups ON groups.id = product.group_id
@@ -49,7 +50,7 @@ foreach($rows as $row){
 	        ) VALUES (
 	                ".$row['id'].", 
 	                '".$row['name']."', 
-	                '".$row['title']."', 
+	                '".$row['article']."', 
 	                '".$row['title']."', 
 	                ".$row['category_id'].", 
 	                ".$row['color_id'].", 
@@ -86,6 +87,7 @@ $rows = mysqli_query($db, "
 	    WHERE groups.id = product.group_id
 	    LIMIT 1
 	)
+	WHERE product.id = 244
 ");
 mysqli_query($showcase_db, "TRUNCATE TABLE `products_sizes`");
 foreach($rows as $row){
