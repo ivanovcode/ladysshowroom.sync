@@ -17,7 +17,8 @@ $rows = mysqli_query($db, "
 	product.group_id,
 	product.name,
 	product.title,
-	product.cost
+	product.cost,
+	product.visible
 	FROM 
 	`varieties` as product 
 	LEFT JOIN groups ON groups.id = product.group_id
@@ -53,7 +54,7 @@ foreach($rows as $row){
 	                ".$row['color_id'].", 
 	                ".$row['group_id'].", 
 	                1, 
-	                1, 
+	                ".$row['visible'].", 
 	                'Test_product_meta_description', 
 	                ".$row['cost'].", 
 	                0, 
@@ -95,6 +96,7 @@ foreach($rows as $row){
 	");
 }
 
+mysqli_query($showcase_db, "CREATE TABLE `ladyshowroom`.`photos` SELECT * FROM `admin.ladyshowroom`.`photos`");
 mysqli_query($db, "DROP TABLE `ladyshowroom`.`photos`; CREATE TABLE `ladyshowroom`.`photos` SELECT * FROM `admin.ladyshowroom`.`photos`; UPDATE `ladyshowroom`.`photos` SET `photable_type` = 'product_main';");
 
 //mysqli_query($showcase_db, "DROP TABLE `products_sizes`");
