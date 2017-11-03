@@ -86,7 +86,6 @@ $rows = mysqli_query($db, "
 	    WHERE groups.id = product.group_id
 	    LIMIT 1
 	)
-	WHERE groups.showroom_id = 3
 ");
 mysqli_query($showcase_db, "TRUNCATE TABLE `products_sizes`");
 foreach($rows as $row){
