@@ -22,7 +22,6 @@ $rows = mysqli_query($db, "
 	`varieties` as product 
 	LEFT JOIN groups ON groups.id = product.group_id
 	LEFT JOIN categories ON categories.id = groups.category_id
-	WHERE product.visible = 1 
 ");
 mysqli_query($showcase_db, "TRUNCATE TABLE `varieties`");
 foreach($rows as $row){
@@ -96,7 +95,6 @@ foreach($rows as $row){
 	");
 }
 
-mysqli_query($showcase_db, "CREATE TABLE `ladyshowroom`.`photos` SELECT * FROM `admin.ladyshowroom`.`photos`");
 mysqli_query($db, "DROP TABLE `ladyshowroom`.`photos`; CREATE TABLE `ladyshowroom`.`photos` SELECT * FROM `admin.ladyshowroom`.`photos`; UPDATE `ladyshowroom`.`photos` SET `photable_type` = 'product_main';");
 
 //mysqli_query($showcase_db, "DROP TABLE `products_sizes`");
