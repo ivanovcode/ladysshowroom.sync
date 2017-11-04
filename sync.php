@@ -110,7 +110,7 @@ foreach($rows as $row){
 
 mysqli_query($db, "DROP TABLE `ladyshowroom`.`photos`;");
 mysqli_query($db, "CREATE TABLE `ladyshowroom`.`photos` SELECT * FROM `admin.ladyshowroom`.`photos`;");
-mysqli_query($db, "UPDATE `ladyshowroom`.`photos` SET `photable_type` = 'product_main' WHERE `photable_type` = 'App\Variety';");
+mysqli_query($db, "UPDATE `ladyshowroom`.`photos` SET `photable_type` = 'product_main' WHERE `photable_type` LIKE '%Variety%';");
 
 //mysqli_query($showcase_db, "DROP TABLE `products_sizes`");
 //mysqli_query($db, "RENAME TABLE `admin.ladyshowroom`.`products_sizes` TO `ladyshowroom`.`products_sizes`");
