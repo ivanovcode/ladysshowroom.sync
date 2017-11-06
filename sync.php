@@ -9,6 +9,7 @@ mysqli_query($showcase_db, "set names utf8");
 mysqli_query($showcase_db, "SET sql_mode = ''");
 
 $rows = [];
+mysqli_query($db, "UPDATE varieties SET price = cost");
 $rows = mysqli_query($db, "
 	SELECT 
 	product.id,
