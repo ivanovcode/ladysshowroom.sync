@@ -21,7 +21,8 @@ $rows = mysqli_query($db, "
 	product.cost,
 	product.visible,
 	product.article,
-	product.meta_description
+	product.meta_description,
+	product.sortPos
 	FROM 
 	`varieties` as product 
 	LEFT JOIN groups ON groups.id = product.group_id
@@ -66,7 +67,7 @@ foreach($rows as $row){
 	                NULL, 
         	        NULL, 
 	                NULL, 
-                	1
+                	".$row['sortPos']."
         	);
 	");
 }
