@@ -42,7 +42,7 @@ $rows = mysqli_query($db, "
 mysqli_query($showcase_db, "TRUNCATE TABLE `ladyshowroom`.`varieties`");
 $x=0;
 foreach($rows as $row){
-	$x++;
+	$x=$x+1;
 	$result = mysqli_query($showcase_db, "
 	        INSERT INTO `ladyshowroom`.`varieties` (
 	                `id`, 
