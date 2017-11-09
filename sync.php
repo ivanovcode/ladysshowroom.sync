@@ -43,7 +43,7 @@ mysqli_query($showcase_db, "TRUNCATE TABLE `ladyshowroom`.`varieties`");
 $x=0;
 foreach($rows as $row){
 	$x++;
-	mysqli_query($showcase_db, "
+	$result = mysqli_query($showcase_db, "
 	        INSERT INTO `ladyshowroom`.`varieties` (
 	                `id`, 
         	        `name`, 
@@ -82,6 +82,7 @@ foreach($rows as $row){
                 	".$row['sortPos']."
         	);
 	");
+	echo $result;
 }
 echo strval($x).'/'.strval(count($rows));
 
