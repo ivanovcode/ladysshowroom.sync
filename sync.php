@@ -84,7 +84,7 @@ foreach($rows as $row){
 	");
 	echo $result;
 }
-echo strval($x).'/'.strval(mysql_num_rows($rows));
+echo strval($x).'/'.strval(count($rows));
 
 $rows = [];
 $rows = mysqli_query($db, "
