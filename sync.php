@@ -79,7 +79,7 @@ foreach($rows as $row){
 	                NULL, 
         	        NULL, 
 	                NULL, 
-                	".$row['sortPos']."
+                	".strval(intval($row['sortPos'])>0 ? $row['sortPos'] : "0")."
         	);
 	");
 	echo $result;
