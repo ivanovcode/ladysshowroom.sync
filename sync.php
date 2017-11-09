@@ -10,12 +10,12 @@ mysqli_query($showcase_db, "SET sql_mode = ''");
 
 mysqli_query($db, "TRUNCATE `admin.ladyshowroom`.`clients`");
 mysqli_query($db, "TRUNCATE `admin.ladyshowroom`.`orders`");
-mysqli_query($db, "TRUNCATE `admin.ladyshowroom`.`order_size_variet`");
+mysqli_query($db, "TRUNCATE `admin.ladyshowroom`.`order_size_variety`");
 mysqli_query($db, "TRUNCATE `admin.ladyshowroom`.`size_variety`");
 
 mysqli_query($showcase_db, "TRUNCATE `ladyshowroom`.`clients`");
 mysqli_query($showcase_db, "TRUNCATE `ladyshowroom`.`orders`");
-mysqli_query($showcase_db, "TRUNCATE `ladyshowroom`.`order_size_variet`");
+mysqli_query($showcase_db, "TRUNCATE `ladyshowroom`.`order_size_variety`");
 mysqli_query($showcase_db, "TRUNCATE `ladyshowroom`.`products_sizes`");
 
 $rows = [];
