@@ -37,7 +37,7 @@ $rows = mysqli_query($db, "
 	`admin.ladyshowroom`.`varieties` as product 
 	LEFT JOIN groups ON groups.id = product.group_id
 	LEFT JOIN categories ON categories.id = groups.category_id
-	WHERE groups.deleted_at IS NOT NULL
+	WHERE groups.deleted_at IS NULL
 ");
 
 mysqli_query($showcase_db, "TRUNCATE TABLE `ladyshowroom`.`varieties`");
@@ -102,7 +102,7 @@ $rows = mysqli_query($db, "
 	    groups.id
 	    FROM groups
 	    WHERE groups.id = product.group_id 
-	    AND groups.deleted_at IS NOT NULL
+	    AND groups.deleted_at IS NULL
 	    LIMIT 1
 	)
 ");
