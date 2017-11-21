@@ -8,9 +8,9 @@ mysqli_query($db, "SET sql_mode = ''");
 mysqli_query($showcase_db, "set names utf8");
 mysqli_query($showcase_db, "SET sql_mode = ''");
 
-mysqli_query($db, "TRUNCATE `admin.ladyshowroom`.`clients`");
+/*mysqli_query($db, "TRUNCATE `admin.ladyshowroom`.`clients`");
 mysqli_query($db, "TRUNCATE `admin.ladyshowroom`.`orders`");
-mysqli_query($db, "TRUNCATE `admin.ladyshowroom`.`order_size_variety`");
+mysqli_query($db, "TRUNCATE `admin.ladyshowroom`.`order_size_variety`");*/
 //mysqli_query($db, "TRUNCATE `admin.ladyshowroom`.`size_variety`");
 
 mysqli_query($showcase_db, "TRUNCATE `ladyshowroom`.`clients`");
