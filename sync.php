@@ -32,7 +32,8 @@ $rows = mysqli_query($db, "
 	product.visible,
 	product.article,
 	product.meta_description,
-	product.sortPos
+	product.sortPos,
+	groups.visible AS group_visible
 	FROM 
 	`admin.ladyshowroom`.`varieties` as product 
 	LEFT JOIN groups ON groups.id = product.group_id
@@ -72,7 +73,7 @@ foreach($rows as $row){
 	                ".$row['color_id'].", 
 	                ".$row['group_id'].", 
 	                1, 
-	                ".$row['visible'].", 
+	                ".$row['group_visible'].", 
 	                '".$row['meta_description']."', 
 	                ".$row['cost'].", 
 	                ".$row['cost'].", 
