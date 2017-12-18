@@ -1,36 +1,95 @@
 <?php
-$p = parse_ini_file('sync.ini', true);
-$ladyshowroom = mysqli_connect($p['ladyshowroom']['host'], $p['ladyshowroom']['user'], $p['ladyshowroom']['password'], $p['ladyshowroom']['dbname']) or require('install.php'); 
-$iampijama = mysqli_connect($p['iampijama']['host'], $p['iampijama']['user'], $p['iampijama']['password'], $p['iampijama']['dbname']) or require('install.php');
-mysqli_query($ladyshowroom, "set names utf8");
-mysqli_query($ladyshowroom, "SET sql_mode = ''");
-mysqli_query($iampijama, "set names utf8");
-mysqli_query($iampijama, "SET sql_mode = ''");
+error_reporting(0);
+function logPush($data){
+	$fp = fopen('sync.log', 'a');
+	fwrite($fp, $data . PHP_EOL);
+	fclose($fp);
+}
+function convert($rows) {
+	if ($rows) {
+		$arr = [];
+		foreach($rows as $row){
+			$arr[$row['article']] = [];
+			$sizes = explode("||", $row['sizes']);
+			foreach($sizes as $size){
+				$size = explode("::", $size);
+				$arr[$row['article']][$size[0]] = $size[1];
+			}
+			unset($sizes);
+		}
+		return $arr;
+	} else {
+		return 0;
+	}
+}
+function connect($db, $p) {
+	$connect = mysqli_connect($p[$db]['host'], $p[$db]['user'], $p[$db]['password'], $p[$db]['dbname']) or require('install.php'); 
+	mysqli_query($connect, "set names utf8");
+	mysqli_query($connect, "SET sql_mode = ''");
+	return $connect;
+}
+function key_compare_func($a, $b)
+{
+    if ($a === $b) {
+        return 0;
+    }
+    return ($a > $b)? 1:-1;
+}
+function pj($connect){
+	$rows = mysqli_query($connect, "
+		SELECT 
+		products.id,
+		articles.`value` AS article,
+		sizes.`value` AS sizes	
+		FROM 
+		`modx_site_content` AS products
+		LEFT JOIN `modx_site_tmplvar_contentvalues` AS sizes ON sizes.`contentid` = products.id AND sizes.tmplvarid = 27
+		LEFT JOIN `modx_site_tmplvar_contentvalues` AS articles ON articles.`contentid` = products.id AND articles.tmplvarid = 15
+		WHERE `parent` IN (11,12,13,14)
+		AND products.id NOT IN(91,36,93,100)
+		ORDER BY articles.`value` ASC
+		LIMIT 500
+	");
 
-$rows = mysqli_query($iampijama, "
-	SELECT 
-	products.id,
-	articles.`value` AS article,
-	sizes.`value` AS sizes	
-	FROM 
-	`modx_site_content` AS products
-	LEFT JOIN `modx_site_tmplvar_contentvalues` AS sizes ON sizes.`contentid` = products.id AND sizes.tmplvarid = 27
-	LEFT JOIN `modx_site_tmplvar_contentvalues` AS articles ON articles.`contentid` = products.id AND articles.tmplvarid = 15
-	WHERE `parent` IN (11,12,13,14)
-	AND products.id NOT IN(91,36,93,100)
-	ORDER BY articles.`value` ASC
-	LIMIT 500
-");
-print_r(explode("||", $rows[1]['sizes']));
+	return convert($rows);	
+}
+function ls($connect){
+	$rows = mysqli_query($connect, "
+		SELECT
+		products.id,
+		products.article,
+		GROUP_CONCAT(CONCAT_WS('::', sizes.size_id, IF(sizes.amount IS NULL, 0, sizes.amount)) SEPARATOR '||') as sizes
+		FROM
+		varieties AS products
+		LEFT JOIN `size_variety` AS sizes ON sizes.variety_id = products.id
+		WHERE products.article IN('IAMP0034L','IAMP0035M','IAMP0041L','IAMP0036P','IAMP0042M','IAMP0043P','IAMP0011P','IAMP0012M','IAMP0010B','IAMP0014P','IAMP0009L','IAMP0001L','IAMP0004B','IAMP0003B','IAMP0002B','IAMP0005L','IAMP0006B','IAMP0007P','0008','IAMP0033G','IAMP0057G','IAMP0016M','IAMP0015L','IAMP0058L','IAMP0059B','IAMP0060G','IAMP0017P','IAMP0023G','IAMP0018L','IAMP0019M','IAMP0020P','IAMP0021P','IAMP0013E','IAMP0044B','IAMP0046B','IAMP0046T','IAMP0047P','IAMP0048L','IAMP0049E','IAMP0050M','IAMP0051M','IAMP0052T','IAMP0053L','IAMP0054E','IAMP0055P','IAMP0061B','IAMP0062R','IAMP0037T','IAMP0038P','IAMP0039E','IAMP0040B','IAMP0056B','IAMP0025B','IAMP0027E','IAMP0029P','IAMP0032M','0009','123','IAMP0022T','IAMP0024P','IAMP0026P','IAMP0028B','IAMP0030M','IAMP0031T','IAMP0045P')
+		AND sizes.size_id IS NOT NULL
+		GROUP BY products.article
+		ORDER BY products.article ASC
+	");
 
-
-
-foreach($rows as $row){
-
+	return convert($rows);	
 }
 
-mysqli_close($ladyshowroom);
-mysqli_close($iampijama);
+
+$config = parse_ini_file('sync.ini', true);
+$ls = connect('ladyshowroom', $config);
+$pj = connect('iampijama', $config);
+$p = pj($pj);
+$l = ls($ls);
+$result = array_diff_uassoc($p, $l, "key_compare_func");
+
+
+logPush('#pijams'); 
+logPush(print_r($p, true)); 
+logPush('#ladyshowroom'); 
+logPush(print_r($l, true)); 
+logPush('#result'); 
+logPush(print_r($result, true)); 
+
+
+mysqli_close($ls);
+mysqli_close($pj);
 die();
 
 
