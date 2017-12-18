@@ -1,7 +1,7 @@
 <?php
 $p = parse_ini_file('sync.ini', true);
-$ladyshowroom = mysqli_connect($p['ladyshowroom']['host'], $p['db']['user'], $p['db']['password'], $p['db']['dbname']) or require('install.php'); 
-$iampijama = mysqli_connect($p['iampijama']['host'], $p['showcase']['user'], $p['showcase']['password'], $p['showcase']['dbname']) or require('install.php');
+$ladyshowroom = mysqli_connect($p['ladyshowroom']['host'], $p['ladyshowroom']['user'], $p['ladyshowroom']['password'], $p['ladyshowroom']['dbname']) or require('install.php'); 
+$iampijama = mysqli_connect($p['iampijama']['host'], $p['iampijama']['user'], $p['iampijama']['password'], $p['iampijama']['dbname']) or require('install.php');
 die();
 mysqli_query($db, "set names utf8");
 mysqli_query($db, "SET sql_mode = ''");
