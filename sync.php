@@ -2,11 +2,38 @@
 $p = parse_ini_file('sync.ini', true);
 $ladyshowroom = mysqli_connect($p['ladyshowroom']['host'], $p['ladyshowroom']['user'], $p['ladyshowroom']['password'], $p['ladyshowroom']['dbname']) or require('install.php'); 
 $iampijama = mysqli_connect($p['iampijama']['host'], $p['iampijama']['user'], $p['iampijama']['password'], $p['iampijama']['dbname']) or require('install.php');
+mysqli_query($ladyshowroom, "set names utf8");
+mysqli_query($ladyshowroom, "SET sql_mode = ''");
+mysqli_query($iampijama, "set names utf8");
+mysqli_query($iampijama, "SET sql_mode = ''");
+
+$rows = mysqli_query($iampijama, "
+	SELECT 
+	products.id,
+	articles.`value` AS article,
+	sizes.`value` AS sizes	
+	FROM 
+	`modx_site_content` AS products
+	LEFT JOIN `modx_site_tmplvar_contentvalues` AS sizes ON sizes.`contentid` = products.id AND sizes.tmplvarid = 27
+	LEFT JOIN `modx_site_tmplvar_contentvalues` AS articles ON articles.`contentid` = products.id AND articles.tmplvarid = 15
+	WHERE `parent` IN (11,12,13,14)
+	AND products.id NOT IN(91,36,93,100)
+	ORDER BY articles.`value` ASC
+	LIMIT 500
+");
+print_r(explode("||", $rows[1]['sizes']));
+
+
+
+foreach($rows as $row){
+
+}
+
+mysqli_close($ladyshowroom);
+mysqli_close($iampijama);
 die();
-mysqli_query($db, "set names utf8");
-mysqli_query($db, "SET sql_mode = ''");
-mysqli_query($showcase_db, "set names utf8");
-mysqli_query($showcase_db, "SET sql_mode = ''");
+
+
 
 /*mysqli_query($db, "TRUNCATE `admin.ladyshowroom`.`clients`");
 mysqli_query($db, "TRUNCATE `admin.ladyshowroom`.`orders`");
@@ -132,6 +159,5 @@ mysqli_query($db, "UPDATE `ladyshowroom`.`photos` SET `photable_type` = 'product
 
 //mysqli_query($showcase_db, "DROP TABLE `products_sizes`");
 //mysqli_query($db, "RENAME TABLE `admin.ladyshowroom`.`products_sizes` TO `ladyshowroom`.`products_sizes`");
-mysqli_close($db);
-mysqli_close($showcase_db);
+
 ?>
