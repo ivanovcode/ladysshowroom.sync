@@ -18,27 +18,40 @@ function connect($db, $p) {
 function disconnect($db){
     mysqli_close($db);
 }
-
-function createGroup($db, $row){
-    $result = mysqli_query($db, "
-        INSERT INTO groups (id, title) VALUES (NULL, '$row[1]') ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id);
-	");
-    return mysqli_insert_id($db);
+function getSizes($db){
+    $query = "
+        SELECT
+        s.type,
+        s.id,
+        s.value
+        FROM (
+              SELECT id, rus value, 'rus' type FROM sizes
+              union all
+              SELECT id, eur value, 'eur' type FROM sizes
+              union all
+              SELECT id, usa value, 'usa' type FROM sizes
+        ) AS s
+        WHERE s.value IS NOT NULL
+    ";
+    $rows = mysqli_query($db, $query);
+    if(!$rows) push('getSizes(): no records', 'error');
+    return mysqli_fetch_all($rows,MYSQLI_ASSOC);
 }
-function updateProduct($db, $row, $value){
-    $result = mysqli_query($db, "
-        UPDATE `products` SET `group_id` = '$value' WHERE `products`.`title` = '$row[0]';
-	");
-}
 
+
+
+$response = [];
+$response['collection'] = [];
 $config = parse_ini_file('config.ini', true);
 $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
-$rows = array_map('str_getcsv', file('db.csv'));
+$rows = getSizes($db);
+$sizes = [];
 foreach ($rows as $key => $row) {
-    print_r($row);
-    /*$group_id = createGroup($db, $row);
-    updateProduct($db, $row, $group_id);*/
+    if(!is_array($sizes[$row['type']])) $sizes[$row['type']] = [];
+    array_push($sizes[$row['type']], array('id' => $row['id'], 'label' => $row['value']));
 }
+$response['collection']['sizes'] = $sizes;
+echo json_encode($response, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 disconnect($db);
 ?>
