@@ -56,6 +56,7 @@ function getProducts($db){
         products.id,
         products.title,
         products.article,
+        products.id as sorting,
         '' as barcode,
         products.hide as status,
         IF(brands.id IS NULL, NULL, CONCAT('[{\"id\":\"',brands.id,'\", \"title\":\"',brands.title,'\"}]')) as brand,
