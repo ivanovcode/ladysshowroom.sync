@@ -37,7 +37,19 @@ function getSizes($db){
     if(!$rows) push('getSizes(): no records', 'error');
     return mysqli_fetch_all($rows,MYSQLI_ASSOC);
 }
-
+function getColors($db){
+    $query = "
+        SELECT       
+        colors.id,
+        colors.title,
+        colors.hex
+        FROM
+        colors
+    ";
+    $rows = mysqli_query($db, $query);
+    if(!$rows) push('getColors(): no records', 'error');
+    return mysqli_fetch_all($rows,MYSQLI_ASSOC);
+}
 function getProducts($db){
     $query = "        
         SELECT
@@ -84,6 +96,7 @@ $config = parse_ini_file('config.ini', true);
 $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
 
+
 $rows = getSizes($db);
 $sizes = [];
 foreach ($rows as $key => $row) {
@@ -108,6 +121,15 @@ foreach ($rows as $key => $row) {
 }
 unset($rows);
 
+$rows = getColors($db);
+$colors = [];
+foreach ($rows as $key => $row) {
+    if(!is_array($colors[$row['id']])) $colors[$row['id']] = [];
+    array_push($colors[$row['id']], array('id' => $row['id'], 'title' => $row['title'], 'hex' => $row['hex']));
+}
+unset($rows);
+
+$response['collection']['colors'] = $colors;
 $response['collection']['sizes'] = $sizes;
 $response['collection']['products'] = $products;
 echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
