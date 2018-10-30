@@ -70,7 +70,7 @@ function getProducts($db){
           END
         ,'\"}]')) as size,
         IF(products.place IS NULL, NULL, CONCAT('[{\"title\":\"Центральный\", \"code\":\"',products.place,'\"}]')) as place,
-        IF(products.price IS NULL, NULL, CONCAT('[{\"purchase\":\"',products.price,'\", \"retail\":\"',products.price,'\", \"discount\":\"',products.price,'\"}]')) as price,
+        IF(products.price IS NULL, NULL, CONCAT('[{\"purchase\":\"',products.price_purchase,'\", \"retail\":\"',products.price,'\", \"discount\":\"',products.price,'\"}]')) as price,
         IF(colors.id IS NULL, NULL, CONCAT('[{\"id\":\"',colors.id,'\", \"title\":\"',colors.title,'\", \"hex\":\"',colors.hex,'\"}]')) as color,
         '' as consist,
         products.discription,
