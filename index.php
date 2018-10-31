@@ -50,6 +50,18 @@ function getColors($db){
     if(!$rows) push('getColors(): no records', 'error');
     return mysqli_fetch_all($rows,MYSQLI_ASSOC);
 }
+function getCategories($db){
+    $query = "
+        SELECT       
+        categories.id,
+        categories.title
+        FROM
+        categories
+    ";
+    $rows = mysqli_query($db, $query);
+    if(!$rows) push('getCategories(): no records', 'error');
+    return mysqli_fetch_all($rows,MYSQLI_ASSOC);
+}
 function getProducts($db){
     $query = "        
         SELECT
@@ -130,9 +142,18 @@ foreach ($rows as $key => $row) {
 }
 unset($rows);
 
+$rows = getCategories($db);
+$categories = [];
+foreach ($rows as $key => $row) {
+    if(!is_array($categories[$row['id']])) $categories[$row['id']] = [];
+    array_push($categories[$row['id']], array('id' => $row['id'], 'title' => $row['title']));
+}
+unset($rows);
+
+$response['collection']['categories'] = $categories;
 $response['collection']['colors'] = $colors;
 $response['collection']['sizes'] = $sizes;
-$response['collection']['products'] = $products;
+//$response['collection']['products'] = $products;
 echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 disconnect($db);
 ?>
