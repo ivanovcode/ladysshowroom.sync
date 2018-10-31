@@ -153,7 +153,7 @@ unset($rows);
 $response['collection']['categories'] = $categories;
 $response['collection']['colors'] = $colors;
 $response['collection']['sizes'] = $sizes;
-//$response['collection']['products'] = $products;
+$response['collection']['products'] = $products;
 echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 disconnect($db);
 ?>
