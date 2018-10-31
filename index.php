@@ -150,6 +150,8 @@ foreach ($rows as $key => $row) {
 }
 unset($rows);
 
+$response['collection']['stocks']['5']['id'] = '5';
+$response['collection']['stocks']['5']['title'] = 'Центральный';
 $response['collection']['categories'] = $categories;
 $response['collection']['colors'] = $colors;
 $response['collection']['sizes'] = $sizes;
