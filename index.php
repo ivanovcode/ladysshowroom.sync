@@ -114,9 +114,12 @@ $rows = getSizes($db);
 $sizes = [];
 foreach ($rows as $key => $row) {
     if(!is_array($sizes[$row['type']])) $sizes[$row['type']] = [];
-    array_push($sizes[$row['type']], array('id' => $row['id'], 'label' => $row['value']));
+    array_push($sizes[$row['type']], array('id' => $row['id'], 'label' => $row['value'],  'type' => ($row['type']=='rus' ? 1 : ($row['type']=='eur' ? 2 : ($row['type']=='usa' ? 3 : 0))) ));
 }
 unset($rows);
+
+
+
 
 $rows = getProducts($db);
 $products = [];
