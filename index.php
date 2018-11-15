@@ -80,7 +80,7 @@ function getProducts($db){
               WHEN '2' then 'eur'
               WHEN '3' then 'usa'
           END
-        ,'\"}]')) as size,
+        ,'\", \"type_id\":\"',products.type_size_id,'\"}]')) as size,
         IF(products.place IS NULL, NULL, CONCAT('[{\"title\":\"Центральный\", \"code\":\"',products.place,'\"}]')) as place,
         IF(products.price IS NULL, NULL, CONCAT('[{\"purchase\":\"',products.price_purchase,'\", \"retail\":\"',products.price,'\", \"discount\":\"',products.price,'\"}]')) as price,
         IF(colors.id IS NULL, NULL, CONCAT('[{\"id\":\"',colors.id,'\", \"title\":\"',colors.title,'\", \"hex\":\"',colors.hex,'\"}]')) as color,
