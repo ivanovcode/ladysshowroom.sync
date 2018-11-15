@@ -21,7 +21,7 @@ function disconnect($db){
 
 function updateProduct($db, $row){
     $result = mysqli_query($db, "
-        UPDATE `products` SET `products`.`price_purchase` = '$row[1]' WHERE `title` = '$row[0]';
+        UPDATE `products` SET `products`.`brand_id` = '$row[1]' WHERE `title` = '$row[0]';
 	");
 }
 
