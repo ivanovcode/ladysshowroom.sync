@@ -18,13 +18,16 @@ function connect($db, $p) {
 function disconnect($db){
     mysqli_close($db);
 }
-function getProducts($db, $id_category){
+function getProducts($db){
     $query = "
         SELECT
-        pc.product_id
+        products.id,
+        products.title
         FROM
-        products_categories as pc
-        WHERE pc.category_id = ".$id_category;
+        products
+        LEFT JOIN products_categories as pc ON pc.product_id = products.id
+        WHERE pc.category_id = 4 and products.delete = 0
+    ";
     $rows = mysqli_query($db, $query);
     if(!$rows) push('getProducts(): no records', 'error');
     return mysqli_fetch_all($rows,MYSQLI_ASSOC);
@@ -37,17 +40,13 @@ $config = parse_ini_file('config.ini', true);
 $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
 
-$links = array("6"=>"1", "7"=>"2", "8"=>"3", "9"=>"4");
 
-
-foreach ($links as $id_category => $id_brand) {
-    $rows = getProducts($db, $key);
+    $rows = getProducts($db);
     foreach ($rows as $key => $row) {
         print_r($row);
-        mysqli_query($db, "UPDATE `products` SET `brand_id` = '".$id_brand."' WHERE `products`.`id` = " . $row['product_id']);
-        mysqli_query($db, "DELETE FROM `products_categories` WHERE `products_categories`.`product_id` = " . $row['product_id'] . " AND `products_categories`.`category_id` = ".$id_category);
+        mysqli_query($db, "UPDATE `products` SET `type_size_id` = '2', `brand_id` = '3' WHERE `products`.`id` = " . $row['product_id']);
     }
-}
+$products = $rows;
 unset($rows);
 
 $response['collection']['products'] = $products;
