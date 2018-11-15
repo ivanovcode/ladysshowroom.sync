@@ -20,8 +20,9 @@ function disconnect($db){
 }
 
 function updateProduct($db, $row){
+
     $result = mysqli_query($db, "
-        UPDATE `products` SET `products`.`brand_id` = '4' WHERE `title` = '$row[0]';
+        UPDATE `products` SET `products`.`type_size_id` = '$row[1]' WHERE `title` = '$row[0]';
 	");
 }
 
@@ -30,6 +31,19 @@ $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
 $rows = array_map('str_getcsv', file('db.csv'));
 foreach ($rows as $key => $row) {
+    switch ($row[1]) {
+        case "rus":
+            $row[1] = "1";
+            break;
+        case "eur":
+            $row[1] = "2";
+            break;
+        case "usa":
+            $row[1] = "3";
+            break;
+        default:
+            $row[1] = "NULL";
+    }
     print_r($row);
     updateProduct($db, $row);
 }
