@@ -44,7 +44,7 @@ mysqli_select_db($db, $config['development']['dbname']);
     $rows = getProducts($db);
     foreach ($rows as $key => $row) {
         print_r($row);
-        mysqli_query($db, "UPDATE `products` SET `type_size_id` = '2', `brand_id` = '3' WHERE `products`.`id` = " . $row['product_id']);
+        mysqli_query($db, "UPDATE `products` SET `type_size_id` = '2', `brand_id` = '3' WHERE `products`.`id` = " . $row['id']);
     }
 $products = $rows;
 unset($rows);
