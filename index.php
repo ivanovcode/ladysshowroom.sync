@@ -37,7 +37,7 @@ function updateProduct($db, $id_group, $title_product){
           UPDATE `products` SET `products`.`group_id` = '$id_group' WHERE `title` = '$title_product';
 	    ";
         $result = mysqli_query($db, $query);
-        echo $id_group;
+        echo $id_group." ";
     }
 }
 
