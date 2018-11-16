@@ -31,10 +31,14 @@ function getGroup($db, $title_group){
     $row = mysqli_fetch_array($row,MYSQLI_ASSOC);
     return $row['id'];
 }
-function updateProduct($db, $row){
-    $result = mysqli_query($db, "
-        UPDATE `products` SET `products`.`brand_id` = '4' WHERE `title` = '$row[0]';
-	");
+function updateProduct($db, $id_group, $title_product){
+    if(!empty($title_product)) {
+        $query = "
+          UPDATE `products` SET `products`.`group_id` = '$id_group' WHERE `title` = '$title_product';
+	    ";
+        $result = mysqli_query($db, $query);
+        echo $id_group;
+    }
 }
 
 $config = parse_ini_file('config.ini', true);
@@ -43,14 +47,7 @@ mysqli_select_db($db, $config['development']['dbname']);
 $rows = array_map('str_getcsv', file('db.csv'));
 foreach ($rows as $key => $row) {
     $id_group = getGroup($db, $row[1]);
-    if(empty($id_group)) {
-        echo $row[1]. " нет такой группы";
-        die();
-    } else {
-        echo $id_group;
-    }
-
-    //updateProduct($db, $row);
+    if(!empty($id_group)) updateProduct($db, $id_group, $row[0]);
 }
 disconnect($db);
 ?>
