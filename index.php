@@ -153,8 +153,7 @@ foreach ($rows as $key => $row) {
 }
 unset($rows);
 
-Пронина, Альфа, PayPal, Сбербанк Анна, Тинькоф
-сбер банк Михаил и Сбербанк Анастасия
+
 $response['collection']['wallets']['1']['id'] = '1';
 $response['collection']['wallets']['1']['title'] = 'Сбербанк Михаил';
 $response['collection']['wallets']['2']['id'] = '2';
