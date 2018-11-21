@@ -152,6 +152,24 @@ foreach ($rows as $key => $row) {
     array_push($categories[$row['id']], array('id' => $row['id'], 'title' => $row['title']));
 }
 unset($rows);
+
+Пронина, Альфа, PayPal, Сбербанк Анна, Тинькоф
+сбер банк Михаил и Сбербанк Анастасия
+$response['collection']['wallets']['1']['id'] = '1';
+$response['collection']['wallets']['1']['title'] = 'Сбербанк Михаил';
+$response['collection']['wallets']['2']['id'] = '2';
+$response['collection']['wallets']['2']['title'] = 'Сбербанк Анастасия';
+$response['collection']['wallets']['3']['id'] = '3';
+$response['collection']['wallets']['3']['title'] = 'Альфа';
+$response['collection']['wallets']['4']['id'] = '4';
+$response['collection']['wallets']['4']['title'] = 'PayPal';
+$response['collection']['wallets']['5']['id'] = '5';
+$response['collection']['wallets']['5']['title'] = 'Сбербанк Анна';
+$response['collection']['wallets']['6']['id'] = '6';
+$response['collection']['wallets']['6']['title'] = 'Тинькоф';
+$response['collection']['wallets']['7']['id'] = '7';
+$response['collection']['wallets']['7']['title'] = 'Пронина';
+
 $response['collection']['deliveries']['1']['id'] = '1';
 $response['collection']['deliveries']['1']['title'] = 'Курьерская';
 $response['collection']['deliveries']['1']['price'] = 350.00;
