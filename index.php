@@ -172,8 +172,8 @@ $response['collection']['payments']['1']['id'] = '1';
 $response['collection']['payments']['1']['title'] = 'Банковская карта';
 $response['collection']['payments']['2']['id'] = '2';
 $response['collection']['payments']['2']['title'] = 'Наличные';
-$response['collection']['payments']['3']['id'] = '3';
-$response['collection']['payments']['3']['title'] = 'Сертификат';
+$response['collection']['payments']['4']['id'] = '4';
+$response['collection']['payments']['4']['title'] = 'Сертификат';
 
 $response['collection']['stocks']['5']['id'] = '5';
 $response['collection']['stocks']['5']['title'] = 'Центральный';
