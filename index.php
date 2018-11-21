@@ -76,12 +76,14 @@ foreach ($rows['products'] as $key => $product) {
                 )
                 VALUES 
                 (NULL ,  '" . $product['id'] . "',  '" . $quantity['sizeid'] . "',  '" . $product['stock'] . "',  NULL,  '" . $quantity['qty'] . "')
-                ON DUPLICATE KEY UPDATE  id=LAST_INSERT_ID(id), quantity=" . $quantity['qty']
+                ON DUPLICATE KEY UPDATE  quantity=" . $quantity['qty']
         ;
         //echo $query."\t"."\t";
+        $result = mysqli_query($db, $query);
+        $id = mysqli_insert_id($db); ($id>0?$created++:$updated++);
     }
-    $result = mysqli_query($db, $query);
-    $id = mysqli_insert_id($db); ($id>0?$created++:$updated++);
+
+
 }
 disconnect($db);
 
