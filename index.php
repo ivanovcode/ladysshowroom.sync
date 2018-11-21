@@ -59,6 +59,7 @@ if(empty($rows)) push('response empty', 'error', true);
 mysqli_query($db, "SET FOREIGN_KEY_CHECKS = 0;");
 mysqli_query($db, "TRUNCATE table catalog;");
 mysqli_query($db, "SET FOREIGN_KEY_CHECKS = 1;");
+
 //file_put_contents('data.json', json_encode($rows['products'], JSON_UNESCAPED_UNICODE));
 foreach ($rows['products'] as $key => $product) {
     $product['stock'] = "5";
