@@ -152,6 +152,28 @@ foreach ($rows as $key => $row) {
     array_push($categories[$row['id']], array('id' => $row['id'], 'title' => $row['title']));
 }
 unset($rows);
+$response['collection']['deliveries']['1']['id'] = '1';
+$response['collection']['deliveries']['1']['title'] = 'Курьерская';
+$response['collection']['deliveries']['1']['price'] = 350.00;
+$response['collection']['deliveries']['2']['id'] = '2';
+$response['collection']['deliveries']['2']['title'] = 'Почта России';
+$response['collection']['deliveries']['2']['price'] = 300.00;
+$response['collection']['deliveries']['3']['id'] = '3';
+$response['collection']['deliveries']['3']['title'] = 'СДЭК';
+$response['collection']['deliveries']['3']['price'] = 0.00;
+$response['collection']['deliveries']['4']['id'] = '4';
+$response['collection']['deliveries']['4']['title'] = 'Самовывоз';
+$response['collection']['deliveries']['4']['price'] = 0.00;
+$response['collection']['deliveries']['5']['id'] = '5';
+$response['collection']['deliveries']['5']['title'] = 'EMS';
+$response['collection']['deliveries']['5']['price'] = 0.00;
+
+$response['collection']['payments']['1']['id'] = '1';
+$response['collection']['payments']['1']['title'] = 'Банковская карта';
+$response['collection']['payments']['2']['id'] = '2';
+$response['collection']['payments']['2']['title'] = 'Наличные';
+$response['collection']['payments']['3']['id'] = '3';
+$response['collection']['payments']['3']['title'] = 'Сертификат';
 
 $response['collection']['stocks']['5']['id'] = '5';
 $response['collection']['stocks']['5']['title'] = 'Центральный';
