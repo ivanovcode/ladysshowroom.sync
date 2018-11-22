@@ -186,7 +186,7 @@ if($orders) {
     if(!empty($ids)) mysqli_query($db, "UPDATE orders  SET request = request + 1 WHERE id IN (".$ids.")");
     $response = [];
     $response['collection']['orders'] = $orders;
-    file_put_contents($now.'_data.json', $response);
+    file_put_contents($now.'_data.json', json_encode($response, JSON_UNESCAPED_UNICODE));
     $response = setQuantitiesIn1C(json_encode($response, JSON_UNESCAPED_UNICODE));
     echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 }
