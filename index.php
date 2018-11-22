@@ -7,10 +7,10 @@ $params = (array) json_decode(file_get_contents('php://input'), TRUE);
 
 
 $data = file_get_contents("php://input");
-var_dump($data);
-var_dump($data1);
-var_dump($_POST);
-var_dump(json_encode($_POST, JSON_UNESCAPED_UNICODE));
+print_r($data);
+print_r($data1);
+print_r($_POST);
+print_r(json_encode($_POST, JSON_UNESCAPED_UNICODE));
 print_r($params);
 
 die();
