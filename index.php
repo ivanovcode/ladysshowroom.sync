@@ -37,7 +37,7 @@ function getOrders($db){
         o.discount,
         o.amount-(o.amount/100)*o.discount as sum,
         o.amount-(o.amount/100)*o.discount + d.price as total_sum,
-        'true' as owerwrite,
+        'true' as overwrite,
         0 as is_paid,
         o.discription as comment,
         IF(r.id IS NULL, NULL, CONCAT('[{\"id\":\"',p.id,'\",\"size\": {\"id\": \"',r.size_id,'\", \"type_id\": \"',p.type_size_id,'\"},\"quantity\":\"',r.quantity,'\",\"price\":\"',p.price,'\",\"discount\":\"',IF(r.discount IS NULL,0,r.discount),'\", \"sum\":\"',(p.price*r.quantity)-(((p.price*r.quantity)/100)*IF(r.discount IS NULL,0,r.discount)),'\"}]')) as products,
