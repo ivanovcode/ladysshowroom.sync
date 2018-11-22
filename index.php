@@ -34,7 +34,7 @@ function disconnect($db){
 
 $POST = file_get_contents('php://input');
 
-if(empty($_POST)) push('no data in request', 'error', true);
+if(empty($POST)) push('no data in request', 'error', true);
 if(!isValidJSON($POST)) push('not valid json in request', 'error', true);
 
 file_put_contents('data.json', $POST);
