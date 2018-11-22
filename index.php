@@ -27,6 +27,15 @@ function disconnect($db){
 }
 
 
+$passwords = array ("admin" => "huj2ov4f"); $users = array_keys($passwords);
+$validated = (in_array($_SERVER['PHP_AUTH_USER'], $users)) && ($_SERVER['PHP_AUTH_PW'] == $passwords[$_SERVER['PHP_AUTH_USER']]);
+
+if (!$validated) {
+    header('WWW-Authenticate: Basic realm="My Realm"');
+    header('HTTP/1.0 401 Unauthorized');
+    die ("Not authorized");
+}
+
 push('set quantities method:'.$_SERVER['REQUEST_METHOD'], 'access');
 if ($_SERVER['REQUEST_METHOD'] === 'GET') push('GET method access denied', 'error', true);
 
