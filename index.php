@@ -31,8 +31,8 @@ function connect($db, $p) {
 function disconnect($db){
     mysqli_close($db);
 }
-
-$POST = file_get_contents('php://input');
+parse_str(file_get_contents("php://input"),$POST);
+//$POST = file_get_contents('php://input');
 
 if(empty($POST)) push('no data in request', 'error', true);
 if(!isValidJSON($POST)) push('not valid json in request', 'error', true);
