@@ -3,18 +3,6 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
 error_reporting(0);
 
-
-parse_str(file_get_contents("php://input"),$data1);
-$data2 = (array) json_decode(file_get_contents('php://input'), TRUE);
-$data3 = file_get_contents("php://input");
-$data4 = json_encode($_POST, JSON_UNESCAPED_UNICODE);
-
-echo $data1." ";
-echo $data2." ";
-echo $data3." ";
-echo $data4." ";
-
-
 function push($data, $name, $die=false, $clear=false, $msg=''){
     if ($clear) unlink($name.'.log');
     $fp = fopen($name.'.log', 'a');
@@ -37,8 +25,8 @@ function connect($db, $p) {
 function disconnect($db){
     mysqli_close($db);
 }
-parse_str(file_get_contents("php://input"),$POST);
-//$POST = file_get_contents('php://input');
+
+$POST = file_get_contents('php://input');
 
 if(empty($POST)) push('no data in request', 'error', true);
 if(!isValidJSON($POST)) push('not valid json in request', 'error', true);
