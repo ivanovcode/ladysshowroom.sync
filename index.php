@@ -32,7 +32,7 @@ function getCertificate($db){
         CONCAT('продавец ', u.user_name) as note        
         FROM
         certificates as c
-        LEFT JOIN orders o on c.order_id = o.id
+        LEFT JOIN _orders o on c.order_id = o.id
       left join users u on u.user_id = o.user_id
     ORDER BY  c.created_at desc
     ";
