@@ -33,7 +33,7 @@ $POST = file_get_contents('php://input');
 
 
 file_put_contents('post.json', 'POST: '.$POST);
-file_put_contents('_post.json', '_POST: '.$_POST);
+file_put_contents('_post.json', '_POST: '.json_encode($_POST, JSON_UNESCAPED_UNICODE));
 //if(empty($_POST)) push('no data in request', 'error', true);
 //if(!isValidJSON($_POST)) push('not valid json in request', 'error', true);
 
