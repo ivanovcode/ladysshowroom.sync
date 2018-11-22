@@ -12,7 +12,7 @@ print_r($data1);
 print_r($_POST);
 print_r(json_encode($_POST, JSON_UNESCAPED_UNICODE));
 print_r($params);
-
+print_r($_REQUEST);
 die();
 function push($data, $name, $die=false, $clear=false, $msg=''){
     if ($clear) unlink($name.'.log');
