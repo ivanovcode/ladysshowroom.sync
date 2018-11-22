@@ -181,6 +181,7 @@ unset($rows);
 
 if($orders) {
     $ids =  implode (", ", array_values(array_column($orders, 'id')));
+    push('orders send success ids: '.$ids, 'access');
     if(!empty($ids)) mysqli_query($db, "UPDATE orders  SET request = request + 1 WHERE id IN (".$ids.")");
     $response = [];
     $response['collection']['orders'] = $orders;
