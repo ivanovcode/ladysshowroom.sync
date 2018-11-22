@@ -28,29 +28,28 @@ function disconnect($db){
 
 $POST = file_get_contents('php://input');
 if(empty($POST)) push('no data in request', 'error', true);
+file_put_contents('data.json', $POST);
 
 $rows = json_decode($POST, true);
 if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
 
 $quantities = [];
 foreach ($rows as $key => $row) {
-    print_r($row[0]['id_product']);
-    die();
-    array_push($quantities, array('updated' => 'success'));
-
+    array_push($quantities, array(
+        'updated' => 'success',
+        'id_product' => $row[0]['id_product'],
+        'id_size' => $row[0]['id_size'],
+        'id_stock' => $row[0]['id_stock'],
+        'amount' => $row[0]['amount'],
+        'response' => array('before' => $row[0]['amount'], 'after' => $row[0]['amount'])
+    ));
 }
 unset($rows);
 
-
-file_put_contents('data.json', $POST);
-
-$config = parse_ini_file('config.ini', true);
+/*$config = parse_ini_file('config.ini', true);
 $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
-disconnect($db);
-
-$quantities = [];
-array_push($quantities, array('updated' => 'success'));
+disconnect($db);*/
 
 $response = [];
 $response['quantities'] = $quantities;
