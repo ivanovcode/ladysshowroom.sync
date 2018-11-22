@@ -1,9 +1,14 @@
 <?php
-header('Access-Control-Allow-Origin: *');
+/*header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
-error_reporting(0);
-$data = file_get_contents('php://input');
+error_reporting(0);*/
+parse_str(file_get_contents("php://input"),$data);
+
+
 var_dump($data);
+var_dump($_POST);
+var_dump(json_encode($_POST, JSON_UNESCAPED_UNICODE));
+
 die();
 function push($data, $name, $die=false, $clear=false, $msg=''){
     if ($clear) unlink($name.'.log');
@@ -38,11 +43,6 @@ file_put_contents('post.json', 'POST: '.json_decode($POST));
 file_put_contents('_post.json', '_POST: '.json_encode($_POST, JSON_UNESCAPED_UNICODE));
 
 
-print "CONTENT_TYPE: " . $_SERVER['CONTENT_TYPE'] . "<BR />";
-
-print "DATA: <pre>";
-var_dump($data);
-var_dump($_POST);
 
 
 die();
