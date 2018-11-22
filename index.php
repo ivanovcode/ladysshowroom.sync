@@ -25,6 +25,7 @@ function connect($db, $p) {
 function disconnect($db){
     mysqli_close($db);
 }
+push('set quantities', 'access');
 
 $POST = file_get_contents('php://input');
 if(empty($POST)) push('no data in request', 'error', true);
