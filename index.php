@@ -53,5 +53,5 @@ disconnect($db);*/
 
 $response = [];
 $response['quantities'] = $quantities;
-echo json_encode($response, JSON_UNESCAPED_UNICODE );
+echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 ?>
