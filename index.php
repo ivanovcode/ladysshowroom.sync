@@ -4,10 +4,16 @@ header('Content-Type: application/json; charset=utf-8');
 error_reporting(0);
 
 
-/*parse_str(file_get_contents("php://input"),$data1);
+parse_str(file_get_contents("php://input"),$data1);
 $data2 = (array) json_decode(file_get_contents('php://input'), TRUE);
 $data3 = file_get_contents("php://input");
-$data4 = json_encode($_POST, JSON_UNESCAPED_UNICODE);*/
+$data4 = json_encode($_POST, JSON_UNESCAPED_UNICODE);
+
+echo $data1." ";
+echo $data2." ";
+echo $data3." ";
+echo $data4." ";
+
 
 function push($data, $name, $die=false, $clear=false, $msg=''){
     if ($clear) unlink($name.'.log');
