@@ -29,8 +29,10 @@ function disconnect($db){
 $config = parse_ini_file('config.ini', true);
 $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
+$POST = file_get_contents('php://input');
 
-file_put_contents('data.json', $_POST);
+
+file_put_contents('data.json', $POST);
 //if(empty($_POST)) push('no data in request', 'error', true);
 //if(!isValidJSON($_POST)) push('not valid json in request', 'error', true);
 
