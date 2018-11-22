@@ -31,8 +31,8 @@ $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
 
 
-if(empty($_POST)) push('no data in request', 'error', true);
-if(isValidJSON($_POST)) push('not valid json in request', 'error', true);
+//if(empty($_POST)) push('no data in request', 'error', true);
+//if(!isValidJSON($_POST)) push('not valid json in request', 'error', true);
 
 
 disconnect($db);
