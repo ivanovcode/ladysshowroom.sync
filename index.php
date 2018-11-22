@@ -9,5 +9,5 @@ function detectRequestBody() {
     return $tempStream;
 }
 var_dump(detectRequestBody());
-
+print_r($_SERVER['REQUEST_METHOD']);
 ?>
