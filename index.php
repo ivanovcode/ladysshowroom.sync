@@ -2,6 +2,7 @@
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
 error_reporting(0);
+set_time_limit(0);
 
 function push($data, $name, $die=false, $clear=false, $msg=''){
     if ($clear) unlink($name.'.log');
@@ -34,7 +35,7 @@ function getQuantitiesFrom1C(){
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "UTF-8",
         CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 30,
+        CURLOPT_TIMEOUT => 500,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => "POST",
         /*CURLOPT_POSTFIELDS => "[\r\n  {\r\n    \"id\": \"adr 1\",\r\n    \"original-address\": \"".$_POST['original_address']."\"\r\n  }\r\n]",*/
@@ -55,6 +56,7 @@ $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
 
 $rows = getQuantitiesFrom1C();
+
 if(empty($rows)) push('response empty', 'error', true);
 mysqli_query($db, "SET FOREIGN_KEY_CHECKS = 0;");
 mysqli_query($db, "TRUNCATE table catalog;");
