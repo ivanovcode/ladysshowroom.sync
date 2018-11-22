@@ -27,7 +27,7 @@ function disconnect($db){
 }
 
 
-$passwords = array ("admin" => "huj2ov4f"); $users = array_keys($passwords);
+$passwords = array ("itone" => "itone"); $users = array_keys($passwords);
 $validated = (in_array($_SERVER['PHP_AUTH_USER'], $users)) && ($_SERVER['PHP_AUTH_PW'] == $passwords[$_SERVER['PHP_AUTH_USER']]);
 
 if (!$validated) {
