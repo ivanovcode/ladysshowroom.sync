@@ -2,7 +2,7 @@
 /*header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
 error_reporting(0);*/
-parse_str(file_get_contents("php://input"),$data1)
+parse_str(file_get_contents("php://input"),$data1);
 
 $data = file_get_contents("php://input");
 var_dump($data);
