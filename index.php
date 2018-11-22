@@ -2,7 +2,9 @@
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
 error_reporting(0);
-
+$data = file_get_contents('php://input');
+var_dump($data);
+die();
 function push($data, $name, $die=false, $clear=false, $msg=''){
     if ($clear) unlink($name.'.log');
     $fp = fopen($name.'.log', 'a');
@@ -37,7 +39,7 @@ file_put_contents('_post.json', '_POST: '.json_encode($_POST, JSON_UNESCAPED_UNI
 
 
 print "CONTENT_TYPE: " . $_SERVER['CONTENT_TYPE'] . "<BR />";
-$data = file_get_contents('php://input');
+
 print "DATA: <pre>";
 var_dump($data);
 var_dump($_POST);
