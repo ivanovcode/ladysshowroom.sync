@@ -25,7 +25,10 @@ function connect($db, $p) {
 function disconnect($db){
     mysqli_close($db);
 }
-push('set quantities', 'access');
+
+
+push('set quantities method:'.$_SERVER['REQUEST_METHOD'], 'access');
+if ($_SERVER['REQUEST_METHOD'] === 'GET') push('GET method access denied', 'error', true);
 
 $POST = file_get_contents('php://input');
 if(empty($POST)) push('no data in request', 'error', true);
