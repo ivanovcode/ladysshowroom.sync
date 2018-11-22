@@ -81,7 +81,7 @@ function setQuantitiesIn1C($response){
     if (!_iscurl()) push('curl is disabled', 'error', true);
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_URL => "http://office.itone.ru/LADYSSHOWROOM_UNF_TEST/hs/atnApi/Order",
+        CURLOPT_URL => "http://cloud.itone.ru/LADYSSHOWROOM_UNF/hs/atnApi/Order",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "UTF-8",
         CURLOPT_MAXREDIRS => 10,
