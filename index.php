@@ -55,7 +55,7 @@ function getOrders($db){
         LEFT JOIN types_deliveries d on d.id = o.delivery_id
         LEFT JOIN clients c on c.id = o.client_id
         LEFT JOIN certificates cert on cert.order_id = o.id
-        WHERE o.number IS NULL AND o.payments IS NULL AND o.status <> 6
+        WHERE (o.request = 0 OR (o.request = 1 AND o.payments IS NOT NULL)) AND o.status <> 6
         GROUP BY o.id
     ";
     $rows = mysqli_query($db, $query);
@@ -108,7 +108,9 @@ mysqli_select_db($db, $config['development']['dbname']);
 
 $rows = getOrders($db);
 $orders = [];
+
 foreach ($rows as $key => $row) {
+
     $row['price'] = number_format(stripos($row['price'], '.')?strstr( $row['price'], '.', true):$row['price'],2, '.', '');
     $row['sum'] = number_format(stripos($row['sum'], '.')?strstr( $row['sum'], '.', true):$row['sum'],2, '.', '');
     $row['total_sum'] = number_format(stripos($row['total_sum'], '.')?strstr( $row['total_sum'], '.', true):$row['total_sum'],2, '.', '');
@@ -162,7 +164,6 @@ foreach ($rows as $key => $row) {
             if($payment['id']==1) {
                 $row['payments'][$id_payment]['wallet_id'] = 1;
             }
-
         }
     } else {
         $row['payments'] = [];
@@ -176,12 +177,15 @@ foreach ($rows as $key => $row) {
 unset($rows);
 
 
-disconnect($db);
+
 
 if($orders) {
+    $ids =  implode (", ", array_values(array_column($orders, 'id')));
+    if(!empty($ids)) mysqli_query($db, "UPDATE orders  SET request = request + 1 WHERE id IN (".$ids.")");
     $response = [];
     $response['collection']['orders'] = $orders;
-    //$response = setQuantitiesIn1C(json_encode($response, JSON_UNESCAPED_UNICODE));
+    $response = setQuantitiesIn1C(json_encode($response, JSON_UNESCAPED_UNICODE));
     echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 }
+disconnect($db);
 ?>
