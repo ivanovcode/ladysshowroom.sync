@@ -54,7 +54,7 @@ $rows = getCertificate($db);
 $certificates = [];
 foreach ($rows as $key => $row) {
     if(!is_array($certificates[$row['id']])) $certificates[$row['id']] = [];
-    array_push($certificates[$row['id']], array('id' => $row['id'], 'code' => $row['code'], 'created' => $row['created'], 'expiry' => $row['expiry'], 'sales' => $row['sales'], 'deposit' => $row['deposit'], 'is_sales' => $row['is_sales'], 'note' => $row['note']));
+    array_push($certificates[$row['id']], array('id' => $row['id'], 'number' => $row['code'], 'created' => $row['created'], 'expiry' => $row['expiry'], 'sales' => $row['sales'], 'deposit' => $row['deposit'], 'is_sales' => $row['is_sales'], 'note' => $row['note']));
 }
 unset($rows);
 
