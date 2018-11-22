@@ -181,7 +181,7 @@ disconnect($db);
 $response = [];
 /*iconv(mb_detect_encoding($data, mb_detect_order(), true), "UTF-8", $data);*/
 $response['collection']['orders'] = $orders;
-//echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );
-$response = setQuantitiesIn1C(json_encode($response, JSON_UNESCAPED_UNICODE));
+
+//$response = setQuantitiesIn1C(json_encode($response, JSON_UNESCAPED_UNICODE));
 echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );
 ?>
