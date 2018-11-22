@@ -27,9 +27,20 @@ function disconnect($db){
 }
 
 $POST = file_get_contents('php://input');
-
 if(empty($POST)) push('no data in request', 'error', true);
-if(!isValidJSON($POST)) push('not valid json in request', 'error', true);
+
+$rows = json_decode($POST, true);
+if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
+
+$quantities = [];
+foreach ($rows as $key => $row) {
+    print_r($row);
+    die();
+    array_push($quantities, array('updated' => 'success'));
+
+}
+unset($rows);
+
 
 file_put_contents('data.json', $POST);
 
