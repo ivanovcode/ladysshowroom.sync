@@ -30,7 +30,7 @@ $config = parse_ini_file('config.ini', true);
 $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
 
-file_put_contents('data.json', "test"));
+file_put_contents('data.json', "test");
 //if(empty($_POST)) push('no data in request', 'error', true);
 //if(!isValidJSON($_POST)) push('not valid json in request', 'error', true);
 
