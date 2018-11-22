@@ -34,7 +34,7 @@ if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'err
 
 $quantities = [];
 foreach ($rows as $key => $row) {
-    print_r($row);
+    print_r($row[0]['id_product']);
     die();
     array_push($quantities, array('updated' => 'success'));
 
