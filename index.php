@@ -2,10 +2,11 @@
 /*header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
 error_reporting(0);*/
-parse_str(file_get_contents("php://input"),$data);
+parse_str(file_get_contents("php://input"),$data1)
 
-
+$data = file_get_contents("php://input");
 var_dump($data);
+var_dump($data1);
 var_dump($_POST);
 var_dump(json_encode($_POST, JSON_UNESCAPED_UNICODE));
 
