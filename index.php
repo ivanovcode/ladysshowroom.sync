@@ -58,8 +58,6 @@ function getOrders($db){
         WHERE (o.request = 0 OR (o.request = 1 AND o.payments != \"\")) AND o.status <> 6
         GROUP BY o.id
     ";
-    echo $query;
-
     $rows = mysqli_query($db, $query);
     if(!$rows) push('getOrders(): no records', 'error');
     return mysqli_fetch_all($rows,MYSQLI_ASSOC);
@@ -179,10 +177,9 @@ foreach ($rows as $key => $row) {
 unset($rows);
 
 
-print_r($orders);
 
 if($orders) {
-    echo "orders";
+
     $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
     $ids =  implode (", ", array_values(array_column($orders, 'id')));
     $response = [];
