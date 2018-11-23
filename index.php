@@ -178,6 +178,7 @@ unset($rows);
 
 
 print_r($orders);
+echo $query;
 
 if($orders) {
     $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
