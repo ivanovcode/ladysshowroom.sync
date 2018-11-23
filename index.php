@@ -55,7 +55,7 @@ function getOrders($db){
         LEFT JOIN types_deliveries d on d.id = o.delivery_id
         LEFT JOIN clients c on c.id = o.client_id
         LEFT JOIN certificates cert on cert.order_id = o.id
-        WHERE (o.request = 0 OR (o.request = 1 AND o.payments IS NOT NULL)) AND o.status <> 6
+        WHERE (o.request = 0 OR (o.request = 1 AND (o.payments IS NOT NULL OR o.payments <> ''))) AND o.status <> 6
         GROUP BY o.id
     ";
     $rows = mysqli_query($db, $query);
@@ -182,13 +182,14 @@ unset($rows);
 if($orders) {
     $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
     $ids =  implode (", ", array_values(array_column($orders, 'id')));
-    push('orders send success ids: '.$ids, 'access');
-    if(!empty($ids)) mysqli_query($db, "UPDATE orders  SET request = request + 1 WHERE id IN (".$ids.")");
     $response = [];
     $response['collection']['orders'] = $orders;
-    file_put_contents($now.'_data.json', json_encode($response, JSON_UNESCAPED_UNICODE));
+    file_put_contents($now.'_request.json', json_encode($response, JSON_UNESCAPED_UNICODE));
     $response = setQuantitiesIn1C(json_encode($response, JSON_UNESCAPED_UNICODE));
-    echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    $response = json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    file_put_contents($now.'_response.json', json_encode($response, JSON_UNESCAPED_UNICODE));
+    push('orders send success ids: '.$ids, 'access');
+    if(!empty($ids)) mysqli_query($db, "UPDATE orders  SET request = request + 1 WHERE id IN (".$ids.")");
 }
 disconnect($db);
 ?>
