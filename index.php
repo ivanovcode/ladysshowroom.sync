@@ -177,7 +177,7 @@ foreach ($rows as $key => $row) {
 unset($rows);
 
 
-
+print_r($orders);
 
 if($orders) {
     $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
