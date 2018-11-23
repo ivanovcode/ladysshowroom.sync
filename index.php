@@ -152,7 +152,7 @@ foreach ($rows as $key => $row) {
             }
             $row['payments'][$id_payment]['id'] = $payment['id'];
             $row['payments'][$id_payment]['title'] = $payment['title'];
-            $row['payments'][$id_payment]['amount'] = number_format(stripos($payment['amount'], '.') ? strstr($payment['amount'], '.', true) : $payment['amount'], 2, '.', '');
+            $row['payments'][$id_payment]['amount'] = floatval(number_format(stripos($payment['amount'], '.') ? strstr($payment['amount'], '.', true) : $payment['amount'], 2, '.', ''));
             if(!empty($row['cert_id']) && $payment['id']==4) {
                 $certificate = [];
                 $certificate["id"] =$row['cert_id'];
