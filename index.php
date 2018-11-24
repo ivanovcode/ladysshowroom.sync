@@ -21,7 +21,7 @@ function disconnect($db){
 
 function updateProduct($db, $row){
     $result = mysqli_query($db, "
-        UPDATE `products` SET `products`.`price_purchase` = '$row[1]' WHERE `title` = '$row[0]';
+        UPDATE `products` SET `products`.`consist` = '$row[1]' WHERE `title` = '$row[0]';
 	");
 }
 
@@ -29,9 +29,22 @@ $config = parse_ini_file('config.ini', true);
 $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
 $rows = array_map('str_getcsv', file('db.csv'));
-foreach ($rows as $key => $row) {
-    print_r($row);
-    updateProduct($db, $row);
+
+if (($handle = fopen("db.csv", "r")) !== FALSE) {
+    while (($row = fgetcsv($handle, 0, ",")) !== FALSE) {
+        //print_r($row[1]);
+        updateProduct($db, $row);
+
+
+    }
+    fclose($handle);
 }
+
+
+/*foreach ($rows as $key => $row) {
+    print_r($row);
+    //
+    //updateProduct($db, $row);
+}*/
 disconnect($db);
 ?>
