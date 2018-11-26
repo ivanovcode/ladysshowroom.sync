@@ -162,7 +162,7 @@ foreach ($rows as $key => $row) {
                 $certificate["expiry"]= $row['cert_expiry'];
                 $row['payments'][$id_payment]['certificate'] = $certificate;
             }
-            if($payment['id']==1) {
+            if($payment['id']==1 || $payment['id']==2) {
                 $row['payments'][$id_payment]['wallet_id'] = $row['wallet'];
             }
         }
