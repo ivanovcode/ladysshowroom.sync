@@ -47,7 +47,8 @@ function getOrders($db){
         cert.id as cert_id,
         cert.code as cert_code,
         cert.deposit as cert_deposit,
-        cert.expiry_at as cert_expiry
+        cert.expiry_at as cert_expiry,
+        o.wallet_id as wallet
         FROM
         orders as o
         LEFT JOIN reserve as r ON r.order_id = o.id
@@ -162,12 +163,13 @@ foreach ($rows as $key => $row) {
                 $row['payments'][$id_payment]['certificate'] = $certificate;
             }
             if($payment['id']==1) {
-                $row['payments'][$id_payment]['wallet_id'] = 1;
+                $row['payments'][$id_payment]['wallet_id'] = $row['wallet'];
             }
         }
     } else {
         $row['payments'] = [];
     }
+    unset($row['wallet']);
     unset($row['cert_id']);
     unset($row['cert_code']);
     unset($row['cert_deposit']);
