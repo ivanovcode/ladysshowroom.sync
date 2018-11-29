@@ -63,9 +63,12 @@ mysqli_query($db, "TRUNCATE table catalog;");
 mysqli_query($db, "SET FOREIGN_KEY_CHECKS = 1;");
 
 //file_put_contents('data.json', json_encode($rows['products'], JSON_UNESCAPED_UNICODE));
+
 foreach ($rows['products'] as $key => $product) {
     $product['stock'] = "5";
-    foreach ($product['onhand'] as $key => $quantity) {
+
+    foreach ($product['sizes'][0]['values'] as $key => $quantity) {
+
         $query = "
                 INSERT IGNORE INTO  `catalog` 
                 (
@@ -77,8 +80,8 @@ foreach ($rows['products'] as $key => $product) {
                     `quantity`
                 )
                 VALUES 
-                (NULL ,  '" . $product['id'] . "',  '" . $quantity['sizeid'] . "',  '" . $product['stock'] . "',  NULL,  '" . $quantity['qty'] . "')
-                ON DUPLICATE KEY UPDATE  quantity=" . $quantity['qty']
+                (NULL ,  '" . $product['id'] . "',  '" . $quantity['id'] . "',  '" . $product['stock'] . "',  NULL,  '" . $quantity['onhand'][0]['qty'] . "')
+                ON DUPLICATE KEY UPDATE  quantity=" . $quantity['onhand'][0]['qty']
         ;
         //echo $query."\t"."\t";
         $result = mysqli_query($db, $query);
