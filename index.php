@@ -168,6 +168,8 @@ $response['collection']['wallets']['6']['id'] = '6';
 $response['collection']['wallets']['6']['title'] = 'Тинькоф';
 $response['collection']['wallets']['7']['id'] = '7';
 $response['collection']['wallets']['7']['title'] = 'Пронина';
+$response['collection']['wallets']['7']['id'] = '8';
+$response['collection']['wallets']['7']['title'] = 'Курьеру на руки';
 
 $response['collection']['deliveries']['1']['id'] = '1';
 $response['collection']['deliveries']['1']['title'] = 'Курьерская';
