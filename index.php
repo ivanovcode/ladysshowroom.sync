@@ -16,7 +16,7 @@ function push($data, $name, $die=false, $clear=false, $msg=''){
     fclose($fp);
     if ($die) die($msg);
 }
-function getTelegram($method, $request) {
+function getTelegram($method, $request, $chat_id) {
     if (!_iscurl()) push('curl is disabled', 'error', true);
     $curl = curl_init();
     curl_setopt_array($curl, array(
@@ -28,8 +28,8 @@ function getTelegram($method, $request) {
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => "POST",
         /*CURLOPT_POSTFIELDS => "[\r\n  {\r\n    \"id\": \"adr 1\",\r\n    \"original-address\": \"".$_POST['original_address']."\"\r\n  }\r\n]",*/
-        /*CURLOPT_POSTFIELDS => "{\"product\": \"\"}",*/
-        CURLOPT_POSTFIELDS => $request,
+        CURLOPT_POSTFIELDS => "{\"chat_id\": \"".$chat_id."\",\"text\": \"Привет!\"}",
+        /*CURLOPT_POSTFIELDS => $request,*/
         CURLOPT_HTTPHEADER => array(
             /*"Authorization: Basic " . base64_encode("itone" . ":" . "itone"),*/
             "cache-control: no-cache",
@@ -52,10 +52,10 @@ if(empty($rows['message']['chat']['id']) || empty($rows['message']['chat']['firs
 $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
 $request['text'] = 'Привет, '.$rows['message']['chat']['first_name'].'!';
-$response = getTelegram('sendMessage', json_encode($request, JSON_UNESCAPED_UNICODE));
+$response = getTelegram('sendMessage', json_encode($request, JSON_UNESCAPED_UNICODE), $request['chat_id']);
 
 
-push(json_decode($response), 'access');
+push(json_encode($response, JSON_UNESCAPED_UNICODE), 'access');
 
 
 file_put_contents('input.json', json_encode($rows['message']));
