@@ -5,6 +5,5 @@ error_reporting(0);
 
 $POST = file_get_contents('php://input');
 file_put_contents('data.json', $POST);
-file_put_contents('data.json', 'ok');
 
 ?>
