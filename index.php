@@ -23,7 +23,7 @@ function getTelegram($chat_id) {
     $proxy = 'de360.nordvpn.com:80';
     $proxyauth = 'development@ivanov.site:ivan0vv0va';
 
-    push("https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/sendMessage?chat_id=".$chat_id."&parse_mode=html&text=Hi", 'access');
+    push("http://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/sendMessage?chat_id=".$chat_id."&parse_mode=html&text=Hi", 'access');
 
     if($ch = curl_init()) {
         curl_setopt($ch, CURLOPT_URL, "https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/sendMessage?chat_id=".$chat_id."&parse_mode=html&text=Hi");
