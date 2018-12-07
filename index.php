@@ -37,7 +37,7 @@ function getTelegram($chat_id) {
         curl_close($ch);
     }
 
-    //if ($error) push('curl request failed: ' . json_encode($error, JSON_UNESCAPED_UNICODE), 'error', true);
+    if ($error) push('curl request failed: ' . $error, 'error');
     return json_decode($data, true);
 
     /*if (!_iscurl()) push('curl is disabled', 'error', true);
