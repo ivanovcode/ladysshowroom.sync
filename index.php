@@ -52,9 +52,10 @@ if(empty($rows['message']['chat']['id']) || empty($rows['message']['chat']['firs
 $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
 $request['text'] = 'Привет, '.$rows['message']['chat']['first_name'].'!';
-/*$response = getTelegram('sendMessage', json_encode($request));*/
+/*$response = getTelegram('sendMessage', json_encode($request, JSON_UNESCAPED_UNICODE));*/
 
-push(var_dump(json_encode($request)), 'access');
+
+push(json_encode($request, JSON_UNESCAPED_UNICODE), 'access');
 
 
 file_put_contents('input.json', json_encode($rows['message']));
