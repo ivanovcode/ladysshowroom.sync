@@ -22,7 +22,7 @@ function getTelegram($method, $request, $chat_id) {
     $website="https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c";
     $params=[
         'chat_id'=>$chat_id,
-        'text'=>'Привет!',
+        'text'=>'hi',
     ];
     $ch = curl_init($website . '/sendMessage');
     curl_setopt($ch, CURLOPT_HEADER, false);
