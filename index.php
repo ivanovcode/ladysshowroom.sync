@@ -21,6 +21,10 @@ if(empty($POST)) push('no data in request', 'error', true);
 $rows = json_decode($POST, true);
 if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
 
+$chat_id = $rows['message']['chat']['id'];
+$command = $rows['message']['text'];
+push('chat: '.$chat_id.' command: '.$command, 'access');
+
 file_put_contents('input.json', json_encode($rows['message']));
 
 ?>
