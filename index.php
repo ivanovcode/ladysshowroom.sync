@@ -19,6 +19,27 @@ function push($data, $name, $die=false, $clear=false, $msg=''){
 
 function getTelegram($method, $request, $chat_id) {
     if (!_iscurl()) push('curl is disabled', 'error', true);
+    $proxy = 'de360.nordvpn.com:80';
+    $proxyauth = 'development@ivanov.site:ivan0vv0va';
+
+    if($ch = curl_init()) {
+        curl_setopt($ch, CURLOPT_URL, "https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/sendMessage?chat_id=".$chat_id."&parse_mode=html&text=Hi");
+        curl_setopt($ch, CURLOPT_PROXY, $proxy);
+        curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxyauth);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+
+        $data = curl_exec($ch);
+        $info = curl_getinfo($ch);
+        $error = curl_error($ch);
+        curl_close($ch);
+    }
+
+    if ($error) push('curl request failed: ' . var_dump($error), 'error', true);
+    return json_decode($data, true);
+
+    /*if (!_iscurl()) push('curl is disabled', 'error', true);
     $website="https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c";
     $params=[
         'chat_id'=>$chat_id,
@@ -35,7 +56,7 @@ function getTelegram($method, $request, $chat_id) {
 
     $data = curl_exec($ch); $info = curl_getinfo($ch); $error = curl_error($ch); curl_close($ch);
     if ($error) push('curl request failed: ' . var_dump($info), 'error', true);
-    return json_decode($data, true);
+    return json_decode($data, true);*/
 
 }
 
