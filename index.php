@@ -16,25 +16,17 @@ function push($data, $name, $die=false, $clear=false, $msg=''){
     fclose($fp);
     if ($die) die($msg);
 }
-function getTelegram($method, $request, $chat_id) {
+
+function getTelegram($method, $request) {
     if (!_iscurl()) push('curl is disabled', 'error', true);
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_URL => "https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/".$method/*."?chat_id=190049461&text=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82"*/,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => "UTF-8",
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 500,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "POST",
-        /*CURLOPT_POSTFIELDS => "[\r\n  {\r\n    \"id\": \"adr 1\",\r\n    \"original-address\": \"".$_POST['original_address']."\"\r\n  }\r\n]",*/
-        CURLOPT_POSTFIELDS => "{\"chat_id\": \"".$chat_id."\",\"text\": \"Привет!\"}",
-        /*CURLOPT_POSTFIELDS => $request,*/
-        CURLOPT_HTTPHEADER => array(
-            /*"Authorization: Basic " . base64_encode("itone" . ":" . "itone"),*/
-            "cache-control: no-cache",
-            "content-type: application/json"
-        ),
+        CURLOPT_URL => "https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/".$method,
+        CURLOPT_HEADER => false,
+        CURLOPT_RETURNTRANSFER => 1,
+        CURLOPT_POST => 1,
+        CURLOPT_POSTFIELDS => ($request),
+        CURLOPT_SSL_VERIFYPEER => false
     ));
     $data = curl_exec($curl); $error = curl_error($curl); curl_close($curl);
     if ($error) push('curl request failed: ' . var_dump($error), 'error', true);
@@ -52,13 +44,9 @@ if(empty($rows['message']['chat']['id']) || empty($rows['message']['chat']['firs
 $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
 $request['text'] = 'Привет, '.$rows['message']['chat']['first_name'].'!';
+$response = getTelegram('sendMessage', $request);
+
 push(json_encode($response, JSON_UNESCAPED_UNICODE), 'access');
-$response = getTelegram('sendMessage', json_encode($request, JSON_UNESCAPED_UNICODE), $request['chat_id']);
-
-
-
-
-
 file_put_contents('input.json', json_encode($rows['message']));
 
 ?>
