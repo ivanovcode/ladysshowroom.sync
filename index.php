@@ -50,7 +50,7 @@ if(empty($POST)) push('no data in request', 'error', true);
 
 $rows = json_decode($POST, true);
 if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
-if(empty($rows['message']['chat']['id']) && empty($rows['message']['chat']['first_name']) && empty($rows['message']['text'])) push('no require value in request', 'error', true);
+if(empty($rows['message']['chat']['id']) || empty($rows['message']['chat']['first_name']) || empty($rows['message']['text'])) push('no require value in request', 'error', true);
 
 $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
