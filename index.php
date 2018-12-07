@@ -19,6 +19,7 @@ function push($data, $name, $die=false, $clear=false, $msg=''){
 
 function getTelegram($method, $request, $chat_id) {
     if (!_iscurl()) push('curl is disabled', 'error', true);
+
     $proxy = 'de360.nordvpn.com:80';
     $proxyauth = 'development@ivanov.site:ivan0vv0va';
 
@@ -29,10 +30,7 @@ function getTelegram($method, $request, $chat_id) {
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HEADER, 1);
-
-        $data = curl_exec($ch);
-        $info = curl_getinfo($ch);
-        $error = curl_error($ch);
+        $data = curl_exec($ch); $error = curl_error($ch);
         curl_close($ch);
     }
 
@@ -71,9 +69,10 @@ if(empty($rows['message']['chat']['id']) || empty($rows['message']['chat']['firs
 $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
 $request['text'] = 'Привет, '.$rows['message']['chat']['first_name'].'!';
-$response = getTelegram('sendMessage', $request, $rows['message']['chat']['id']);
 
-push(json_encode($response, JSON_UNESCAPED_UNICODE), 'access');
+push(json_encode($request, JSON_UNESCAPED_UNICODE), 'access');
+
+$response = getTelegram('sendMessage', $request, $rows['message']['chat']['id']);
 file_put_contents('input.json', json_encode($rows['message']));
 
 ?>
