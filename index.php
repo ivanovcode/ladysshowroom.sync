@@ -49,37 +49,44 @@
     if(!empty($rows['message']['text'])) { $command = $rows['message']['text']; } else { $command = $rows['callback_query']['data']; }
     if(empty($chat_id) || empty($command)) { push('chat id or command undefined', 'error', true); }
 
-    $request = [];
-    $request['chat_id'] = $chat_id;
-    $request['parse_mode'] = 'html';
+
 
     switch ($command) {
         case '/start':
+            $request = [];
+            $request['chat_id'] = $chat_id;
+            $request['parse_mode'] = 'html';
             $request['text'] = '✌ Привет, '.$rows['message']['chat']['first_name'].'!';
-            $request['text'] .= " \n ";
+            $request['reply_markup'] = json_encode(array('keyboard' => array(
+                array(
+                    array('text'=>'💰 Касса','callback_data'=>'finance')
+                )
+            )));
+            $response = getTelegram('sendMessage', $request);
+
+            $request = [];
+            $request['chat_id'] = $chat_id;
+            $request['parse_mode'] = 'html';
             $request['text'] .= 'Сейчас мы находимся в';
             $request['text'] .= " \n ";
             $request['text'] .= '<i>/ Главное меню /</i>';
             $request['text'] .= " \n ";
             $request['text'] .= " \n ";
             $request['text'] .= '<b>Выбери нужный раздел</b> 👇';
-
-            $request['reply_markup'] = json_encode(array('keyboard' => array(
-                array(
-                    array('text'=>'💰 Касса','callback_data'=>'finance')
-                )
-            )));
+            $response = getTelegram('sendMessage', $request);
             break;
         case 'add_decrease':
             $request['text'] = 'Расход добавлен!';
+            $response = getTelegram('sendMessage', $request);
             break;
         case 'del_decrease':
             $request['text'] = 'Расход удален!';
+            $response = getTelegram('sendMessage', $request);
             break;
         default:
             break;
     }
-    $response = getTelegram('sendMessage', $request);
+
 ?>
 
 
