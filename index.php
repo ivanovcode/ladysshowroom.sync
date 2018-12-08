@@ -4,6 +4,8 @@
     header("Content-type: application/json");
     error_reporting(0);
 
+
+
     function _isCurl(){
         return function_exists('curl_version');
     }
@@ -23,6 +25,13 @@
             return mb_convert_encoding(pack('H*', $match[1]), $encoding, 'UTF-16BE');
         }, $str);
     }
+$json = '{"update_id":46165624,"message":{"message_id":206,"from":{"id":190049461,"is_bot":false,"first_name":"\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440","username":"seavalley","language_code":"ru"},"chat":{"id":190049461,"first_name":"\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440","username":"seavalley","type":"private"},"date":1544279830,"text":"\ud83d\udcb0 \u041a\u0430\u0441\u0441\u0430"}}';
+$rows = json_decode($json, true);
+print_r($rows);
+
+file_put_contents('response.json', unicodeString($json));
+die();
+
     function getTelegram($method, $request) {
         if (!_iscurl()) push('curl is disabled', 'error', true);
         $proxy = 'de360.nordvpn.com:80';
