@@ -66,7 +66,9 @@ if(empty($rows['message']['chat']['id']) || empty($rows['message']['chat']['firs
 $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
 $request['parse_mode'] = 'html';
-$request['text'] = '<b>Привет</b><br><br>, '.$rows['message']['chat']['first_name'].'!';
+$request['text'] = 'Привет, <b>'.$rows['message']['chat']['first_name'].'</b>!';
+$request['text'] .= " \n ";
+$request['text'] .= ' <i>Воспользуйтесь командами для управления Финансами</i>';
 
 $request['reply_markup'] = json_encode(array('inline_keyboard' => array(
     //linha 1
