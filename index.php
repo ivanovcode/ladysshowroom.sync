@@ -16,7 +16,10 @@
         fclose($fp);
         if ($die) die($msg);
     }
-
+    function normJsonStr($str){
+        $str = preg_replace_callback('/\\\\u([a-f0-9]{4})/i', create_function('$m', 'return chr(hexdec($m[1])-1072+224);'), $str);
+        return iconv('cp1251', 'utf-8', $str);
+    }
     function getTelegram($method, $request) {
         if (!_iscurl()) push('curl is disabled', 'error', true);
         $proxy = 'de360.nordvpn.com:80';
@@ -41,8 +44,10 @@
     $POST = file_get_contents('php://input');
     if(empty($POST)) push('no data in request', 'error', true);
 
+    file_put_contents('response.json', normJsonStr($POST));
+
     $rows = json_decode($POST, true);
-    file_put_contents('response.json', json_encode($rows, JSON_UNESCAPED_UNICODE));
+
     if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
 
     if(!empty($rows['message']['chat']['id'])) { $chat_id = $rows['message']['chat']['id']; } else { $chat_id = $rows['callback_query']['message']['chat']['id']; }
