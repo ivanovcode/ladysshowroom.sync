@@ -86,7 +86,7 @@ $item=[];
 $item['text'] = 'B';
 $item['callback_data'] = 'B1';
 array_push($list['inline_keyboard'], $item);
-$request['reply_markup'] = $list;
+$request['reply_markup'] = json_encode($list);
 
 
 $response = getTelegram('sendMessage', $request);
