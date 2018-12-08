@@ -44,6 +44,7 @@ function getTelegram($method, $request) {
 }
 
 
+/*
 if ($_GET['auth'] != 'd41d8cd98f00b204e9800998ecf8427e') push('access denied', 'error', true);
 $POST = file_get_contents('php://input');
 if(empty($POST)) push('no data in request', 'error', true);
@@ -51,7 +52,7 @@ if(empty($POST)) push('no data in request', 'error', true);
 $rows = json_decode($POST, true);
 if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
 if(empty($rows['message']['chat']['id']) || empty($rows['message']['chat']['first_name']) || empty($rows['message']['text'])) push('no require value in request', 'error', true);
-
+*/
 
 $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
@@ -67,6 +68,6 @@ $request['reply_markup'] = json_encode($list, JSON_UNESCAPED_UNICODE);
 
 /*$response = getTelegram('sendMessage', $request);
 file_put_contents('response.json', json_encode($response, JSON_UNESCAPED_UNICODE));*/
-file_put_contents('request.json', json_encode($request, JSON_UNESCAPED_UNICODE));
+file_put_contents('request.json', json_encode($request));
 
 ?>
