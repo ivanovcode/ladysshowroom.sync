@@ -26,8 +26,24 @@ function getTelegram($method, $request) {
     push("http://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/sendMessage?chat_id=".$request['chat_id']."&parse_mode=html&text=Hi", 'access');
     $fp = fopen('./curl.log', 'w');
 
-    $curl = curl_init();
-    curl_setopt_array($curl, array(
+
+    if($ch = curl_init()) {
+        curl_setopt($ch, CURLOPT_URL, "https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/".$method."?chat_id=".$request['chat_id']."&parse_mode=html&text=Hi");
+        curl_setopt($ch, CURLOPT_PROXY, $proxy);
+        curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxyauth);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_VERBOSE, 1);
+        curl_setopt($ch, CURLOPT_STDERR, $fp);
+        $data = curl_exec($ch); $error = curl_error($ch);
+        curl_close($ch);
+    }
+
+
+    /*$ch = curl_init();
+    curl_setopt_array($ch, array(
         CURLOPT_URL => "https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/".$method,
         CURLOPT_PROXY => $proxy,
         CURLOPT_PROXYUSERPWD => $proxyauth,
@@ -42,8 +58,8 @@ function getTelegram($method, $request) {
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_VERBOSE => 1,
         CURLOPT_STDERR => $fp
-    ));
-    $data = curl_exec($curl); $error = curl_error($curl); curl_close($curl);
+    ));*/
+    $data = curl_exec($ch); $error = curl_error($ch); curl_close($ch);
     if ($error) push('curl request failed: ' . $error, 'error');
     return json_decode($data, true);
 }
@@ -52,7 +68,7 @@ $request = [];
 $request['chat_id'] = '190049461';
 
 $response = getTelegram('sendMessage', $request);
-file_put_contents('input.json', json_encode($rows['message']));
+file_put_contents('response.json', json_encode($rows['message']));
 die();
 
 if ($_GET['auth'] != 'd41d8cd98f00b204e9800998ecf8427e') push('access denied', 'error', true);
