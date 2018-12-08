@@ -60,11 +60,10 @@ $request['text'] = 'Привет, '.$rows['message']['chat']['first_name'].'!';
 
 $list = [];
 $list['inline_keyboard'] = [];
-$list['inline_keyboard'][]=[];
 $item['text'] = 'A';
 $item['callback_data'] = 'A1';
-array_push($list['inline_keyboard'][], $item);
-$request['reply_markup'] = json_encode($list);
+array_push($list['inline_keyboard'], $item);
+$request['reply_markup'] = '['.json_encode($list).']';
 
 
 $response = getTelegram('sendMessage', $request);
