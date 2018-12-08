@@ -64,7 +64,9 @@
     if(empty($chat_id) || empty($command)) { push('chat id or command undefined', 'error', true); }
 
     push('chat_id:'.$chat_id.' command:'.$command, 'access');
-    echo $command;
+
+    $command = preg_replace('/[^a-zA-Zа-яА-Я0-9]/ui', '', $command);
+echo $command;
     die();
     switch ($command) {
         case '/start':
