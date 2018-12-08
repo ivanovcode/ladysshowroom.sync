@@ -68,13 +68,12 @@ $request['chat_id'] = $rows['message']['chat']['id'];
 $request['parse_mode'] = 'html';
 $request['text'] = 'Привет, <b>'.$rows['message']['chat']['first_name'].'</b>!';
 $request['text'] .= " \n ";
-$request['text'] .= ' <i>Воспользуйтесь командами для управления Финансами</i>';
+$request['text'] .= '<i>Воспользуйтесь командами для управления Финансами</i>';
 
 $request['reply_markup'] = json_encode(array('inline_keyboard' => array(
-    //linha 1
     array(
-        array('text'=>'✅ Добавить Расход','callback_data'=>'A1'),
-        array('text'=>'✅ Удалить Расход','callback_data'=>'B1')
+        array('text'=>'✅ Добавить Расход','callback_data'=>'add_decrease'),
+        array('text'=>'✅ Удалить Расход','callback_data'=>'del_decrease')
     )
 )));
 
