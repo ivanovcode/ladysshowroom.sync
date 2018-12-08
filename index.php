@@ -8,20 +8,10 @@ error_reporting(0);
 $request['chat_id'] = '111';
 $request['text'] = 'Привет';
 
-$list['inline_keyboard'] = [];
-$item=[];
-$item['text'] = 'A';
-$item['callback_data'] = 'A1';
-array_push($list['inline_keyboard'], $item);
-$item=[];
-$item['text'] = 'B';
-$item['callback_data'] = 'B1';
-array_push($list['inline_keyboard'], $item);
-$request['reply_markup'] = $list;
-print_r($request);
-echo json_encode($request);
-die();*/
 
+
+print_r($request);
+die();*/
 
 function _isCurl(){
     return function_exists('curl_version');
@@ -77,16 +67,13 @@ $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
 $request['text'] = 'Привет, '.$rows['message']['chat']['first_name'].'!';
 
-$list['inline_keyboard'] = [];
-$item=[];
-$item['text'] = 'A';
-$item['callback_data'] = 'A1';
-array_push($list['inline_keyboard'], $item);
-$item=[];
-$item['text'] = 'B';
-$item['callback_data'] = 'B1';
-array_push($list['inline_keyboard'], $item);
-$request['reply_markup'] = json_encode($list);
+$request['reply_markup'] = array('inline_keyboard' => array(
+    //linha 1
+    array(
+        array('text'=>'A','callback_data'=>'A1'),
+        array('text'=>'B','callback_data'=>'B1')
+    )
+));
 
 
 $response = getTelegram('sendMessage', $request);
