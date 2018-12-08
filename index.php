@@ -65,7 +65,7 @@
 
     push('chat_id:'.$chat_id.' command:'.$command, 'access');
 
-    $command = mb_strtolower(preg_replace('/[^a-zA-Zа-яА-Я0-9]/ui', '', $command));
+    $command = mb_strtolower(preg_replace('/[^\\/a-zA-Zа-яА-Я0-9]/ui', '', $command));
 
     switch ($command) {
         case '/start':
@@ -110,8 +110,8 @@
             $request['text'] .= '<b>Выбери нужный раздел</b> 👇';
             $request['reply_markup'] = json_encode(array('keyboard' => array(
                 array(
-                    array('text'=>'📗 Расходы','callback_data'=>'finance'),
-                    array('text'=>'◀ Вернуться','callback_data'=>'finance')
+                    array('text'=>'◀ Вернуться','callback_data'=>'finance'),
+                    array('text'=>'📗 Расходы','callback_data'=>'finance')
 
                 )
             )));
