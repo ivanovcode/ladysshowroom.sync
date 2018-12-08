@@ -112,7 +112,6 @@
                 array(
                     array('text'=>'◀ Вернуться','callback_data'=>'finance'),
                     array('text'=>'📗 Расходы','callback_data'=>'finance')
-
                 )
             )));
             $response = getTelegram('sendMessage', $request);
@@ -129,8 +128,8 @@
             $request['text'] .= '<b>Выбери нужный раздел</b> 👇';
             $request['reply_markup'] = json_encode(array('keyboard' => array(
                 array(
-                    array('text'=>'✅ Внести расход','callback_data'=>'finance'),
-                    array('text'=>'❎ Отменить расход','callback_data'=>'finance')
+                    array('✅ Внести расход'),
+                    array('❎ Отменить расход')
                 )
             )));
             $response = getTelegram('sendMessage', $request);
