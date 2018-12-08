@@ -40,7 +40,7 @@
     if ($_GET['auth'] != 'd41d8cd98f00b204e9800998ecf8427e') push('access denied', 'error', true);
     $POST = file_get_contents('php://input');
     if(empty($POST)) push('no data in request', 'error', true);
-    //file_put_contents('response.json', $POST); //json_encode($response, JSON_UNESCAPED_UNICODE)
+    file_put_contents('response.json', $POST); //json_encode($response, JSON_UNESCAPED_UNICODE)
 
     $rows = json_decode($POST, true);
     if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
@@ -67,7 +67,7 @@
             $request = [];
             $request['chat_id'] = $chat_id;
             $request['parse_mode'] = 'html';
-            $request['text'] .= 'Сейчас мы находимся в';
+            $request['text'] .= 'Сейчас мы находимся в:';
             $request['text'] .= " \n ";
             $request['text'] .= '<i>/ Главное меню /</i>';
             $request['text'] .= " \n ";
