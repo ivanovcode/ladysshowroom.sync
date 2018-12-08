@@ -65,7 +65,8 @@
 
     push('chat_id:'.$chat_id.' command:'.$command, 'access');
 
-    $command = preg_replace('/[^a-zA-Zа-яА-Я0-9]/ui', '', $command);
+    $command = mb_strtolower(preg_replace('/[^a-zA-Zа-яА-Я0-9]/ui', '', $command));
+
 echo $command;
     die();
     switch ($command) {
