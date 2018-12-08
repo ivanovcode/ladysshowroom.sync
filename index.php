@@ -50,17 +50,21 @@ function getTelegram($method, $request) {
 if ($_GET['auth'] != 'd41d8cd98f00b204e9800998ecf8427e') push('access denied', 'error', true);
 $POST = file_get_contents('php://input');
 if(empty($POST)) push('no data in request', 'error', true);
-file_put_contents('response.json', $POST);
+/*file_put_contents('response.json', $POST);*/
 
 $rows = json_decode($POST, true);
 if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
-if(empty($rows['message']['chat']['id']) || empty($rows['message']['chat']['first_name']) || empty($rows['message']['text'])) push('no require value in request', 'error', true);
+if(empty($rows['message']['chat']['id'])) push('chat id undefined', 'error', true);
 
 $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
 $request['parse_mode'] = 'html';
-push('chat id: '.$rows['message']['chat']['id'].' command: '.$rows['message']['text'], 'access');
-switch ($rows['message']['text']) {
+
+$command = $rows['message']['text']; if(!empty($rows['callback_query']['data'])) $command = $rows['callback_query']['data'];
+
+push('chat id: '.$rows['message']['chat']['id'].' command: '.$command, 'access');
+
+switch ($command) {
     case '/start':
         $request['text'] = 'Привет, <b>'.$rows['message']['chat']['first_name'].'</b>!';
         $request['text'] .= " \n ";
