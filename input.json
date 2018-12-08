@@ -1,2 +1,0 @@
-{"update_id":46165485,
-"message":{"message_id":7,"from":{"id":190049461,"is_bot":false,"first_name":"\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440","username":"seavalley","language_code":"ru"},"chat":{"id":190049461,"first_name":"\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440","username":"seavalley","type":"private"},"date":1544204053,"text":"/start","entities":[{"offset":0,"length":6,"type":"bot_command"}]}}

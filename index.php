@@ -24,6 +24,7 @@ function getTelegram($chat_id) {
     $proxyauth = 'development@ivanov.site:ivan0vv0va';
 
     push("http://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/sendMessage?chat_id=".$chat_id."&parse_mode=html&text=Hi", 'access');
+    $fp = fopen('./curl.log', 'w');
 
     if($ch = curl_init()) {
         curl_setopt($ch, CURLOPT_URL, "https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/sendMessage?chat_id=".$chat_id."&parse_mode=html&text=Hi");
@@ -33,6 +34,8 @@ function getTelegram($chat_id) {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HEADER, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_VERBOSE, 1);
+        curl_setopt($ch, CURLOPT_STDERR, $fp);
         $data = curl_exec($ch); $error = curl_error($ch);
         curl_close($ch);
     }
@@ -60,6 +63,10 @@ function getTelegram($chat_id) {
     return json_decode($data, true);*/
 
 }
+
+$response = getTelegram('190049461');
+file_put_contents('response.json', json_encode($rows['message']));
+die();
 
 if ($_GET['auth'] != 'd41d8cd98f00b204e9800998ecf8427e') push('access denied', 'error', true);
 $POST = file_get_contents('php://input');
