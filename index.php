@@ -67,13 +67,13 @@ $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
 $request['text'] = 'Привет, '.$rows['message']['chat']['first_name'].'!';
 
-$request['reply_markup'] = array('inline_keyboard' => array(
+$request['reply_markup'] = json_encode(array('inline_keyboard' => array(
     //linha 1
     array(
         array('text'=>'A','callback_data'=>'A1'),
         array('text'=>'B','callback_data'=>'B1')
     )
-));
+)));
 
 
 $response = getTelegram('sendMessage', $request);
