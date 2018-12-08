@@ -63,9 +63,9 @@
             $request['text'] .= 'Выбери нужный раздел 👇';
 
             $request['reply_markup'] = json_encode(array('keyboard' => array(
-                array(
-                    array('text'=>'💰 Касса','callback_data'=>'add_decrease'),
-                )
+                array('text'=>'💰 Касса','callback_data'=>'finance'),
+                array('text'=>'📕 Остатки','callback_data'=>'products'),
+                array('text'=>'📝 Заказы','callback_data'=>'orders'),
             )));
             break;
         case 'add_decrease':
