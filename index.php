@@ -57,13 +57,13 @@ if(empty($rows['message']['chat']['id']) || empty($rows['message']['chat']['firs
 $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
 $request['text'] = 'Привет, '.$rows['message']['chat']['first_name'].'!';
-$list = [];
+
+/*$list = [];
 $list['inline_keyboard'] = [];
 $item['text'] = 'A';
 $item['callback_data'] = 'A1';
-
 array_push($list['inline_keyboard'], $item);
-$request['reply_markup'] = json_encode($list, JSON_UNESCAPED_UNICODE);
+$request['reply_markup'] = json_encode($list, JSON_UNESCAPED_UNICODE);*/
 
 
 $response = getTelegram('sendMessage', $request);
