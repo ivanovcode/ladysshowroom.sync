@@ -61,7 +61,6 @@
             $request['reply_markup'] = json_encode(array('keyboard' => array(
                 array(
                     array('text'=>'💰 Касса','callback_data'=>'add_decrease'),
-                    array('text'=>'➖ Расход','callback_data'=>'del_decrease')
                 )
             )));
             break;
