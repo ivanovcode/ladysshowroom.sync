@@ -59,8 +59,8 @@ $request['reply_markup']['inline_keyboard'] = [];
 $item = []; $item['text'] = 'A'; $item['callback_data'] = 'A1';
 array_push($request['reply_markup']['inline_keyboard'], $item);
 
-$response = getTelegram('sendMessage', $request);
-file_put_contents('response.json', json_encode($response, JSON_UNESCAPED_UNICODE));
+/*$response = getTelegram('sendMessage', $request);
+file_put_contents('response.json', json_encode($response, JSON_UNESCAPED_UNICODE));*/
 file_put_contents('request.json', json_encode($request, JSON_UNESCAPED_UNICODE));
 
 ?>
