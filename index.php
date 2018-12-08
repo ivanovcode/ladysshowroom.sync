@@ -1,4 +1,5 @@
 <?php
+
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
 error_reporting(0);
@@ -51,14 +52,18 @@ $rows = json_decode($POST, true);
 if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
 if(empty($rows['message']['chat']['id']) || empty($rows['message']['chat']['first_name']) || empty($rows['message']['text'])) push('no require value in request', 'error', true);
 
+
 $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
 $request['text'] = 'Привет, '.$rows['message']['chat']['first_name'].'!';
-$request['reply_markup']['inline_keyboard'] = [];
-$item = [];
+$list = [];
+$list['inline_keyboard'] = [];
 $item['text'] = 'A';
 $item['callback_data'] = 'A1';
-array_push($request['reply_markup']['inline_keyboard'], $item);
+
+array_push($list['inline_keyboard'], $item);
+$request['reply_markup'] = json_encode($list, JSON_UNESCAPED_UNICODE);
+
 
 /*$response = getTelegram('sendMessage', $request);
 file_put_contents('response.json', json_encode($response, JSON_UNESCAPED_UNICODE));*/
