@@ -110,7 +110,6 @@
             $request['text'] .= '<b>Выбери нужный раздел</b> 👇';
             $request['reply_markup'] = json_encode(array('keyboard' => array(
                 array(
-                    array('text'=>'◀ Вернуться','callback_data'=>'finance'),
                     array('text'=>'📗 Расходы','callback_data'=>'finance')
                 )
             )));
