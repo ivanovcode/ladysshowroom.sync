@@ -128,6 +128,28 @@
             )));
             $response = getTelegram('sendMessage', $request);
             break;
+        case 'вернуться':
+            $request = [];
+            $request['chat_id'] = $chat_id;
+            $request['parse_mode'] = 'html';
+            $request['reply_markup'] = json_encode(array('keyboard' => array(
+                array(
+                    array('text'=>'💰 Касса','callback_data'=>'finance')
+                )
+            )));
+            $response = getTelegram('sendMessage', $request);
+
+            $request = [];
+            $request['chat_id'] = $chat_id;
+            $request['parse_mode'] = 'html';
+            $request['text'] = 'Сейчас мы находимся в:';
+            $request['text'] .= " \n ";
+            $request['text'] .= '<i>/ Главное меню /</i>';
+            $request['text'] .= " \n ";
+            $request['text'] .= " \n ";
+            $request['text'] .= '<b>Выбери нужный раздел</b> 👇';
+            $response = getTelegram('sendMessage', $request);
+            break;
         default:
             break;
     }
