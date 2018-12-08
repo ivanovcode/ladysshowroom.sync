@@ -41,18 +41,13 @@
     $POST = file_get_contents('php://input');
     if(empty($POST)) push('no data in request', 'error', true);
 
-
     $rows = json_decode($POST, true);
-
     file_put_contents('response.json', json_encode($rows, JSON_UNESCAPED_UNICODE));
-
     if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
 
     if(!empty($rows['message']['chat']['id'])) { $chat_id = $rows['message']['chat']['id']; } else { $chat_id = $rows['callback_query']['message']['chat']['id']; }
     if(!empty($rows['message']['text'])) { $command = $rows['message']['text']; } else { $command = $rows['callback_query']['data']; }
     if(empty($chat_id) || empty($command)) { push('chat id or command undefined', 'error', true); }
-
-
 
     switch ($command) {
         case '/start':
@@ -89,17 +84,4 @@
         default:
             break;
     }
-
 ?>
-
-
-
-
-Бот-консоль для упрощенной работы с ❤ Lady's Showroom CRM.
-
-✅ Внесение данных о расходах
-
-Полная версия CRM:
-http://admin.ladysshowroom.ru
-
-Для начала работы бота 👇 нажмите START
