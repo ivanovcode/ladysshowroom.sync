@@ -27,7 +27,7 @@ function getTelegram($method, $request) {
     $fp = fopen('./curl.log', 'w');
 
 
-    if($ch = curl_init()) {
+    /*if($ch = curl_init()) {
         curl_setopt($ch, CURLOPT_URL, "https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/".$method."?chat_id=".$request['chat_id']."&parse_mode=html&text=Hi");
         curl_setopt($ch, CURLOPT_PROXY, $proxy);
         curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxyauth);
@@ -39,7 +39,21 @@ function getTelegram($method, $request) {
         curl_setopt($ch, CURLOPT_STDERR, $fp);
         $data = curl_exec($ch); $error = curl_error($ch);
         curl_close($ch);
-    }
+    }*/
+
+
+    $params=[
+        'chat_id'=>$request['chat_id'],
+        'text'=>'hi',
+    ];
+    $ch = curl_init("https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/".$method);
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, ($params));
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_VERBOSE, 1);
+    curl_setopt($ch, CURLOPT_STDERR, $fp);
 
 
     /*$ch = curl_init();
