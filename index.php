@@ -45,9 +45,9 @@
         return json_decode($data, true);
     }
 
-    //if ($_GET['auth'] != 'd41d8cd98f00b204e9800998ecf8427e') push('access denied', 'error', true);
+    if ($_GET['auth'] != 'd41d8cd98f00b204e9800998ecf8427e') push('access denied', 'error', true);
     $POST = file_get_contents('php://input');
-    $POST = '{"update_id":46165624,"message":{"message_id":206,"from":{"id":190049461,"is_bot":false,"first_name":"\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440","username":"seavalley","language_code":"ru"},"chat":{"id":190049461,"first_name":"\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440","username":"seavalley","type":"private"},"date":1544279830,"text":"\ud83d\udcb0 \u041a\u0430\u0441\u0441\u0430"}}';
+    //$POST = '{"update_id":46165624,"message":{"message_id":206,"from":{"id":190049461,"is_bot":false,"first_name":"\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440","username":"seavalley","language_code":"ru"},"chat":{"id":190049461,"first_name":"\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440","username":"seavalley","type":"private"},"date":1544279830,"text":"\ud83d\udcb0 \u041a\u0430\u0441\u0441\u0430"}}';
     if(empty($POST)) push('no data in request', 'error', true);
 
 
@@ -66,7 +66,6 @@
     push('chat_id:'.$chat_id.' command:'.$command, 'access');
 
     $command = mb_strtolower(preg_replace('/[^a-zA-Zа-яА-Я0-9]/ui', '', $command));
-
 
     switch ($command) {
         case '/start':
@@ -109,6 +108,11 @@
             $request['text'] .= " \n ";
             $request['text'] .= " \n ";
             $request['text'] .= '<b>Выбери нужный раздел</b> 👇';
+            $request['reply_markup'] = json_encode(array('keyboard' => array(
+                array(
+                    array('text'=>'🔴 Расходы','callback_data'=>'finance')
+                )
+            )));
             $response = getTelegram('sendMessage', $request);
             break;
 
