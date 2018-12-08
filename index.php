@@ -48,7 +48,7 @@
     (!empty($rows['message']['chat']['id']) ? $chat_id = ['message']['chat']['id'] : $chat_id = $rows['callback_query']['message']['chat']['id']);
     (!empty($rows['message']['text']) ? $command = $rows['message']['text'] : $command = $rows['callback_query']['data']);
     (empty($chat_id) || empty($command) ? push('chat id or command undefined', 'error', true) : '');
-    push('chat id: '.$request['chat_id'].' command: '.$command, 'access');
+    push('chat id: '.$chat_id.' command: '.$command, 'access');
 
     $request = [];
     $request['chat_id'] = $chat_id;
@@ -66,13 +66,14 @@
                 )
             )));
             break;
-        case '/add_decrease':
+        case 'add_decrease':
             $request['text'] = 'Расход добавлен!';
             break;
-        case '/del_decrease':
+        case 'del_decrease':
             $request['text'] = 'Расход удален!';
             break;
         default:
+            break;
     }
     $response = getTelegram('sendMessage', $request);
     /*file_put_contents('response.json', json_encode($response, JSON_UNESCAPED_UNICODE)); file_put_contents('request.json', json_encode($request));*/
