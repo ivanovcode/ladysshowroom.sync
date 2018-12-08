@@ -41,10 +41,10 @@ function getTelegram($method, $request) {
         curl_close($ch);
     }*/
 
-    $params=[
+    /*$params=[
         'chat_id'=>$request['chat_id'],
         'text'=>'hi',
-    ];
+    ];*/
     $ch = curl_init('https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/'.$method);
     curl_setopt($ch, CURLOPT_PROXY, $proxy);
     curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxyauth);
@@ -81,6 +81,7 @@ function getTelegram($method, $request) {
 
 $request = [];
 $request['chat_id'] = '190049461';
+$request['text'] = 'hi';
 
 $response = getTelegram('sendMessage', $request);
 file_put_contents('response.json', json_encode($rows['message']));
