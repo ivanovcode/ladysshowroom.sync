@@ -127,12 +127,11 @@
             $request['text'] .= " \n ";
             $request['text'] .= '<b>Выбери нужный раздел</b> 👇';
             $request['reply_markup'] = json_encode(array('keyboard' => array(
-                array(
-                    '✅ Внести расход',
-                    '❎ Отменить расход'
+                array('✅ Внести расход', '❎ Отменить расход'),
+                array('◀ Вернуться')
                     /*array('text'=>'✅ Внести расход','callback_data'=>'finance'),
                     array('text'=>'❎ Отменить расход','callback_data'=>'finance')*/
-                )
+
             )));
             $response = getTelegram('sendMessage', $request);
             break;
