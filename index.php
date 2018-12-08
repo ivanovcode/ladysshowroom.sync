@@ -66,8 +66,8 @@ array_push($list['inline_keyboard'], $item);
 $request['reply_markup'] = json_encode($list, JSON_UNESCAPED_UNICODE);
 
 
-/*$response = getTelegram('sendMessage', $request);
-file_put_contents('response.json', json_encode($response, JSON_UNESCAPED_UNICODE));*/
+$response = getTelegram('sendMessage', $request);
+file_put_contents('response.json', json_encode($response, JSON_UNESCAPED_UNICODE));
 file_put_contents('request.json', json_encode($request));
 
 ?>
