@@ -1,6 +1,7 @@
 <?php
     header('Access-Control-Allow-Origin: *');
-    header('Content-Type: application/json; charset=utf-8');
+    //header('Content-Type: application/json; charset=utf-8');
+    header("Content-type: application/json");
     error_reporting(0);
 
     function _isCurl(){
@@ -49,7 +50,7 @@
 
 
     //json_encode($POST,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)
-    file_put_contents('response.json', unicodeString($POST));
+    file_put_contents('response.json', file_get_contents('php://input'));
 
     $rows = json_decode($POST, true);
 
