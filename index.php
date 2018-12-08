@@ -70,8 +70,8 @@ $request['text'] = 'Привет, '.$rows['message']['chat']['first_name'].'!';
 $request['reply_markup'] = json_encode(array('inline_keyboard' => array(
     //linha 1
     array(
-        array('text'=>'u\'\U000026C4\' Добавить Расход','callback_data'=>'A1'),
-        array('text'=>'u\'\U000026C4\' Удалить Расход','callback_data'=>'B1')
+        array('text'=>'\xE2\x9C\x85 Добавить Расход','callback_data'=>'A1'),
+        array('text'=>'\xE2\x9C\x85 Удалить Расход','callback_data'=>'B1')
     )
 )));
 
