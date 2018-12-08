@@ -170,9 +170,6 @@
             $request['text'] .= " \n ";
             $request['text'] .= '<b>К какой категории относиться расход?</b> 👇';
             $request['reply_markup'] = json_encode(array(
-                'keyboard' => array(
-                    array('▶ Далее [Р3]'), array('◀ Вернуться')
-                ),
                 'inline_keyboard' => array(
                     array('text'=>'A', 'callback_data'=>'A1')
                 )
