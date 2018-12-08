@@ -16,9 +16,11 @@
         fclose($fp);
         if ($die) die($msg);
     }
-    function normJsonStr($str){
-        $str = preg_replace_callback('/\\\\u([a-f0-9]{4})/i', create_function('$m', 'return chr(hexdec($m[1])-1072+224);'), $str);
-        return iconv('cp1251', 'utf-8', $str);
+    function unicodeString($str, $encoding=null) {
+        if (is_null($encoding)) $encoding = ini_get('mbstring.internal_encoding');
+        return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/u', function($match) use ($encoding) {
+            return mb_convert_encoding(pack('H*', $match[1]), $encoding, 'UTF-16BE');
+        }, $str);
     }
     function getTelegram($method, $request) {
         if (!_iscurl()) push('curl is disabled', 'error', true);
@@ -46,10 +48,12 @@
     if(empty($POST)) push('no data in request', 'error', true);
 
 
+    //json_encode($POST,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)
+    file_put_contents('response.json', unicodeString($POST));
 
     $rows = json_decode($POST, true);
 
-file_put_contents('response.json', json_encode($rows,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
+
 
     if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
 
