@@ -50,7 +50,7 @@
 
 
     //json_encode($POST,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)
-    file_put_contents('response.json', file_get_contents('php://input'));
+    file_put_contents('response.json', iconv('CP1251', 'UTF-8', file_get_contents('php://input')));
 
     $rows = json_decode($POST, true);
 
