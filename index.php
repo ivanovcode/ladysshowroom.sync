@@ -56,7 +56,6 @@
 
     $rows = json_decode($POST, true);
 
-
     if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
 
     if(!empty($rows['message']['chat']['id'])) { $chat_id = $rows['message']['chat']['id']; } else { $chat_id = $rows['callback_query']['message']['chat']['id']; }
@@ -145,7 +144,24 @@
             )));
             $response = getTelegram('sendMessage', $request);
             break;
+        case 'создать расход':
+            $request = [];
+            $request['chat_id'] = $chat_id;
+            $request['parse_mode'] = 'html';
+            $request['text'] .= 'Сейчас мы находимся в:';
+            $request['text'] .= " \n ";
+            $request['text'] .= '<i>/ Создание нового Расхода /</i>';
+            $request['text'] .= " \n ";
+            $request['text'] .= " \n ";
+            $request['text'] .= '<b>Расход на какую сумму?</b> 👇';
+            $request['reply_markup'] = json_encode(array('keyboard' => array(
+                array('▶ Далее [Р2]'), array('◀ Вернуться')
+            )));
+            $response = getTelegram('sendMessage', $request);
+            break;
         default:
             break;
     }
 ?>
+
+
