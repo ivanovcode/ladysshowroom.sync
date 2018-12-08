@@ -4,6 +4,7 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
 error_reporting(0);
 
+
 function _isCurl(){
     return function_exists('curl_version');
 }
@@ -59,8 +60,13 @@ $request['chat_id'] = $rows['message']['chat']['id'];
 $request['text'] = 'Привет, '.$rows['message']['chat']['first_name'].'!';
 
 $list = [];
+$item=[];
 $item['text'] = 'A';
 $item['callback_data'] = 'A1';
+array_push($list, $item);
+$item=[];
+$item['text'] = 'B';
+$item['callback_data'] = 'B1';
 array_push($list, $item);
 $request['reply_markup']['inline_keyboard'] = '['.json_encode($list).']';
 
