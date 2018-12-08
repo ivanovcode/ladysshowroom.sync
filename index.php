@@ -54,9 +54,10 @@ if(empty($rows['message']['chat']['id']) || empty($rows['message']['chat']['firs
 $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
 $request['text'] = 'Привет, '.$rows['message']['chat']['first_name'].'!';
-$request['reply_markup'] = [];
 $request['reply_markup']['inline_keyboard'] = [];
-$item = []; $item['text'] = 'A'; $item['callback_data'] = 'A1';
+$item = [];
+$item['text'] = 'A';
+$item['callback_data'] = 'A1';
 array_push($request['reply_markup']['inline_keyboard'], $item);
 
 /*$response = getTelegram('sendMessage', $request);
