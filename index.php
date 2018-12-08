@@ -159,6 +159,26 @@
             )));
             $response = getTelegram('sendMessage', $request);
             break;
+        case 'далеер2':
+            $request = [];
+            $request['chat_id'] = $chat_id;
+            $request['parse_mode'] = 'html';
+            $request['text'] .= 'Сейчас мы находимся в:';
+            $request['text'] .= " \n ";
+            $request['text'] .= '<i>/ Создание нового Расхода /</i>';
+            $request['text'] .= " \n ";
+            $request['text'] .= " \n ";
+            $request['text'] .= '<b>К какой категории относиться расход?</b> 👇';
+            $request['reply_markup'] = json_encode(array(
+                'keyboard' => array(
+                    array('▶ Далее [Р3]'), array('◀ Вернуться')
+                ),
+                'inline_keyboard' => array(
+                    array('text'=>'A', 'callback_data'=>'A1')
+                )
+            ));
+            $response = getTelegram('sendMessage', $request);
+            break;
         default:
             break;
     }
