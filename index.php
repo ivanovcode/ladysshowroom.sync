@@ -45,9 +45,11 @@
     $POST = file_get_contents('php://input');
     if(empty($POST)) push('no data in request', 'error', true);
 
-    file_put_contents('response.json', json_encode($POST,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
+
 
     $rows = json_decode($POST, true);
+
+file_put_contents('response.json', json_encode($rows,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
 
     if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
 
