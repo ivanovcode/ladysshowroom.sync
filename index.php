@@ -62,7 +62,7 @@
             $request['text'] .= '<i>/ Главное меню /</i>';
             $request['text'] .= " \n ";
             $request['text'] .= " \n ";
-            $request['text'] .= 'Выбери нужный раздел 👇';
+            $request['text'] .= '<b>Выбери нужный раздел</b> 👇';
 
             $request['reply_markup'] = json_encode(array('keyboard' => array(
                 array(
