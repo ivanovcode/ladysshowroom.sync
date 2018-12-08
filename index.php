@@ -33,7 +33,6 @@ function getTelegram($method, $request) {
     $proxy = 'de360.nordvpn.com:80';
     $proxyauth = 'development@ivanov.site:ivan0vv0va';
 
-    push("http://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/sendMessage?chat_id=".$request['chat_id']."&parse_mode=html&text=Hi", 'access');
     $fp = fopen('./curl.log', 'w');
 
     $ch = curl_init('https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/'.$method);
@@ -62,24 +61,32 @@ $rows = json_decode($POST, true);
 if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
 if(empty($rows['message']['chat']['id']) || empty($rows['message']['chat']['first_name']) || empty($rows['message']['text'])) push('no require value in request', 'error', true);
 
-
 $request = [];
 $request['chat_id'] = $rows['message']['chat']['id'];
 $request['parse_mode'] = 'html';
-$request['text'] = 'Привет, <b>'.$rows['message']['chat']['first_name'].'</b>!';
-$request['text'] .= " \n ";
-$request['text'] .= '<i>Воспользуйтесь командами для управления Финансами</i>';
-
-$request['reply_markup'] = json_encode(array('inline_keyboard' => array(
-    array(
-        array('text'=>'✅ Добавить Расход','callback_data'=>'add_decrease'),
-        array('text'=>'✅ Удалить Расход','callback_data'=>'del_decrease')
-    )
-)));
-
-
+push('chat id: '.$rows['message']['chat']['id'].' command: '.$rows['message']['text'], 'access');
+switch ($rows['message']['text']) {
+    case '/start':
+        $request['text'] = 'Привет, <b>'.$rows['message']['chat']['first_name'].'</b>!';
+        $request['text'] .= " \n ";
+        $request['text'] .= '<i>Воспользуйтесь командами для управления Финансами</i>';
+        $request['reply_markup'] = json_encode(array('inline_keyboard' => array(
+            array(
+                array('text'=>'✅ Добавить Расход','callback_data'=>'add_decrease'),
+                array('text'=>'✅ Удалить Расход','callback_data'=>'del_decrease')
+            )
+        )));
+        break;
+    case '/add_decrease':
+        $request['text'] = 'Расход добавлен!';
+        break;
+    case '/del_decrease':
+        $request['text'] = 'Расход удален!';
+        break;
+    default:
+}
 $response = getTelegram('sendMessage', $request);
-file_put_contents('response.json', json_encode($response, JSON_UNESCAPED_UNICODE));
-file_put_contents('request.json', json_encode($request));
+/*file_put_contents('response.json', json_encode($response, JSON_UNESCAPED_UNICODE));
+file_put_contents('request.json', json_encode($request));*/
 
 ?>
