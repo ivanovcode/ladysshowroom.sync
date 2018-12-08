@@ -40,7 +40,7 @@
     if ($_GET['auth'] != 'd41d8cd98f00b204e9800998ecf8427e') push('access denied', 'error', true);
     $POST = file_get_contents('php://input');
     if(empty($POST)) push('no data in request', 'error', true);
-    file_put_contents('response.json', $POST); //json_encode($response, JSON_UNESCAPED_UNICODE)
+    //file_put_contents('response.json', $POST); //json_encode($response, JSON_UNESCAPED_UNICODE)
 
     $rows = json_decode($POST, true);
     if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
@@ -60,8 +60,8 @@
             $request['text'] .= '<i>Воспользуйтесь командами для управления Финансами</i>';
             $request['reply_markup'] = json_encode(array('inline_keyboard' => array(
                 array(
-                    array('text'=>'✅ Добавить Расход','callback_data'=>'add_decrease'),
-                    array('text'=>'✅ Удалить Расход','callback_data'=>'del_decrease')
+                    array('text'=>'➕ Расход','callback_data'=>'add_decrease'),
+                    array('text'=>'➖ Расход','callback_data'=>'del_decrease')
                 )
             )));
             break;
