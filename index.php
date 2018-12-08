@@ -65,7 +65,7 @@
 
     push('chat_id:'.$chat_id.' command:'.$command, 'access');
 
-    $command = mb_strtolower(preg_replace('/[^a-zA-Zа-яА-Я0-9]/ui', '', $command));
+    $command = mb_strtolower(preg_replace('/[^a-zA-Zа-яА-Я0-9/]/ui', '', $command));
 
     switch ($command) {
         case '/start':
