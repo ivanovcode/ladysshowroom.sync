@@ -44,7 +44,7 @@
     $POST = file_get_contents('php://input');
     if(empty($POST)) push('no data in request', 'error', true);
 
-    file_put_contents('response.json', normJsonStr($POST));
+    file_put_contents('response.json', $POST);
 
     $rows = json_decode($POST, true);
 
