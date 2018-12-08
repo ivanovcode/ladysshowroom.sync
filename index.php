@@ -62,8 +62,6 @@ $list = [];
 $item['text'] = 'A';
 $item['callback_data'] = 'A1';
 array_push($list, $item);
-
-$request['reply_markup'] = [];
 $request['reply_markup']['inline_keyboard'] = '['.json_encode($list).']';
 
 
