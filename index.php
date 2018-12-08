@@ -55,9 +55,13 @@
 
     switch ($command) {
         case '/start':
-            $request['text'] = '✌ Привет, '.$rows['message']['chat']['first_name'].'! Выбери нужный раздел 👇';
+            $request['text'] = '✌ Привет, '.$rows['message']['chat']['first_name'].'!';
             $request['text'] .= " \n ";
-            $request['text'] .= ': <b>Главное меню</b> <i>/</i>';
+            $request['text'] .= '<i>Сейчас мы в:</i> <b>Главное меню /</b>';
+            $request['text'] .= " \n ";
+            $request['text'] .= " \n ";
+            $request['text'] .= 'Выбери нужный раздел 👇';
+
             $request['reply_markup'] = json_encode(array('keyboard' => array(
                 array(
                     array('text'=>'💰 Касса','callback_data'=>'add_decrease'),
