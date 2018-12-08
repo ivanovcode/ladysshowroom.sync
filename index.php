@@ -55,10 +55,10 @@
 
     switch ($command) {
         case '/start':
-            $request['text'] = 'Привет, <b>'.$rows['message']['chat']['first_name'].'</b>!';
+            $request['text'] = '✌ Привет, '.$rows['message']['chat']['first_name'].'!';
             $request['text'] .= " \n ";
             $request['text'] .= '<i>Воспользуйтесь командами для управления Финансами</i>';
-            $request['reply_markup'] = json_encode(array('inline_keyboard' => array(
+            $request['reply_markup'] = json_encode(array('keyboard' => array(
                 array(
                     array('text'=>'➕ Расход','callback_data'=>'add_decrease'),
                     array('text'=>'➖ Расход','callback_data'=>'del_decrease')
@@ -76,3 +76,17 @@
     }
     $response = getTelegram('sendMessage', $request);
 ?>
+
+
+
+
+Бот-консоль для упрощенной работы с ❤ Lady's Showroom CRM.
+
+✅ Внесение данных о расходах и доходах
+✅ Получение информации по остаткам
+✅ Оформление заказа и другое.
+
+Полная версия CRM:
+http://admin.ladysshowroom.ru
+
+Для начала работы бота 👇 нажмите START
