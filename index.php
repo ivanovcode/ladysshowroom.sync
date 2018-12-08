@@ -144,7 +144,7 @@
             )));
             $response = getTelegram('sendMessage', $request);
             break;
-        case 'создать расход':
+        case 'создатьрасход':
             $request = [];
             $request['chat_id'] = $chat_id;
             $request['parse_mode'] = 'html';
