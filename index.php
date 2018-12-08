@@ -109,10 +109,7 @@
             $request['text'] .= " \n ";
             $request['text'] .= '<b>Выбери нужный раздел</b> 👇';
             $request['reply_markup'] = json_encode(array('keyboard' => array(
-                array(
-                    array('text'=>'◀ Вернуться','callback_data'=>'finance'),
-                    array('text'=>'📗 Расходы','callback_data'=>'finance')
-                )
+                array('📗 Расходы'), array('◀ Вернуться')
             )));
             $response = getTelegram('sendMessage', $request);
             break;
@@ -127,11 +124,7 @@
             $request['text'] .= " \n ";
             $request['text'] .= '<b>Выбери нужный раздел</b> 👇';
             $request['reply_markup'] = json_encode(array('keyboard' => array(
-                array('✅ Внести расход', '❎ Отменить расход'),
-                array('◀ Вернуться')
-                    /*array('text'=>'✅ Внести расход','callback_data'=>'finance'),
-                    array('text'=>'❎ Отменить расход','callback_data'=>'finance')*/
-
+                array('✅ Создать Расход', '❎ Удалить Расход'), array('◀ Вернуться')
             )));
             $response = getTelegram('sendMessage', $request);
             break;
