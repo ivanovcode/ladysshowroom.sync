@@ -1,10 +1,8 @@
 <?php
     header('Access-Control-Allow-Origin: *');
-    //header('Content-Type: application/json; charset=utf-8');
-    header("Content-type: application/json");
+    header('Content-Type: application/json; charset=utf-8');
+
     error_reporting(0);
-
-
 
     function _isCurl(){
         return function_exists('curl_version');
@@ -64,6 +62,7 @@
     if(!empty($rows['message']['text'])) { $command = $rows['message']['text']; } else { $command = $rows['callback_query']['data']; }
     if(empty($chat_id) || empty($command)) { push('chat id or command undefined', 'error', true); }
 
+    push('chat_id:'.$chat_id.' command:'.$command, 'access');
     switch ($command) {
         case '/start':
             $request = [];
