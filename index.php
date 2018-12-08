@@ -45,10 +45,8 @@
     $rows = json_decode($POST, true);
     if(!isValidJSON($POST) || $rows === null) push('not valid json in request', 'error', true);
 
-    if(!empty($rows['message']['chat']['id'])) { $chat_id = ['message']['chat']['id']; } else { $chat_id = $rows['callback_query']['message']['chat']['id']; }
+    if(!empty($rows['message']['chat']['id'])) { $chat_id = $rows['message']['chat']['id']; } else { $chat_id = $rows['callback_query']['message']['chat']['id']; }
     if(!empty($rows['message']['text'])) { $command = $rows['message']['text']; } else { $command = $rows['callback_query']['data']; }
-
-    push('0:' . $chat_id . ' 1:' . $rows['message']['chat']['id'] . ' 2:' . $rows['callback_query']['message']['chat']['id'] . ' 3:' . $rows['message']['text'] . ' 4:' . $rows['callback_query']['data'], 'access');
     if(empty($chat_id) || empty($command)) { push('chat id or command undefined', 'error', true); }
 
     $request = [];
