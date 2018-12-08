@@ -47,7 +47,7 @@
 
     (!empty($rows['message']['chat']['id']) ? $chat_id = ['message']['chat']['id'] : $chat_id = $rows['callback_query']['message']['chat']['id']);
     (!empty($rows['message']['text']) ? $command = $rows['message']['text'] : $command = $rows['callback_query']['data']);
-    push($rows['message']['chat']['id'].' / '.$rows['callback_query']['message']['chat']['id'] . ' / ' . $rows['message']['text'] . ' / ' . $rows['callback_query']['data'], 'access');
+    push('1:' . $rows['message']['chat']['id'] . ' 2:' . $rows['callback_query']['message']['chat']['id'] . ' 3:' . $rows['message']['text'] . ' 4:' . $rows['callback_query']['data'], 'access');
     (empty($chat_id) || empty($command) ? push('chat id or command undefined', 'error', true) : '');
 
 
