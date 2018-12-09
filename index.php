@@ -52,7 +52,7 @@
 
 
     //json_encode($POST,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)
-    file_put_contents('response.json', $POST);
+    //file_put_contents('response.json', $POST);
 
     $rows = json_decode($POST, true);
 
@@ -62,7 +62,7 @@
     if(!empty($rows['message']['text'])) { $command = $rows['message']['text']; } else { $command = $rows['callback_query']['data']; }
     if(empty($chat_id) || empty($command)) { push('chat id or command undefined', 'error', true); }
 
-    push('chat_id:'.$chat_id.' command:'.$command, 'access');
+    //push('chat_id:'.$chat_id.' command:'.$command, 'access');
 
     $command = mb_strtolower(preg_replace('/[^\\/a-zA-Zа-яА-Я0-9]/ui', '', $command));
 
@@ -74,7 +74,8 @@
             $request['text'] = '✌ Привет, '.$rows['message']['chat']['first_name'].'!';
             $request['reply_markup'] = json_encode(array('keyboard' => array(
                 array(
-                    array('text'=>'💰 Касса','callback_data'=>'finance')
+                    array('text'=>'💰 Касса','callback_data'=>'finance'),
+                    array('text'=>"Send your visit card", 'request_contact'=>true)
                 )
             )));
             $response = getTelegram('sendMessage', $request);
