@@ -52,7 +52,7 @@
 
 
     //json_encode($POST,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)
-    file_put_contents('response.json', $POST);
+    //file_put_contents('response.json', $POST);
 
     $rows = json_decode($POST, true);
 
