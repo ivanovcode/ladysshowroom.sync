@@ -3,36 +3,13 @@ require(__DIR__ . "/vendor/autoload.php");
 
 use GitHubWebhook\Handler;
 
-
-$commands = array(
-    'echo $PWD',
-    'whoami',
-    'git fetch --all',
-    'git checkout --force "origin/TelegramBot"',
-    'git status',
-    'git submodule sync',
-    'git submodule update',
-    'git submodule status',
-    'composer install',
-);
-
-// exec commands
-$output = '';
-foreach($commands AS $command){
-    $tmp = shell_exec($command);
-
-    $output .= "<span style=\"color: #6BE234;\">\$</span><span style=\"color: #729FCF;\">{$command}\n</span><br />";
-    $output .= htmlentities(trim($tmp)) . "\n<br /><br />";
-}
-
-die();
 $handler = new Handler("d41d8cd98f00b204e9800998ecf8427e", __DIR__);
 if($handler->validate()) {
     $commands = array(
         'echo $PWD',
         'whoami',
         'git fetch --all',
-        'git checkout --force "origin/TelegramBot"',
+        'git checkout --force "origin/master"',
         'git status',
         'git submodule sync',
         'git submodule update',
