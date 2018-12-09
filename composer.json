@@ -1,0 +1,12 @@
+{
+  "name": "ivanov/public",
+  "require": {
+    "dintel/php-github-webhook": "^0.2.0"
+  },
+  "authors": [
+    {
+      "name": "seavalley",
+      "email": "development@ivanov.site"
+    }
+  ]
+}
