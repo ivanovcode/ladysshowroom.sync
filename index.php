@@ -153,6 +153,10 @@ foreach ($rows as $key => $row) {
 }
 unset($rows);
 
+1. Курьеру наличные = Наличные
+2. По карте на личную карту  = Банковская карта
+3. Реальный эквайринг = Эквайринг
+4. Сертификат = Сертификат
 
 $response['collection']['wallets']['1']['id'] = '1';
 $response['collection']['wallets']['1']['title'] = 'Сбербанк Михаил';
@@ -193,8 +197,6 @@ $response['collection']['payments']['2']['id'] = '2';
 $response['collection']['payments']['2']['title'] = 'Наличные';
 $response['collection']['payments']['4']['id'] = '4';
 $response['collection']['payments']['4']['title'] = 'Сертификат';
-$response['collection']['payments']['5']['id'] = '5';
-$response['collection']['payments']['5']['title'] = 'Курьеру';
 $response['collection']['payments']['6']['id'] = '6';
 $response['collection']['payments']['6']['title'] = 'Эквайринг';
 
