@@ -195,8 +195,8 @@ $response['collection']['payments']['4']['id'] = '4';
 $response['collection']['payments']['4']['title'] = 'Сертификат';
 $response['collection']['payments']['5']['id'] = '5';
 $response['collection']['payments']['5']['title'] = 'Курьеру';
-$response['collection']['payments']['5']['id'] = '6';
-$response['collection']['payments']['5']['title'] = 'Эквайринг';
+$response['collection']['payments']['6']['id'] = '6';
+$response['collection']['payments']['6']['title'] = 'Эквайринг';
 
 $response['collection']['stocks']['5']['id'] = '5';
 $response['collection']['stocks']['5']['title'] = 'Центральный';
