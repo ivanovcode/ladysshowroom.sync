@@ -3,6 +3,8 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
 error_reporting(0);
 set_time_limit(0);
+ini_set("display_errors",1);
+error_reporting(E_ALL);
 
 function push($data, $name, $die=false, $clear=false, $msg=''){
     if ($clear) unlink($name.'.log');
@@ -83,6 +85,9 @@ foreach ($rows['products'] as $key => $product) {
                 (NULL ,  '" . $product['id'] . "',  '" . $quantity['id'] . "',  '" . $product['stock'] . "',  NULL,  '" . $quantity['onhand'][0]['qty'] . "')
                 ON DUPLICATE KEY UPDATE  quantity=" . $quantity['onhand'][0]['qty']
         ;
+
+
+
         //echo $query."\t"."\t";
         $result = mysqli_query($db, $query);
         $id = mysqli_insert_id($db); ($id>0?$created++:$updated++);
