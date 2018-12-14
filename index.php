@@ -58,6 +58,8 @@ $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
 
 $rows = getQuantitiesFrom1C();
+$created = 0;
+$updated = 0;
 
 if(empty($rows)) push('response empty', 'error', true);
 mysqli_query($db, "SET FOREIGN_KEY_CHECKS = 0;");
