@@ -188,6 +188,7 @@ $response['collection']['deliveries']['5']['id'] = '5';
 $response['collection']['deliveries']['5']['title'] = 'EMS';
 $response['collection']['deliveries']['5']['price'] = 0.00;
 
+
 $response['collection']['payments']['1']['id'] = '1';
 $response['collection']['payments']['1']['title'] = 'Банковская карта';
 $response['collection']['payments']['2']['id'] = '2';
