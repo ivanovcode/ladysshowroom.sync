@@ -138,6 +138,7 @@ foreach ($rows as $key => $row) {
         $row['delivery'] = [];
     }
 
+
     if($row['payments']) {
         foreach ($row['payments'] as $id_payment => $payment) {
             if($payment['id']==4 || $payment['id']==1) {
