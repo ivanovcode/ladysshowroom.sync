@@ -130,7 +130,8 @@ foreach ($rows as $key => $row) {
     $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
     if($row['delivery']) {
         foreach ($row['delivery'] as $id_delivery => $delivery) {
-            $row['delivery']['date'] = $now;
+            $row['datefrom'] =  $now;
+            $row['dateto'] =  $now;
             $row['delivery'][$id_delivery]['price'] = number_format(stripos($delivery['price'], '.') ? strstr($delivery['price'], '.', true) : $delivery['price'], 2, '.', '');
         }
     } else {
