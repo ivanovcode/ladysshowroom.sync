@@ -50,6 +50,17 @@ function getColors($db){
     if(!$rows) push('getColors(): no records', 'error');
     return mysqli_fetch_all($rows,MYSQLI_ASSOC);
 }
+function getStatuses($db){
+    $query = "
+        SELECT       
+        *
+        FROM
+        statuses_orders
+    ";
+    $rows = mysqli_query($db, $query);
+    if(!$rows) push('getStatuses(): no records', 'error');
+    return mysqli_fetch_all($rows,MYSQLI_ASSOC);
+}
 function getCategories($db){
     $query = "
         SELECT       
@@ -153,8 +164,15 @@ foreach ($rows as $key => $row) {
 }
 unset($rows);
 
+$rows = getStatuses($db);
+$statuses = [];
+foreach ($rows as $key => $row) {
+    if(!is_array($statuses[$row['id']])) $statuses[$row['id']] = [];
+    array_push($statuses[$row['id']], array('id' => $row['id'], 'title' => $row['title']));
+}
+unset($rows);
 
-
+$response['collection']['statuses'] = $statuses;
 $response['collection']['wallets']['1']['id'] = '1';
 $response['collection']['wallets']['1']['title'] = 'Сбербанк Михаил';
 $response['collection']['wallets']['2']['id'] = '2';
