@@ -168,7 +168,7 @@ $rows = getStatuses($db);
 $statuses = [];
 foreach ($rows as $key => $row) {
     if(!is_array($statuses[$row['id']])) $statuses[$row['id']] = [];
-    array_push($statuses[$row['id']], array('id' => $row['id'], 'title' => $row['title']));
+    $statuses[$row['id']] = array('id' => $row['id'], 'title' => $row['title']);
 }
 unset($rows);
 
