@@ -28,7 +28,22 @@ function connect($db, $p) {
 function disconnect($db){
     mysqli_close($db);
 }
-
+function getProducts($db){
+    $query = "
+        SELECT
+        p.id
+        FROM
+        products p
+        WHERE
+        p.delete = 0
+    ";
+    $rows = mysqli_query($db, $query);
+    $results = [];
+    while ($row = mysqli_fetch_array($rows, MYSQLI_ASSOC)) {
+        array_push($results, $row);
+    }
+    return $results;
+}
 function getQuantitiesFrom1C(){
     if (!_iscurl()) push('curl is disabled', 'error', true);
     $curl = curl_init();
@@ -58,8 +73,15 @@ $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
 
 $rows = getQuantitiesFrom1C();
+$products =  getProducts($db);
 $created = 0;
 $updated = 0;
+print_r(array_diff(array_column($rows['products'], 'id'), array_column($products, 'id')));
+//print_r(array_column($products, 'id'));
+//print_r(array_column($rows['products'], 'id'));
+ die();
+
+
 
 if(empty($rows)) push('response empty', 'error', true);
 mysqli_query($db, "SET FOREIGN_KEY_CHECKS = 0;");
@@ -70,6 +92,14 @@ mysqli_query($db, "SET FOREIGN_KEY_CHECKS = 1;");
 
 foreach ($rows['products'] as $key => $product) {
     $product['stock'] = "5";
+
+
+    $query = "
+            INSERT IGNORE INTO `staffs` (`id`, `name`, `phone`, `login`, `password`, `hash`, `role`) 
+            VALUES (NULL, NULL, '".$phone."', NULL, NULL, NULL, '0')
+            ON DUPLICATE KEY UPDATE `hash`= NULL
+    ";
+
 
     foreach ($product['sizes'][0]['values'] as $key => $quantity) {
 
