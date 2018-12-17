@@ -112,7 +112,8 @@ $rows = getOrders($db);
 $orders = [];
 
 foreach ($rows as $key => $row) {
-    $row['status'] = array('id'=>'1', 'title'=>'Новый');
+    $row['status'] = [];
+    array_push($row['status'], array('id'=>'1'));
     $row['price'] = number_format(stripos($row['price'], '.')?strstr( $row['price'], '.', true):$row['price'],2, '.', '');
     $row['sum'] = number_format(stripos($row['sum'], '.')?strstr( $row['sum'], '.', true):$row['sum'],2, '.', '');
     $row['total_sum'] = number_format(stripos($row['total_sum'], '.')?strstr( $row['total_sum'], '.', true):$row['total_sum'],2, '.', '');
