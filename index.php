@@ -28,7 +28,7 @@ function disconnect($db){
 
 function getOrders($db){
     $query = "
-        SELECT
+        SELECT        
         o.id,
         IF(o.number IS NULL,'', o.number) as number,
         o.created_at as created,
@@ -43,6 +43,7 @@ function getOrders($db){
         IF(r.id IS NULL, NULL, CONCAT('[{\"id\":\"',p.id,'\",\"size\": {\"id\": \"',r.size_id,'\", \"type_id\": \"',p.type_size_id,'\"},\"quantity\":\"',r.quantity,'\",\"price\":\"',p.price,'\",\"discount\":\"',IF(r.discount IS NULL,0,r.discount),'\", \"sum\":\"',(p.price*r.quantity)-(((p.price*r.quantity)/100)*IF(r.discount IS NULL,0,r.discount)),'\"}]')) as products,
         IF(o.delivery_id IS NULL, NULL, CONCAT('[{\"id\":\"',d.id,'\",\"title\":\"',d.title,'\",\"address\":\"',o.address,'\",\"price\":\"',d.price,'\"}]')) as delivery,
         IF(o.client_id IS NULL, NULL, CONCAT('[{\"id\":\"',c.id,'\",\"name\":\"',c.name,'\",\"phone\":\"',c.phone,'\",\"email\":\"\",\"overwrite\":\"true\"}]')) as client,
+        IF(o.user_id IS NULL, NULL, CONCAT('[{\"id\":\"',o.user_id,'\"}]')) as staff,
         o.payments,
         cert.id as cert_id,
         cert.code as cert_code,
@@ -118,6 +119,7 @@ foreach ($rows as $key => $row) {
     $row['products'] = json_decode($row['products'], JSON_UNESCAPED_SLASHES);
     $row['delivery'] = json_decode($row['delivery'], JSON_UNESCAPED_SLASHES);
     $row['client'] = json_decode($row['client'], JSON_UNESCAPED_SLASHES);
+    $row['staff'] = json_decode($row['staff'], JSON_UNESCAPED_SLASHES);
     $row['payments'] = json_decode($row['payments'], JSON_UNESCAPED_SLASHES);
     if($row['products']) {
         foreach ($row['products'] as $id_product => $product) {
