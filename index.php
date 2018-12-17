@@ -189,7 +189,7 @@ $rows = getStaffs($db);
 $staffs = [];
 foreach ($rows as $key => $row) {
     if(!is_array($staffs[$row['user_id']])) $staffs[$row['user_id']] = [];
-    $staffs[$row['id']] = array('id' => $row['user_id'], 'name' => $row['user_name'], 'email' => $row['user_login']);
+    $staffs[$row['user_id']] = array('id' => $row['user_id'], 'name' => $row['user_name'], 'email' => $row['user_login']);
 }
 unset($rows);
 $response['collection']['staffs'] = $staffs;
