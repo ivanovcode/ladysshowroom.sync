@@ -61,6 +61,19 @@ function getStatuses($db){
     if(!$rows) push('getStatuses(): no records', 'error');
     return mysqli_fetch_all($rows,MYSQLI_ASSOC);
 }
+function getStaffs($db){
+    $query = "
+        SELECT       
+        *
+        FROM
+        users
+        WHERE
+        users.user_delete = 1
+    ";
+    $rows = mysqli_query($db, $query);
+    if(!$rows) push('getStaffs(): no records', 'error');
+    return mysqli_fetch_all($rows,MYSQLI_ASSOC);
+}
 function getCategories($db){
     $query = "
         SELECT       
@@ -172,6 +185,14 @@ foreach ($rows as $key => $row) {
 }
 unset($rows);
 
+$rows = getStaffs($db);
+$staffs = [];
+foreach ($rows as $key => $row) {
+    if(!is_array($staffs[$row['id']])) $staffs[$row['id']] = [];
+    $staffs[$row['id']] = array('id' => $row['user_id'], 'name' => $row['user_name'], 'email' => $row['user_login']);
+}
+unset($rows);
+$response['collection']['staffs'] = $staffs;
 $response['collection']['statuses'] = $statuses;
 $response['collection']['wallets']['1']['id'] = '1';
 $response['collection']['wallets']['1']['title'] = 'Сбербанк Михаил';
