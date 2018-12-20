@@ -73,6 +73,8 @@ foreach ($rows['products'] as $key => $product) {
 
     foreach ($product['sizes'][0]['values'] as $key => $quantity) {
 
+
+
         $query = "
                 INSERT IGNORE INTO  `catalog` 
                 (
@@ -84,7 +86,7 @@ foreach ($rows['products'] as $key => $product) {
                     `quantity`
                 )
                 VALUES 
-                (NULL ,  '" . $product['id'] . "',  '" . $quantity['id'] . "',  '" . $product['stock'] . "',  NULL,  '" . $quantity['onhand'][0]['qty'] . "')
+                (NULL ,  '" . $product['id'] . "',  '" . $quantity['id'] . "',  '" . $product['stock'] . "',  NULL,  '" . array_sum(array_column($quantity['onhand'], 'qty')) . "')
                 ON DUPLICATE KEY UPDATE  quantity=" . $quantity['onhand'][0]['qty']
         ;
 
