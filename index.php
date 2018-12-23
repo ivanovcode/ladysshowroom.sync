@@ -296,8 +296,8 @@ clearCatalog($db);
 clearShowrooms($db);
 clearGroups($db);
 cancelOrders($db);
-clearOrders($db);
-clearReserve($db);
+/*clearOrders($db);
+clearReserve($db);*/
 $products = $rows['products'];
 $showrooms = [];
 foreach ($products as $key => $product) {

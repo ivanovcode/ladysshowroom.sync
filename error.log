@@ -1,3 +1,20 @@
-response empty
-response empty
-21.12.18 10:47:41 | response empty
+
+
+План действий:
+1. Ознакомиться с SDK
+- клонировать репозиторий, написать пробный скрипт, протестировать используя тестовый доступ в dpd
+- сделать отдельную ветку выполнить тестовый коммит
+2. Ознакомиться с DPD (по нативной интеграции)
+- написать пробный скрипт, протестировать используя тестовый доступ в dpd
+3. Развернуть окружение с поддержкой версионности для разработки плагина OpenCart
+4. Поэтапная разработка плагина (список задач составлю)
+
+Найденные аналоги:
+Offical E-commerce extensions 1.5.x, 2.0.x, 2.1.x, 2.2.
+https://www.dpd.com/ro_en/home/e_commerce_extensions/opencart
+
+DPD Courier Shipping Module for OpenCart 3.x
+https://www.opencart.com/index.php?route=marketplace/extension/info&extension_id=32913&filter_category_id=4&filter_download_id=55
+
+DPD - служба доставки 1.5.x, 2.0.x, 2.1.x, 2.2.x, 2.3.x, 3.x
+https://softpodkluch.ru/dpd
