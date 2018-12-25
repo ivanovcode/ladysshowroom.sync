@@ -26,6 +26,9 @@ function disconnect($db){
     mysqli_close($db);
 }
 
+
+
+
 function getOrders($db){
     $query = "
         SELECT        
@@ -200,6 +203,8 @@ if($orders) {
     file_put_contents($now.'_response.json', json_encode($response, JSON_UNESCAPED_UNICODE));
     push('orders send success ids: '.$ids, 'access');
     if(!empty($ids)) mysqli_query($db, "UPDATE orders  SET request = request + 1 WHERE id IN (".$ids.")");
+    $records = json_decode($response, true);
+    mysqli_query($db, "UPDATE `orders` SET `number` = '".$records[$row['id']]['Номер']."' WHERE `orders`.`id` = ".$row['id']);
 }
 disconnect($db);
 ?>
