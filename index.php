@@ -152,7 +152,26 @@ function clearOrders($db) {
     mysqli_query($db, "SET FOREIGN_KEY_CHECKS = 0;");
     mysqli_query($db, "TRUNCATE table orders;");
     mysqli_query($db, "SET FOREIGN_KEY_CHECKS = 1;");
+    mysqli_query($db, "ALTER TABLE orders AUTO_INCREMENT = 100;");
+
 }
+function clearCertificate($db) {
+    $query = "
+      SELECT c.id FROM certificates c LEFT JOIN orders o ON c.order_id = o.id WHERE o.id IS NULL AND c.order_id IS NOT NULL
+    ";
+    $rows = mysqli_query($db, $query);
+    $results = [];
+    while ($row = mysqli_fetch_array($rows, MYSQLI_ASSOC)) {
+        array_push($results, $row);
+    }
+    foreach ($results as $key => $item) {
+        mysqli_query($db, "DELETE FROM `certificates` WHERE `certificates`.`id` = ".$item['id']);
+    }
+}
+
+
+
+
 function cancelOrders($db) {
     $query = "
         UPDATE orders o
@@ -286,7 +305,8 @@ mysqli_select_db($db, $config['development']['dbname']);
 
 $rows = getQuantitiesFrom1C();
 $products =  getProducts($db);
-
+clearCertificate($db);
+die();
 //print_r(array_diff(array_column($rows['products'], 'id'), array_column($products, 'id')));
 
 
