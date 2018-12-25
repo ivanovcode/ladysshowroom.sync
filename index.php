@@ -40,7 +40,7 @@ function getOrders($db){
         'true' as overwrite,
         0 as is_paid,
         o.discription as comment,
-        IF(r.id IS NULL, NULL, CONCAT('[{\"id\":\"',p.id,'\",\"size\": {\"id\": \"',r.size_id,'\", \"type_id\": \"',p.type_size_id,'\"},\"quantity\":\"',r.quantity,'\",\"price\":\"',p.price,'\",\"discount\":\"',IF(r.discount IS NULL,0,r.discount),'\", \"sum\":\"',(p.price*r.quantity)-(((p.price*r.quantity)/100)*IF(r.discount IS NULL,0,r.discount)),'\"}]')) as products,
+        CONCAT('[', GROUP_CONCAT(IF(r.id IS NULL, NULL, CONCAT('{\"id\":\"',p.id,'\",\"size\": {\"id\": \"',r.size_id,'\", \"type_id\": \"',p.type_size_id,'\"},\"quantity\":\"',r.quantity,'\",\"price\":\"',p.price,'\",\"discount\":\"',IF(r.discount IS NULL,0,r.discount),'\", \"sum\":\"',(p.price*r.quantity)-(((p.price*r.quantity)/100)*IF(r.discount IS NULL,0,r.discount)),'\"}'))),']') as products,
         IF(o.delivery_id IS NULL, NULL, CONCAT('[{\"id\":\"',d.id,'\",\"title\":\"',d.title,'\",\"address\":\"',o.address,'\",\"price\":\"',d.price,'\"}]')) as delivery,
         IF(o.client_id IS NULL, NULL, CONCAT('[{\"id\":\"',c.id,'\",\"name\":\"',c.name,'\",\"phone\":\"',c.phone,'\",\"email\":\"\",\"overwrite\":\"true\"}]')) as client,
         IF(o.user_id IS NULL, NULL, CONCAT('[{\"id\":\"',o.user_id,'\"}]')) as staff,
@@ -130,6 +130,8 @@ foreach ($rows as $key => $row) {
     } else {
         $row['products'] = [];
     }
+
+
     $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
     if($row['delivery']) {
         foreach ($row['delivery'] as $id_delivery => $delivery) {
