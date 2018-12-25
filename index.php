@@ -31,7 +31,8 @@ function disconnect($db){
 
 function getOrders($db){
     $query = "
-        SELECT    
+        SELECT,
+        o.status as status, 
         d.price as delivery_price,    
         o.id,
         IF(o.number IS NULL,'', o.number) as number,
@@ -117,7 +118,8 @@ $rows = getOrders($db);
 $orders = [];
 $total_sum = 0;
 foreach ($rows as $key => $row) {
-    $row['status'] = "1";
+
+
     //array_push($row['status'], array('id'=>'1'));
 
 
