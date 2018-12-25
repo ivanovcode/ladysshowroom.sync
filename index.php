@@ -304,9 +304,9 @@ mysqli_select_db($db, $config['development']['dbname']);
 $rows = getQuantitiesFrom1C();
 $products =  getProducts($db);
 
-clearOrders($db);
+/*clearOrders($db);
 clearCertificate($db);
-die();
+die();*/
 //print_r(array_diff(array_column($rows['products'], 'id'), array_column($products, 'id')));
 
 
