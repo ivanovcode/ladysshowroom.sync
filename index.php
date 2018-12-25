@@ -302,8 +302,6 @@ $products = $rows['products'];
 $showrooms = [];
 foreach ($products as $key => $product) {
     $sizes = $product['sizes'][0]['values'];
-
-
     $product = convertProduct($product); if(validateProduct($product)) {
         $group = $product['group'];
         $group['product_id'] = $product['product_id'];
@@ -323,7 +321,6 @@ foreach ($products as $key => $product) {
                             addShowroom($db,$quantity);
                             addProduct($db, $product);
                             addCatalog($db, $quantity);
-
                             //$showrooms[$quantity['showroom_id']]=$quantity['showroom_title'];
                         }
                     }
