@@ -165,8 +165,12 @@ foreach ($rows as $key => $row) {
         foreach ($row['delivery'] as $id_delivery => $delivery) {
             $row['datefrom'] =  $now;
             $row['dateto'] =  $now;
-            $row['delivery'][$id_delivery]['price'] = number_format(stripos($delivery['price'], '.') ? strstr($delivery['price'], '.', true) : $delivery['price'], 2, '.', '');
 
+            if(intval( $row['delivery_price']>0)) {
+                $row['delivery'][$id_delivery]['price'] = number_format(stripos($row['delivery_price'], '.') ? strstr($row['delivery_price'], '.', true) : $row['delivery_price'], 2, '.', '');
+            } else {
+                $row['delivery'][$id_delivery]['price'] = number_format(stripos($delivery['price'], '.') ? strstr($delivery['price'], '.', true) : $delivery['price'], 2, '.', '');
+            }
         }
     } else {
         $row['delivery'] = [];
