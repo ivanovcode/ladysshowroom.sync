@@ -32,8 +32,8 @@ function disconnect($db){
 function getOrders($db){
     $query = "
         SELECT
-        o.status as status, 
-        d.price as delivery_price,    
+        o.status as status,
+        IF(o.delivery_price IS NULL, d.price, o.delivery_price) as delivery_price,
         o.id,
         IF(o.number IS NULL,'', o.number) as number,
         o.created_at as created,
