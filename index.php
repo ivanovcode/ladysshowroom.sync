@@ -66,7 +66,7 @@ function getOrders($db){
         LEFT JOIN types_deliveries d on d.id = o.delivery_id
         LEFT JOIN clients c on c.id = o.client_id
         LEFT JOIN certificates cert on cert.order_id = o.id
-        WHERE ((o.request = 0 OR (o.request = 1 AND o.payments != \"\"))/* AND o.status <> 6*/) OR (o.request = 2 AND (o.status = 6 OR o.status = 7))
+        WHERE ((o.request = 0 OR /*(*/o.request = 1 /*AND o.payments != \"\")*/)/* AND o.status <> 6*/) OR (o.request = 2 AND (o.status = 6 OR o.status = 7))
         GROUP BY o.id
     ";
     $rows = mysqli_query($db, $query);
