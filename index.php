@@ -229,6 +229,10 @@ foreach ($rows as $key => $row) {
     unset($row['cert_code']);
     unset($row['cert_deposit']);
     unset($row['cert_expiry']);
+    unset($row['delivery_date']);
+    unset($row['delivery_time_in']);
+    unset($row['delivery_time_out']);
+
     $orders[$row['id']] = $row;
 }
 unset($rows);
