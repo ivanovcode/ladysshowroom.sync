@@ -51,6 +51,9 @@ function getOrders($db){
         IF(o.client_id IS NULL, NULL, CONCAT('[{\"id\":\"',c.id,'\",\"name\":\"',c.name,'\",\"phone\":\"',c.phone,'\",\"email\":\"\",\"overwrite\":\"true\"}]')) as client,
         IF(o.user_id IS NULL, NULL, CONCAT('[{\"id\":\"',o.user_id,'\"}]')) as staff,
         o.payments,
+        o.delivery_date,
+        o.delivery_time_in,
+        o.delivery_time_out,
         cert.id as cert_id,
         cert.code as cert_code,
         cert.deposit as cert_deposit,
@@ -163,8 +166,8 @@ foreach ($rows as $key => $row) {
     $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
     if($row['delivery']) {
         foreach ($row['delivery'] as $id_delivery => $delivery) {
-            $row['datefrom'] =  $now;
-            $row['dateto'] =  $now;
+            $row['datefrom'] =  $row['delivery_date'].' '.$row['delivery_time_in'];
+            $row['dateto'] =  $row['delivery_date'].' '.$row['delivery_time_out'];
 
             if(intval( $row['delivery_price']>0)) {
                 $row['delivery'][$id_delivery]['price'] = number_format(stripos($row['delivery_price'], '.') ? strstr($row['delivery_price'], '.', true) : $row['delivery_price'], 2, '.', '');
