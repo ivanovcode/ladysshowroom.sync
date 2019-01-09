@@ -49,7 +49,7 @@ function getOrders($db){
         CONCAT('[', GROUP_CONCAT(IF(r.id IS NULL, NULL, CONCAT('{\"id\":\"',p.id,'\",\"reserve_id\":\"',r.id,'\",\"size\": {\"id\": \"',r.size_id,'\", \"type_id\": \"',p.type_size_id,'\"},\"quantity\":\"',r.quantity,'\",\"price\":\"',p.price,'\",\"discount\":\"',IF(r.discount IS NULL,0,r.discount),'\", \"sum\":\"',(p.price*r.quantity)-(((p.price*r.quantity)/100)*IF(r.discount IS NULL,0,r.discount)),'\"}'))),']') as products,
         IF(o.delivery_id IS NULL, NULL, CONCAT('[{\"id\":\"',d.id,'\",\"title\":\"',d.title,'\",\"address\":\"',o.address,'\",\"price\":\"',d.price,'\"}]')) as delivery,
         IF(o.client_id IS NULL, NULL, CONCAT('[{\"id\":\"',c.id,'\",\"name\":\"',c.name,'\",\"phone\":\"',c.phone,'\",\"email\":\"\",\"overwrite\":\"true\"}]')) as client,
-        IF(o.user_id IS NULL, NULL, CONCAT('[{\"id\":\"',o.user_id,'\"}]')) as staff,
+        IF(o.user_id IS NULL, NULL, CONCAT('[{\"id\":\"',u.user_id,'\", \"name\":\"',u.user_name,'\", \"email\":\"',u.user_login,'\"}]')) as staff,
         o.payments,
         o.delivery_date,
         o.delivery_time_in,
@@ -61,6 +61,7 @@ function getOrders($db){
         o.wallet_id as wallet
         FROM
         orders as o
+        LEFT JOIN users as u ON u.user_id = o.user_id
         LEFT JOIN reserve as r ON r.order_id = o.id
         LEFT JOIN products p on p.id = r.product_id
         LEFT JOIN types_deliveries d on d.id = o.delivery_id
