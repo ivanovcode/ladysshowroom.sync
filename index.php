@@ -77,7 +77,7 @@ foreach ($rows as $key => $row) {
 
 disconnect($db);
 /*$response = [];
-echo json_encode($response, JSON_UNESCAPED_UNICODE );*/
+echo json_encode($response, JSON_UNESCAPED_UNICODE );sd*/
 
 
 
