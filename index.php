@@ -34,7 +34,59 @@ function clear($db) {
     mysqli_query($db, "TRUNCATE table products;");
     mysqli_query($db, "SET FOREIGN_KEY_CHECKS = 1;");
 }
+function enablePJProduct($db, $id){
+    $query = "
+        UPDATE modx_site_content modx
+        LEFT OUTER JOIN `sync.modx_site_content` sync 
+            ON modx.id = sync.id_modx 
+        SET modx.`published` = '1'
+        WHERE sync.id_1c = ".$id.";
+    ";
+    mysqli_query($db, $query);
+    return true;
+}
 
+function disablePJAllProducts($db){
+    $query = "
+         UPDATE `modx_site_content` SET `published` = '0' WHERE  `modx_site_content`.`parent` IN (11,12,13,14);
+    ";
+    $result = mysqli_query($db, $query);
+    $info = mysqli_info($db);
+    preg_match('/^\D+(\d+)\D+(\d+)\D+(\d+)$/',$info,$matches);
+    $_matches = [];
+    $_matches['matched'] = $matches[1]; $_matches['changed'] = $matches[2]; $_matches['warnings'] = $matches[3];
+    return $_matches;
+}
+function updatePJQuantity($db, $id, $quantities){
+    $query = "
+        UPDATE modx_site_tmplvar_contentvalues modx
+        LEFT OUTER JOIN `sync.modx_site_content` sync 
+            ON modx.contentid = sync.id_modx AND modx.tmplvarid = 27
+        SET modx.`value` = '".$quantities."'
+        WHERE sync.id_1c = ".$id.";
+    ";
+    $result = mysqli_query($db, $query);
+    $info = mysqli_info($db);
+    preg_match('/^\D+(\d+)\D+(\d+)\D+(\d+)$/',$info,$matches);
+    $_matches = [];
+    $_matches['matched'] = $matches[1]; $_matches['changed'] = $matches[2]; $_matches['warnings'] = $matches[3];
+    return $_matches;
+}
+function updatePJArticle($db, $id, $article){
+    $query = "
+        UPDATE modx_site_tmplvar_contentvalues modx
+        LEFT OUTER JOIN `sync.modx_site_content` sync 
+            ON modx.contentid = sync.id_modx AND modx.tmplvarid = 15
+        SET modx.`value` = '".$article."'
+        WHERE sync.id_1c = ".$id.";
+    ";
+    $result = mysqli_query($db, $query);
+    $info = mysqli_info($db);
+    preg_match('/^\D+(\d+)\D+(\d+)\D+(\d+)$/',$info,$matches);
+    $_matches = [];
+    $_matches['matched'] = $matches[1]; $_matches['changed'] = $matches[2]; $_matches['warnings'] = $matches[3];
+    return $_matches;
+}
 function addSync($db, $row){
     $query = "
          INSERT IGNORE INTO `sync.modx_site_content` (`id_1C`, `id_modx`) VALUES ('".$row[0]."', '".$row[1]."');
@@ -96,14 +148,37 @@ function getQuantitiesFrom1C(){
 $config = parse_ini_file('config.ini', true);
 $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
+disablePJAllProducts($db);
+$rows = getQuantitiesFrom1C();
+$products = $rows['products'];
+$_results = [];
+foreach ($products as $product_key => $product) {
+    $_sizes = [];
+    $sizes = $product['sizes'][0]['values'];
+    foreach ($sizes as $size_key => $size) {
+        array_push($_sizes, $size['title']."::".array_sum(array_column($size['onhand'], 'qty')));
+    }
+    if(!empty($product['id']))  {
+        $results = updatePJQuantity($db, $product['id'], implode ("||", $_sizes));
+        array_push($_results, $results);
+    }
+    if(!empty($product['id'])) {
+        enablePJProduct($db, $product['id']);
+    }
+    if(!empty($product['article']))  {
+        updatePJArticle($db, $product['id'], $product['article']);
+    }
+    unset($_sizes);
+}
 
-/*$rows = getQuantitiesFrom1C();
-foreach ($rows as $key => $row) {
-    print_r($row);
-}*/
 
-$message = '⚠ <b>Тестирование уведомлений!</b> В синхронизации <i>1С и iampijama.ru</i> обнаружена ошибка.';
+$message  = 'Результат обновления сайта iampijama.ru с 1С:';
+$message .= " \n ";
+$message .= '✔ Всего записей: <b>'.array_sum(array_column($_results, 'matched')).'</b>  🔃 Обновлено: <b>'.array_sum(array_column($_results, 'changed')).'</b>  ✖ Ошибки: <b>'.array_sum(array_column($_results, 'warnings')).'</b>';
 sendTelegramMessage('-283140968', $message);
+
+/*$message = '⚠ <b>Тестирование уведомлений!</b> В синхронизации <i>1С и iampijama.ru</i> обнаружена ошибка.';
+sendTelegramMessage('-283140968', $message);*/
 
 disconnect($db);
 /*$response = [];l
