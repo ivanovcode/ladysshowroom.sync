@@ -152,11 +152,17 @@ disablePJAllProducts($db);
 $rows = getQuantitiesFrom1C();
 $products = $rows['products'];
 $_results = [];
+$showroom_id = '5';
 foreach ($products as $product_key => $product) {
     $_sizes = [];
     $sizes = $product['sizes'][0]['values'];
     foreach ($sizes as $size_key => $size) {
-        array_push($_sizes, $size['title']."::".array_sum(array_column($size['onhand'], 'qty')));
+        $_size = $size['onhand'];
+        /* filter showroom */
+        $_size = array_filter($_size, function ($var) use ($showroom_id) {
+            return ($var['warehouse_id'] == $showroom_id);
+        });
+        array_push($_sizes, $size['title']."::".array_sum(array_column($_size, 'qty')));
     }
     if(!empty($product['id']))  {
         $results = updatePJQuantity($db, $product['id'], implode ("||", $_sizes));
@@ -172,10 +178,10 @@ foreach ($products as $product_key => $product) {
 }
 
 
-/*$message  = 'Результат обновления сайта iampijama.ru с 1С:';
+$message  = 'Результат обновления сайта iampijama.ru с 1С:';
 $message .= " \n ";
 $message .= '✔ Всего записей: <b>'.array_sum(array_column($_results, 'matched')).'</b>  🔃 Обновлено: <b>'.array_sum(array_column($_results, 'changed')).'</b>  ✖ Ошибки: <b>'.array_sum(array_column($_results, 'warnings')).'</b>';
-sendTelegramMessage('-283140968', $message);*/
+sendTelegramMessage('-283140968', $message);
 
 /*$message = '⚠ <b>Тестирование уведомлений!</b> В синхронизации <i>1С и iampijama.ru</i> обнаружена ошибка.';
 sendTelegramMessage('-283140968', $message);*/
