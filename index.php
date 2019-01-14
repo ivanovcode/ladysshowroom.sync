@@ -172,10 +172,10 @@ foreach ($products as $product_key => $product) {
 }
 
 
-$message  = 'Результат обновления сайта iampijama.ru с 1С:';
+/*$message  = 'Результат обновления сайта iampijama.ru с 1С:';
 $message .= " \n ";
 $message .= '✔ Всего записей: <b>'.array_sum(array_column($_results, 'matched')).'</b>  🔃 Обновлено: <b>'.array_sum(array_column($_results, 'changed')).'</b>  ✖ Ошибки: <b>'.array_sum(array_column($_results, 'warnings')).'</b>';
-sendTelegramMessage('-283140968', $message);
+sendTelegramMessage('-283140968', $message);*/
 
 /*$message = '⚠ <b>Тестирование уведомлений!</b> В синхронизации <i>1С и iampijama.ru</i> обнаружена ошибка.';
 sendTelegramMessage('-283140968', $message);*/
