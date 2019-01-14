@@ -167,8 +167,8 @@ foreach ($rows as $key => $row) {
     $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
     if($row['delivery']) {
         foreach ($row['delivery'] as $id_delivery => $delivery) {
-            $row['datefrom'] =  $row['delivery_date'].' '.$row['delivery_time_in'];
-            $row['dateto'] =  $row['delivery_date'].' '.$row['delivery_time_out'];
+            $row['delivery'][$id_delivery]['datefrom'] =  $row['delivery_date'].' '.$row['delivery_time_in'];
+            $row['delivery'][$id_delivery]['dateto'] =  $row['delivery_date'].' '.$row['delivery_time_out'];
 
             if(intval( $row['delivery_price']>0)) {
                 $row['delivery'][$id_delivery]['price'] = number_format(stripos($row['delivery_price'], '.') ? strstr($row['delivery_price'], '.', true) : $row['delivery_price'], 2, '.', '');
