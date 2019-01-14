@@ -72,13 +72,12 @@ mysqli_select_db($db, $config['development']['dbname']);
 
 $rows = getQuantitiesFrom1C();
 foreach ($rows as $key => $row) {
-
+    print_r($row);
 }
 
-print_r($showrooms);
 disconnect($db);
-$response = [];
-echo json_encode($response, JSON_UNESCAPED_UNICODE );
+/*$response = [];
+echo json_encode($response, JSON_UNESCAPED_UNICODE );*/
 
 
 
