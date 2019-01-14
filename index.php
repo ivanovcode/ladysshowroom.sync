@@ -42,6 +42,33 @@ function addSync($db, $row){
     mysqli_query($db, $query);
     return mysqli_insert_id($db);
 }
+function sendTelegramMessage($chat_id=NULL, $message=NULL) {
+    if (!empty($chat_id) && !empty($message)) {
+        $response = [];
+        $response['chat_id'] = $chat_id;
+        $response['parse_mode'] = 'html';
+        $response['text'] = $message;
+    }
+    if (!_iscurl()) push('curl is disabled', 'error', true);
+    $proxy = 'de360.nordvpn.com:80';
+    $proxyauth = 'development@ivanov.site:ivan0vv0va';
+    $fp = fopen('./curl.log', 'w');
+    $ch = curl_init('https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/sendMessage');
+    curl_setopt($ch, CURLOPT_PROXY, $proxy);
+    curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxyauth);
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    curl_setopt($ch, CURLOPT_ENCODING, "UTF-8");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, ($response?($response):($GLOBALS['response'])));
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_VERBOSE, 1);
+    curl_setopt($ch, CURLOPT_STDERR, $fp);
+    $data = curl_exec($ch); $error = curl_error($ch); curl_close($ch);
+    if ($error) push('curl request failed: ' . $error, 'error');
+    unset($GLOBALS['response']);
+    return json_decode($data, true);
+}
 
 function getQuantitiesFrom1C(){
     if (!_iscurl()) push('curl is disabled', 'error', true);
@@ -70,13 +97,16 @@ $config = parse_ini_file('config.ini', true);
 $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
 
-$rows = getQuantitiesFrom1C();
+/*$rows = getQuantitiesFrom1C();
 foreach ($rows as $key => $row) {
     print_r($row);
-}
+}*/
+
+$message = '⚠ <b>Тестирование уведомлений!</b> В синхронизации <i>1С и iampijama.ru</i> обнаружена ошибка.';
+sendTelegramMessage('-283140968', $message);
 
 disconnect($db);
-/*$response = [];
+/*$response = [];l
 echo json_encode($response, JSON_UNESCAPED_UNICODE );sd*/
 
 
