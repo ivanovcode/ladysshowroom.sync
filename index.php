@@ -162,13 +162,13 @@ foreach ($products as $product_key => $product) {
         $_size = array_filter($_size, function ($var) use ($showroom_id) {
             return ($var['warehouse_id'] == $showroom_id);
         });
-        array_push($_sizes, $size['title']."::".array_sum(array_column($_size, 'qty')));
+        $qty = array_sum(array_column($_size, 'qty'));
+        if($qty>0) array_push($_sizes, $size['title']."::".$qty);
     }
-    if(!empty($product['id']))  {
+    if(!empty($product['id']) && !empty($_sizes)) {
+        echo implode ("||", $_sizes)."\n";
         $results = updatePJQuantity($db, $product['id'], implode ("||", $_sizes));
         array_push($_results, $results);
-    }
-    if(!empty($product['id'])) {
         enablePJProduct($db, $product['id']);
     }
     if(!empty($product['article']))  {
