@@ -30,6 +30,7 @@ function disconnect($db){
 
 
 function getOrders($db){
+    mysqli_query($db,"SET SESSION group_concat_max_len = 1000000;");
     $query = "
         SELECT
         o.status as status,
