@@ -38,7 +38,7 @@ function validTxt($value, $target) {
     $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
     $msg = $target.': not valid   '.'['.(!empty($value['product_id'])?$value['product_id']:'-- no id --').'] '.(!empty($value['product_title'])?$value['product_title']:'-- no title --');
     $msg_status = checkValidate($msg);
-    if($msg_status) {
+    if(!$msg_status) {
         $message  = '<i>При загрузке товара в CRM из 1C обнаружена ошибка:</i>';
         $message .= " \n ";
         $message .= $now.' * '.$msg;
@@ -54,7 +54,7 @@ function validNum($value, $target) {
     $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
     $msg = $target.': not valid   '.'['.(!empty($value['product_id'])?$value['product_id']:'-- no id --').'] '.(!empty($value['product_title'])?$value['product_title']:'-- no title --');
     $msg_status = checkValidate($msg);
-    if($msg_status) {
+    if(!$msg_status) {
         $message  = '<i>При загрузке товара в CRM из 1C обнаружена ошибка:</i>';
         $message .= " \n ";
         $message .= $now.' * '.$msg;
