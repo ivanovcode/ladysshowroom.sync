@@ -32,13 +32,19 @@ function disconnect($db){
 
 function validTxt($value, $target) {
     if(!empty($value[$target])) return true;
-    push($target.': not valid   '.'['.(!empty($value['product_id'])?$value['product_id']:'-- no id --').'] '.(!empty($value['product_title'])?$value['product_title']:'-- no title --'), 'validation');
+    $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
+    $msg = $target.': not valid   '.'['.(!empty($value['product_id'])?$value['product_id']:'-- no id --').'] '.(!empty($value['product_title'])?$value['product_title']:'-- no title --');
+    $msg_status = checkValidate($msg);
+    push($now.' * '.$msg_status.' * '.$msg, 'validation');
     return false;
 }
 
 function validNum($value, $target) {
     if(preg_match("/^[0-9]+$/i", $value[$target])) return true;
-    push($target.': not valid   '.'['.(!empty($value['product_id'])?$value['product_id']:'-- no id --').'] '.(!empty($value['product_title'])?$value['product_title']:'-- no title --'), 'validation');
+    $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
+    $msg = $target.': not valid   '.'['.(!empty($value['product_id'])?$value['product_id']:'-- no id --').'] '.(!empty($value['product_title'])?$value['product_title']:'-- no title --');
+    $msg_status = checkValidate($msg);
+    push($now.' * '.$msg_status.' * '.$msg, 'validation');
     return false;
 }
 
@@ -295,6 +301,14 @@ function getQuantitiesFrom1C(){
     $data = curl_exec($curl); $error = curl_error($curl); curl_close($curl);
     if ($error) push('request failed: '.var_dump($error), 'error', true);
     return json_decode($data, true);
+}
+
+function checkValidate($search) {
+    $lines = file('validation.log');
+    foreach($lines as $num_line => $line_value)   {
+        if(strpos($line_value, $search) !== FALSE) return true;
+    }
+    return false;
 }
 
 $config = parse_ini_file('config.ini', true);
