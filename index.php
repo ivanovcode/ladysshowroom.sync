@@ -304,7 +304,7 @@ function getQuantitiesFrom1C(){
 }
 
 function checkValidate($search) {
-    $lines = file(dirname(__FILE__).'validation.log');
+    $lines = file(dirname(__FILE__).'/validation.log');
     foreach($lines as $num_line => $line_value)   {
         if(strpos($line_value, $search) !== FALSE) return true;
     }
