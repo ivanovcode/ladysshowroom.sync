@@ -304,10 +304,17 @@ function getQuantitiesFrom1C(){
 }
 
 function checkValidate($search) {
-    $lines = file(dirname(__FILE__).'/validation.log');
-    foreach($lines as $num_line => $line_value)   {
-        if(strpos($line_value, $search) !== FALSE) return true;
+
+    $filename = dirname(__FILE__).'/validation.log';
+
+    if (file_exists($filename)) {
+        $lines = file($filename);
+        foreach($lines as $num_line => $line_value)   {
+            if(strpos($line_value, $search) !== FALSE) return true;
+        }
     }
+
+
     return false;
 }
 
