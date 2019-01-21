@@ -42,7 +42,7 @@ function validTxt($value, $target) {
         $message  = '<i>При загрузке товара в CRM из 1C обнаружена ошибка:</i>';
         $message .= " \n ";
         $message .= $now.' * '.$msg;
-        sendTelegramMessage('-283140968', $message);
+        sendTelegramMessage('-283140968', $msg);
     }
     push($now.' * '.$msg_status.' * '.$msg, 'validation');
 
@@ -58,7 +58,7 @@ function validNum($value, $target) {
         $message  = '<i>При загрузке товара в CRM из 1C обнаружена ошибка:</i>';
         $message .= " \n ";
         $message .= $now.' * '.$msg;
-        sendTelegramMessage('-283140968', $message);
+        sendTelegramMessage('-283140968', $msg);
     }
     push($now.' * '.$msg_status.' * '.$msg, 'validation');
     return false;
