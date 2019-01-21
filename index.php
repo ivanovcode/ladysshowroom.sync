@@ -7,8 +7,8 @@ ini_set("display_errors",1);
 error_reporting(E_ALL);
 
 function push($data, $name, $die=false, $clear=false, $msg=''){
-    if ($clear) unlink($name.'.log');
-    $fp = fopen($name.'.log', 'a');
+    if ($clear) unlink(dirname(__FILE__).'/'.$name.'.log');
+    $fp = fopen(dirname(__FILE__).'/'.$name.'.log', 'a');
     fwrite($fp, /*date("d.m.y").' '.date("H:i:s").' | '.*/$data . PHP_EOL);
     fclose($fp);
     if ($die) die($msg);
