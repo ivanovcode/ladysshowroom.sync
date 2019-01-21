@@ -321,6 +321,7 @@ clearReserve($db);*/
 $products = $rows['products'];
 $showrooms = [];
 foreach ($products as $key => $product) {
+    if($product['status']==0) continue;
     $sizes = $product['sizes'][0]['values'];
     $product = convertProduct($product); if(validateProduct($product)) {
         $group = $product['group'];
