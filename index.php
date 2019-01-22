@@ -254,7 +254,7 @@ if($orders) {
     $response = setQuantitiesIn1C(json_encode($response, JSON_UNESCAPED_UNICODE));
     $response = json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     file_put_contents(dirname(__FILE__).'/logs/'.$now.'_response.json', json_encode($response, JSON_UNESCAPED_UNICODE));
-    print_r(json_encode($response, JSON_UNESCAPED_UNICODE));
+    print_r($respons);
     push('orders send success ids: '.$ids, 'access');
     if(!empty($ids)) mysqli_query($db, "UPDATE orders  SET request = request + 1 WHERE id IN (".$ids.")");
     $records = json_decode($response, true);
