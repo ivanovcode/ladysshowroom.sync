@@ -268,41 +268,35 @@ foreach ($rows as $key => $row) {
 
     $orders[$row['id']] = $row;
 
+    $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
+    $response = [];
+    $response['collection']['orders'][$row['id']] = $row;
+    file_put_contents(dirname(__FILE__).'/logs/'.$now.'_request.json', json_encode($response, JSON_UNESCAPED_UNICODE));
+    $response = setQuantitiesIn1C(json_encode($response, JSON_UNESCAPED_UNICODE));
+    $response = json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    file_put_contents(dirname(__FILE__).'/logs/'.$now.'_response.json', json_encode($response, JSON_UNESCAPED_UNICODE));
 
-
-
-    if($orders) {
-
-        $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
-        $ids =  implode (", ", array_values(array_column($orders, 'id')));
-        $response = [];
-        $response['collection']['orders'] = $orders;
-        /*print_r($response);
-        die();*/
-        file_put_contents(dirname(__FILE__).'/logs/'.$now.'_request.json', json_encode($response, JSON_UNESCAPED_UNICODE));
-        $response = setQuantitiesIn1C(json_encode($response, JSON_UNESCAPED_UNICODE));
-        $response = json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-        file_put_contents(dirname(__FILE__).'/logs/'.$now.'_response.json', json_encode($response, JSON_UNESCAPED_UNICODE));
-
-        $data = json_encode($response, JSON_UNESCAPED_UNICODE);
-
-        if (!strstr($data, 'Ошибка:'))  {  }  else   {
-            $message  = '<i>Из 1C пришла ошибка при отправке заказа:</i>';
-            $message .= " \n ";
-            $message .= $now.' * '.$data;
-            sendTelegramMessage('-283140968', $message);
-        }
-
-
-        push('orders send success ids: '.$ids, 'access');
-        if(!empty($ids)) mysqli_query($db, "UPDATE orders  SET request = request + 1 WHERE id IN (".$ids.")");
-        $records = json_decode($response, true);
-        mysqli_query($db, "UPDATE `orders` SET `number` = '".$records[$row['id']]['Номер']."' WHERE `orders`.`id` = ".$row['id']);
+    $data = json_encode($response, JSON_UNESCAPED_UNICODE);
+    if (!strstr($data, 'Ошибка:'))  {  }  else   {
+        $message  = '<i>Из 1C пришла ошибка при отправке заказа:</i>';
+        $message .= " \n ";
+        $message .= $now.' * '.$data;
+        sendTelegramMessage('-283140968', $message);
     }
-    unset($orders);
+
+    $records = json_decode($response, true);
+    mysqli_query($db, "UPDATE `orders` SET `number` = '".$records[$row['id']]['Номер']."' WHERE `orders`.`id` = ".$row['id']);
 
 }
 unset($rows);
+
+
+
+if($orders) {
+    $ids =  implode (", ", array_values(array_column($orders, 'id')));
+    push('orders send success ids: '.$ids, 'access');
+    if(!empty($ids)) mysqli_query($db, "UPDATE orders  SET request = request + 1 WHERE id IN (".$ids.")");
+}
 
 
 
