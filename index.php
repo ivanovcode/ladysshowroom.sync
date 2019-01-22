@@ -115,6 +115,36 @@ function setQuantitiesIn1C($response){
     if ($error) push('request failed: '.var_dump($error), 'error', true);
     return json_decode($data, true);
 }
+function sendTelegramMessage($chat_id=NULL, $message=NULL) {
+    if (!empty($chat_id) && !empty($message)) {
+        $response = [];
+        $response['chat_id'] = $chat_id;
+        $response['parse_mode'] = 'html';
+        $response['text'] = $message;
+    }
+    if (!_iscurl()) push('curl is disabled', 'error', true);
+    $proxy = 'de360.nordvpn.com:80';
+    $proxyauth = 'development@ivanov.site:ivan0vv0va';
+    $fp = fopen('./curl.log', 'w');
+    $ch = curl_init('https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/sendMessage');
+    curl_setopt($ch, CURLOPT_PROXY, $proxy);
+    curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxyauth);
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    curl_setopt($ch, CURLOPT_ENCODING, "UTF-8");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, ($response ? ($response) : ($GLOBALS['response'])));
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_VERBOSE, 1);
+    curl_setopt($ch, CURLOPT_STDERR, $fp);
+    $data = curl_exec($ch);
+    $error = curl_error($ch);
+    curl_close($ch);
+    if ($error) push('curl request failed: ' . $error, 'error');
+    unset($GLOBALS['response']);
+    return json_decode($data, true);
+}
+
 
 $config = parse_ini_file('config.ini', true);
 $db =  connect('development', $config);
@@ -254,7 +284,17 @@ if($orders) {
     $response = setQuantitiesIn1C(json_encode($response, JSON_UNESCAPED_UNICODE));
     $response = json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     file_put_contents(dirname(__FILE__).'/logs/'.$now.'_response.json', json_encode($response, JSON_UNESCAPED_UNICODE));
-    print_r($response);
+
+    $data = json_encode($response, JSON_UNESCAPED_UNICODE);
+
+    if (!strstr($data, 'Ошибка:'))  {  }  else   {
+        $message  = '<i>Из 1C пришла ошибка при отправке заказа:</i>';
+        $message .= " \n ";
+        $message .= $now.' * '.$data;
+        sendTelegramMessage('-283140968', $message);
+    }
+
+
     push('orders send success ids: '.$ids, 'access');
     if(!empty($ids)) mysqli_query($db, "UPDATE orders  SET request = request + 1 WHERE id IN (".$ids.")");
     $records = json_decode($response, true);
