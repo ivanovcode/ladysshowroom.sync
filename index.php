@@ -189,6 +189,7 @@ foreach ($rows as $key => $row) {
             $sum = (intval($product['price'])*intval($product['quantity']))-(((intval($product['price'])*intval($product['quantity']))/100)*floatval($discounts[$product['reserve_id']]));
             $row['products'][$id_product]['sum'] = number_format(stripos($sum, '.') ? strstr($sum, '.', true) : $sum, 2, '.', '');
             $row['products'][$id_product]['discount_sum']=number_format((intval($row['products'][$id_product]['price'])*intval($product['quantity']))-intval($row['products'][$id_product]['sum']), 2, '.', '');
+            $row['products'][$id_product]['discount_sum']=($row['products'][$id_product]['discount_sum']?$row['products'][$id_product]['discount_sum']:'0');
             unset($row['products'][$id_product]['reserve_id']);
             $total_sum = $total_sum + intval($sum);
         }
