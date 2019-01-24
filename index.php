@@ -279,7 +279,7 @@ foreach ($rows as $key => $row) {
     file_put_contents(dirname(__FILE__).'/logs/'.$now.'_response.json', json_encode($response, JSON_UNESCAPED_UNICODE));
 
     $data = json_encode($response, JSON_UNESCAPED_UNICODE);
-    if (!strstr($data, 'Ошибка:'))  {  }  else   {
+    if ((!strstr($data, 'Ошибка:')) ||($data!='"null"')) {  }  else   {
         $message  = '<i>Из 1C пришла ошибка при отправке заказа:</i>';
         $message .= " \n ";
         $message .= $now.' * '.$data;
