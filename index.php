@@ -215,6 +215,23 @@ foreach ($rows as $key => $row) {
 unset($rows);
 
 
+$response['collection']['roles']['1']['id'] = '1';
+$response['collection']['roles']['1']['title'] = 'Доставки LS';
+$response['collection']['roles']['2']['id'] = '2';
+$response['collection']['roles']['2']['title'] = 'Посылки LS';
+$response['collection']['roles']['3']['id'] = '3';
+$response['collection']['roles']['3']['title'] = 'Доставки IAP';
+$response['collection']['roles']['4']['id'] = '4';
+$response['collection']['roles']['4']['title'] = 'Посылки IAP';
+$response['collection']['roles']['5']['id'] = '5';
+$response['collection']['roles']['5']['title'] = 'Аукционы';
+$response['collection']['roles']['6']['id'] = '6';
+$response['collection']['roles']['6']['title'] = 'Приложение iOS';
+$response['collection']['roles']['7']['id'] = '7';
+$response['collection']['roles']['7']['title'] = 'Сайт LS';
+$response['collection']['roles']['8']['id'] = '8';
+$response['collection']['roles']['8']['title'] = 'Сайт IAP';
+
 $response['collection']['showrooms'] = $showrooms;
 $response['collection']['staffs'] = $staffs;
 $response['collection']['statuses'] = $statuses;
@@ -250,6 +267,7 @@ $response['collection']['deliveries']['4']['price'] = 0.00;
 $response['collection']['deliveries']['5']['id'] = '5';
 $response['collection']['deliveries']['5']['title'] = 'EMS';
 $response['collection']['deliveries']['5']['price'] = 0.00;
+
 
 
 $response['collection']['payments']['1']['id'] = '1';
