@@ -93,7 +93,7 @@
 
     function setRequest($db, $id_finance, $id_request, $id_response, $status=0, $message='') {
         $query = "
-             INSERT IGNORE INTO `1c_requests.finances` (`id_finance`, `id_request`, `id_response`, `status`, `created`, `message`) VALUES ('".$id_finance."', '".$id_request."', '".$id_response."', '".$status."', CURRENT_TIME(), '".$message."')
+             INSERT IGNORE INTO `1c_requests.finances` (`id_finance`, `id_request`, `id_response`, `status`, `created`, `message`) VALUES ('".$id_finance."', ".(!empty($id_request)?'\''.$id_request.'\'':'NULL').", ".(!empty($id_response)?'\''.$id_response.'\'':'NULL').", '".$status."', CURRENT_TIME(), ".(!empty($message)?'\''.$message.'\'':'NULL').")
              ON DUPLICATE KEY UPDATE `id_finance`=LAST_INSERT_ID(id_finance), `id_request`=".(!empty($id_request)?'\''.$id_request.'\'':'NULL').", `id_response`=".(!empty($id_response)?'\''.$id_response.'\'':'NULL').", `message`=".(!empty($message)?'\''.$message.'\'':'NULL');
 
         mysqli_query($db, $query);
