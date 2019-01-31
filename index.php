@@ -37,7 +37,7 @@
             ss.id_1c_staff as `staff`,
             DATE_FORMAT(f.created,\"%Y-%m-%dT%T\") as `date`,
             e.id as expense,
-            f.comment,
+            REPLACE(f.comment, \"\n\", \" \") as comment,
             d.id as dds
             FROM
             finances f
@@ -54,6 +54,7 @@
             LEFT JOIN `1c_staffs.staffs` ss ON ss.id_staff = f.staff_id
             WHERE f.category REGEXP '^[0-9]+$' AND f.full > 0
             AND r.id_request IS NULL
+            ORDER BY f.created ASC 
         ";
         $rows = mysqli_query($db, $query);
         $results = [];
@@ -170,6 +171,14 @@
         return mysqli_insert_id($db);
     }
 
+    function setNumberFinance($db, $id, $number) {
+        $q = "
+                UPDATE `finances` f
+                SET f.`number` = '".$number."'
+                WHERE f.id = ".$id;
+        mysqli_query($db, $q);
+    }
+
     /*Синхронизация названий мест хранения денег из 1С при наличии их в промежуточной таблице*/
     function updateTitleWallets($db) {
         $q = "
@@ -246,9 +255,12 @@
         $response = json_decode($response, true);
         //print_r($response);
 
-        if(isset($request['hash_before']) && isset($response['hash_before'])) {
-            setRequest($db, $finances[$key]['id'], $request['hash_before'], $response['hash_before']);
-        }
+        $data = json_decode($store->data, true);
+        //if(isset($request['hash_before']) && isset($response['hash_before'])) {
+            $status = (($data['info']['state']=='Проведен' && $data !== null)?1:-1);
+            setRequest($db, $finances[$key]['id'], $request['hash_before'], $response['hash_before'], $status);
+            if ($data!== null && isset($data['info']['id'])) setNumberFinance($db, $finances[$key]['id'], $data['info']['id']);
+        //}
         die();
     }
 ?>
