@@ -52,7 +52,7 @@
             LEFT JOIN `1c_types` ty ON ty.id = tyc.id_type
             LEFT JOIN `1c_tills.bot_wallets` tw ON tw.id_bot_wallet = w.id
             LEFT JOIN `1c_staffs.staffs` ss ON ss.id_staff = f.staff_id
-            WHERE f.category REGEXP '^[0-9]+$' AND f.full > 0 AND w.cash = 0
+            WHERE f.category REGEXP '^[0-9]+$' AND f.full > 0 AND w.cash = 0 AND f.id = 419
             AND r.id_request IS NULL
             ORDER BY f.created ASC 
         ";
@@ -74,7 +74,7 @@
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "UTF-8",
                 CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 500,
+                CURLOPT_TIMEOUT => 5,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
                 //CURLOPT_POSTFIELDS => "{\"product\": \"\"}",
@@ -91,10 +91,10 @@
 
     }
 
-    function setRequest($db, $id_finance, $id_request, $id_response, $status=0) {
+    function setRequest($db, $id_finance, $id_request, $id_response, $status=0, $message='') {
         $query = "
-             INSERT IGNORE INTO `1c_requests.finances` (`id_finance`, `id_request`, `id_response`, `status`, `created`) VALUES ('".$id_finance."', '".$id_request."', '".$id_response."', '".$status."', CURRENT_TIME())
-             ON DUPLICATE KEY UPDATE `id_finance`=LAST_INSERT_ID(id_finance), `id_request`='".$id_request."', `id_response`='".$id_response."'
+             INSERT IGNORE INTO `1c_requests.finances` (`id_finance`, `id_request`, `id_response`, `status`, `created`, `message`) VALUES ('".$id_finance."', '".$id_request."', '".$id_response."', '".$status."', CURRENT_TIME(), '".$message."')
+             ON DUPLICATE KEY UPDATE `id_finance`=LAST_INSERT_ID(id_finance), `id_request`='".$id_request."', `id_response`='".$id_response."', `message`='".$message."'
         ";
         mysqli_query($db, $query);
         return mysqli_insert_id($db);
@@ -234,6 +234,16 @@
         $buh->list = 'CashFlow';
         $buh->data = json_encode($finance, JSON_UNESCAPED_UNICODE);
         $response = $buh->sendItem();
+        $response = str_replace(array('\t','\n'),'',$response);
+
+
+
+
+        /*$response = preg_replace(
+            '/(:"[^#:]*?)"([^#:]*?)"([^#:]*?"[,}])/',
+            '$1\'$2\'$3',
+            $response
+        );*/
 
         $store->list = 'rest';
 
@@ -256,11 +266,16 @@
         //print_r($response);
 
         $data = json_decode($store->data, true);
-        //if(isset($request['hash_before']) && isset($response['hash_before'])) {
-            $status = (($data['info']['state']=='Проведен' && $data !== null)?1:-1);
-            setRequest($db, $finances[$key]['id'], $request['hash_before'], $response['hash_before'], $status);
-            if ($data!== null && isset($data['info']['id'])) setNumberFinance($db, $finances[$key]['id'], $data['info']['id']);
-        //}
+        $message = '';
+        if(!isset($request['hash_before']) || !isset($response['hash_before'])) $message .= '<br>Ошибка записи лога;';
+        if(isset($data['msg']) && strpos($data['msg'], 'Не хватает денежных средств')!== false) $message .= '<br>Не хватает денежных средств;';
+        if($data === null) $message .= '<br>В ответе нет информации;';
+
+        $status = -1;
+        if(isset($data['info'])) $status = (($data['info']['state']=='Проведен' && $data !== null)?1:$status);
+        setRequest($db, $finances[$key]['id'], $request['hash_before'], $response['hash_before'], $status, $message);
+        if ($data!== null && isset($data['info']['id'])) setNumberFinance($db, $finances[$key]['id'], $data['info']['id']);
+
         die();
     }
 ?>
