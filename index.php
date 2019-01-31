@@ -52,7 +52,7 @@
             LEFT JOIN `1c_types` ty ON ty.id = tyc.id_type
             LEFT JOIN `1c_tills.bot_wallets` tw ON tw.id_bot_wallet = w.id
             LEFT JOIN `1c_staffs.staffs` ss ON ss.id_staff = f.staff_id
-            WHERE f.category REGEXP '^[0-9]+$' AND f.full > 0
+            WHERE f.category REGEXP '^[0-9]+$' AND f.full > 0 AND w.cash = 0
             AND r.id_request IS NULL
             ORDER BY f.created ASC 
         ";
