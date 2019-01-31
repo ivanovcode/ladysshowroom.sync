@@ -103,7 +103,7 @@
 
     class Get1C {
         var $list;
-        var $url = "http://office.itone.ru/LADYSSHOWROOM_UNF_TEST/hs/atnApi/";
+        var $url = "http://office.itone.ru/LADYSSHOWROOM_UNF/hs/atnApi/";
         var $data;
         function getList(){
             $curl = curl_init();
