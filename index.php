@@ -51,8 +51,9 @@
             LEFT JOIN `1c_types.categories` tyc ON tyc.id_category = f.subcategory
             LEFT JOIN `1c_types` ty ON ty.id = tyc.id_type
             LEFT JOIN `1c_tills.bot_wallets` tw ON tw.id_bot_wallet = w.id
+            LEFT JOIN `1c_tills` t ON t.id = tw.id_1c_till
             LEFT JOIN `1c_staffs.staffs` ss ON ss.id_staff = f.staff_id
-            WHERE f.category REGEXP '^[0-9]+$' AND f.full > 0 AND w.cash = 0 AND f.created >= '2019-02-01 00:00:00'
+            WHERE f.category REGEXP '^[0-9]+$' AND f.full > 0 AND w.cash = 0 AND f.created >= '2019-02-01 00:00:00' AND f.amount <= t.amount 
             AND r.id_request IS NULL
             ORDER BY f.created ASC 
         ";
@@ -171,6 +172,31 @@
         return mysqli_insert_id($db);
     }
 
+    function setTills($db, $request, $list){
+        $request->list = key($list);
+        $rows = $request->getList();
+        foreach($rows as $key => $row)   {
+            setTill($db, current($list), $row);
+        }
+    }
+    function setTill($db, $tbl, $row){
+        $query = "
+                INSERT IGNORE INTO  `".$tbl."` 
+                (
+                    `id` ,
+                    `name` ,
+                    `amount`
+                )
+                VALUES
+                ('".$row['id']."' ,  '".$row['name']."',  '".(!empty($row['amount'])?$row['amount']:0)."')
+                ON DUPLICATE KEY UPDATE `name` = '".$row['name']."',  `amount` = '".(!empty($row['amount'])?$row['amount']:0)."';
+            ";
+        mysqli_query($db, $query);
+        return mysqli_insert_id($db);
+    }
+
+
+
     function setNumberFinance($db, $id, $number) {
         $q = "
                 UPDATE `finances` f
@@ -224,8 +250,12 @@
     $buh = new Get1C;
     $store = new Store;
 
-    $lists = array(array('TillList'=>'1c_tills'), array('ExpenseList'=>'1c_expenses'), array('DDSList'=>'1c_dds'));
+    $lists = array(array('ExpenseList'=>'1c_expenses'), array('DDSList'=>'1c_dds'));
     foreach($lists as $key => $list) setRows($db, $buh, $list);
+
+    $lists = array(array('TillList'=>'1c_tills'));
+    foreach($lists as $key => $list) setTills($db, $buh, $list);
+
     updateTitleWallets($db);
 
     $finances = getFinances($db);
@@ -277,9 +307,9 @@
         if($data === null) $message .= '<br>В ответе нет информации;';
 
         $status = -1;
-        if(isset($data['info'])) $status = (($data['info']['state']=='Проведен' && $data !== null)?1:$status);
-        setRequest($db, $finances[$key]['id'], $request['hash_before'], $response['hash_before'], $status, $message);
-        if ($data!== null && intval($data['info']['id'])>0) setNumberFinance($db, $id, $data['info']['id']);
+        if($data !== null && isset($data['info'])) $status = ($data['info']['state']=='Проведен'?1:$status);
+        if(isset($request['hash_before']) || isset($response['hash_before'])) setRequest($db, $finances[$key]['id'], $request['hash_before'], $response['hash_before'], $status, $message);
+        if ($data !== null && isset($data['info']['id'])) setNumberFinance($db, $id, $data['info']['id']);
 
         die();
     }
