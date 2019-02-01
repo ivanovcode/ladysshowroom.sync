@@ -230,6 +230,7 @@
 
     $finances = getFinances($db);
     foreach($finances as $key => $finance)   {
+        $id = $finance['id'];
         unset($finance['id']);
         $buh->list = 'CashFlow';
         $buh->data = json_encode($finance, JSON_UNESCAPED_UNICODE);
@@ -278,7 +279,7 @@
         $status = -1;
         if(isset($data['info'])) $status = (($data['info']['state']=='Проведен' && $data !== null)?1:$status);
         setRequest($db, $finances[$key]['id'], $request['hash_before'], $response['hash_before'], $status, $message);
-        if ($data!== null && isset($data['info']['id'])) setNumberFinance($db, $finances[$key]['id'], $data['info']['id']);
+        if ($data!== null && intval($data['info']['id'])>0) setNumberFinance($db, $id, $data['info']['id']);
 
         die();
     }
