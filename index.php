@@ -249,20 +249,24 @@
 
         $store->data = $buh->data;
         $request = $store->set();
-        /*echo "Запрос:"."\n";
+        echo "Запрос:"."\n";
         echo $request;
         echo "\n";
-        echo "\n";*/
+        echo "\n";
         $request = json_decode($request, true);
         //print_r($request);
 
         $store->data = $response;
         $response = $store->set();
-        /*echo "Ответ:"."\n";
+
+        echo "Ответ:"."\n";
         echo $response;
         echo "\n";
-        echo "\n";*/
+        echo "\n";
         $response = json_decode($response, true);
+
+
+
         //print_r($response);
 
         $data = json_decode($store->data, true);
