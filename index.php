@@ -188,8 +188,8 @@
                     `amount`
                 )
                 VALUES
-                ('".$row['id']."' ,  '".$row['name']."',  '".(!empty($row['amount'])?$row['amount']:0)."')
-                ON DUPLICATE KEY UPDATE `name` = '".$row['name']."',  `amount` = '".(!empty($row['amount'])?$row['amount']:0)."';
+                ('".$row['id']."' ,  '".$row['name']."',  '".(!empty($row['balance'])?$row['balance']:0)."')
+                ON DUPLICATE KEY UPDATE `name` = '".$row['name']."',  `amount` = '".(!empty($row['balance'])?$row['balance']:0)."';
             ";
         mysqli_query($db, $query);
         return mysqli_insert_id($db);
