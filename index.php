@@ -167,6 +167,10 @@ foreach ($rows as $key => $row) {
     $row['client'] = json_decode($row['client'], JSON_UNESCAPED_SLASHES);
     $row['staff'] = json_decode($row['staff'], JSON_UNESCAPED_SLASHES);
     $row['payments'] = json_decode($row['payments'], JSON_UNESCAPED_SLASHES);
+    $row['role'] = 'Доставки LS';
+
+    //Доставки IP  Посылки LS  Посылки IP  Аукционы
+
 
     $_discounts=[];
     $discounts = $row['discounts'];
