@@ -308,7 +308,7 @@
 
         $status = -1;
         if($data !== null && isset($data['info'])) $status = ($data['info']['state']=='Проведен'?1:$status);
-        if(isset($request['hash_before']) || isset($response['hash_before'])) setRequest($db, $finances[$key]['id'], $request['hash_before'], $response['hash_before'], $status, $message);
+        /*if(isset($request['hash_before']) || isset($response['hash_before']))*/ setRequest($db, $finances[$key]['id'], $request['hash_before'], $response['hash_before'], $status, $message);
         if ($data !== null && isset($data['info']['id'])) setNumberFinance($db, $id, $data['info']['id']);
 
         die();
