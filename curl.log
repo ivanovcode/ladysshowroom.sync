@@ -1,0 +1,48 @@
+*   Trying 185.142.26.203...
+* Connected to de360.nordvpn.com (185.142.26.203) port 80 (#0)
+* Establish HTTP proxy tunnel to api.telegram.org:443
+* Proxy auth using Basic with user 'development@ivanov.site'
+> CONNECT api.telegram.org:443 HTTP/1.1
+Host: api.telegram.org:443
+Proxy-Authorization: Basic ZGV2ZWxvcG1lbnRAaXZhbm92LnNpdGU6aXZhbjB2djB2YQ==
+Proxy-Connection: Keep-Alive
+
+< HTTP/1.1 200 Connection established
+< 
+* Proxy replied OK to CONNECT request
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /etc/ssl/certs/ca-certificates.crt
+  CApath: /etc/ssl/certs
+* NPN, negotiated HTTP1.1
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
+* ALPN, server did not agree to a protocol
+* Server certificate:
+* 	 subject: OU=Domain Control Validated; CN=api.telegram.org
+* 	 start date: May  4 14:42:31 2018 GMT
+* 	 expire date: May 23 16:17:38 2020 GMT
+* 	 subjectAltName: api.telegram.org matched
+* 	 issuer: C=US; ST=Arizona; L=Scottsdale; O=GoDaddy.com, Inc.; OU=http://certs.godaddy.com/repository/; CN=Go Daddy Secure Certificate Authority - G2
+* 	 SSL certificate verify ok.
+> POST /bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/sendMessage HTTP/1.1
+Host: api.telegram.org
+Accept: */*
+Accept-Encoding: UTF-8
+Content-Length: 521
+Expect: 100-continue
+Content-Type: multipart/form-data; boundary=------------------------be6365ba80f7c5af
+
+< HTTP/1.1 100 Continue
+< HTTP/1.1 200 OK
+< Server: nginx/1.12.2
+< Date: Wed, 06 Feb 2019 12:56:41 GMT
+< Content-Type: application/json
+< Content-Length: 695
+< Connection: keep-alive
+< Access-Control-Allow-Origin: *
+< Access-Control-Allow-Methods: GET, POST, OPTIONS
+< Access-Control-Expose-Headers: Content-Length,Content-Type,Date,Server,Connection
+< Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+< 
+* Connection #0 to host de360.nordvpn.com left intact

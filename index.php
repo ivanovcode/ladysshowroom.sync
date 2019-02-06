@@ -50,7 +50,7 @@ function validTxt($value, $target) {
 }
 
 function validNum($value, $target) {
-    if(preg_match("/^[0-9]+$/i", $value[$target])) return true;
+    if(preg_match("/^[0-9]+$/i", $value[$target]) && !empty($value[$target])) return true;
     $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
     $msg = $target.': not valid   '.'['.(!empty($value['product_id'])?$value['product_id']:'-- no id --').'] '.(!empty($value['product_title'])?$value['product_title']:'-- no title --');
     $msg_status = checkValidate($msg);
