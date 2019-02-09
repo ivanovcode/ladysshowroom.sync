@@ -195,6 +195,31 @@
         return mysqli_insert_id($db);
     }
 
+    function setMoneys($db, $request, $list){
+        $request->list = key($list);
+        $rows = $request->getList();
+        foreach($rows as $key => $row)   {
+            setMoney($db, current($list), $row);
+        }
+    }
+    function setMoney($db, $tbl, $row){
+        $query = "
+                    INSERT IGNORE INTO  `".$tbl."` 
+                    (
+                        `id_staff`, 
+                        `took`, 
+                        `gave`, 
+                        `reported`, 
+                        `remained`
+                    )
+                    VALUES
+                    ('".$row['id']."' ,  '".$row['took']."',  '".$row['gave']."',  '".$row['reported']."',  '".$row['remained']."')
+                    ON DUPLICATE KEY UPDATE `took` = '".$row['took']."',  `gave` = '".$row['gave']."',  `reported` = '".$row['reported']."',  `remained` = '".$row['remained']."';
+                ";
+        mysqli_query($db, $query);
+        return mysqli_insert_id($db);
+    }
+
 
 
     function setNumberFinance($db, $id, $number) {
@@ -206,12 +231,12 @@
     }
 
     /*Синхронизация названий мест хранения денег из 1С при наличии их в промежуточной таблице*/
-    function updateTitleWallets($db) {
+    function updateWallets($db) {
         $q = "
             UPDATE `wallets` w
             LEFT JOIN `1c_tills.bot_wallets` tw ON tw.id_bot_wallet = w.id
             LEFT JOIN `1c_tills` t ON t.id = tw.id_1c_till
-            SET w.title = t.`name`
+            SET w.title = t.`name`, w.balance = t.`amount`
             WHERE t.id IS NOT NULL AND tw.`update` = 1
         ";
         mysqli_query($db, $q);
@@ -256,7 +281,10 @@
     $lists = array(array('TillList'=>'1c_tills'));
     foreach($lists as $key => $list) setTills($db, $buh, $list);
 
-    updateTitleWallets($db);
+    $lists = array(array('GetMoneyStaff'=>'1c_moneys'));
+    foreach($lists as $key => $list) setMoneys($db, $buh, $list);
+
+    updateWallets($db);
 
     $finances = getFinances($db);
     foreach($finances as $key => $finance)   {
