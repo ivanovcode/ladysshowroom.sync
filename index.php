@@ -60,7 +60,8 @@ function getOrders($db){
         cert.deposit as cert_deposit,
         cert.expiry_at as cert_expiry,
         o.wallet_id as wallet,
-        r.showroom_id as warehouse
+        r.showroom_id as warehouse,
+        u.role
         FROM
         orders as o
         LEFT JOIN users as u ON u.user_id = o.user_id
@@ -167,7 +168,7 @@ foreach ($rows as $key => $row) {
     $row['client'] = json_decode($row['client'], JSON_UNESCAPED_SLASHES);
     $row['staff'] = json_decode($row['staff'], JSON_UNESCAPED_SLASHES);
     $row['payments'] = json_decode($row['payments'], JSON_UNESCAPED_SLASHES);
-    $row['role'] = 'Доставки LS';
+
 
     //Доставки IP  Посылки LS  Посылки IP  Аукционы
 
