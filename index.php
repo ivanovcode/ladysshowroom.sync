@@ -61,7 +61,7 @@ function getOrders($db){
         cert.expiry_at as cert_expiry,
         o.wallet_id as wallet,
         r.showroom_id as warehouse,
-        u.role
+        u.role as roleid
         FROM
         orders as o
         LEFT JOIN users as u ON u.user_id = o.user_id
