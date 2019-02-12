@@ -236,8 +236,11 @@
             UPDATE `wallets` w
             LEFT JOIN `1c_tills.bot_wallets` tw ON tw.id_bot_wallet = w.id
             LEFT JOIN `1c_tills` t ON t.id = tw.id_1c_till
-            SET w.title = t.`name`, w.balance = t.`amount`
-            WHERE t.id IS NOT NULL AND tw.`update` = 1
+            LEFT JOIN `1c_cash.wallets` cw ON cw.id_wallet = w.id
+            LEFT JOIN `1c_cash` ca ON ca.id_staff = cw.id_1c_staff
+            LEFT JOIN `1c_staffs` st ON st.id = cw.id_1c_staff
+            SET w.title = CASE WHEN t.id IS NULL THEN CONCAT('Наличные ', st.firstname) ELSE t.`name` END, w.balance = CASE WHEN t.id IS NULL THEN ca.remained ELSE t.amount END
+            WHERE (tw.`update` = 1 OR cw.`update` = 1) AND (ca.remained IS NOT NULL OR t.amount IS NOT NULL)
         ";
         mysqli_query($db, $q);
     }
