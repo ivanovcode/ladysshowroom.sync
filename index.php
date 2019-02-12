@@ -281,7 +281,7 @@
     $lists = array(array('TillList'=>'1c_tills'));
     foreach($lists as $key => $list) setTills($db, $buh, $list);
 
-    $lists = array(array('GetMoneyStaff'=>'1c_moneys'));
+    $lists = array(array('GetMoneyStaff'=>'1c_cash'));
     foreach($lists as $key => $list) setMoneys($db, $buh, $list);
 
     updateWallets($db);
