@@ -26,6 +26,35 @@
         mysqli_query($db, "TRUNCATE table products;");
         mysqli_query($db, "SET FOREIGN_KEY_CHECKS = 1;");
     }*/
+    function getTransfers($db, $cash=0)  {
+        $query = "
+            SELECT
+            tt.id,
+            tw2.id_1c_till as till_to,
+            tw1.id_1c_till as till_from,
+            DATE_FORMAT(tt.created,\"%Y-%m-%dT%T\") as `date`,
+            tt.amount as sum,
+            tt.dds_id as dds,
+            ss.id_1c_staff as staff,
+            tt.comment
+            FROM
+            `1c_trans.tills` tt
+            LEFT JOIN `1c_requests.trans` r ON r.id_trans = tt.id
+            LEFT JOIN `1c_tills.bot_wallets` tw1 ON tw1.id_bot_wallet = tt.till_from
+            LEFT JOIN `1c_tills.bot_wallets` tw2 ON tw2.id_bot_wallet = tt.till_to
+            LEFT JOIN `1c_staffs.staffs` ss ON ss.id_staff = tt.staff_id
+            LEFT JOIN wallets w ON w.id = tw1.id_bot_wallet
+            WHERE tt.full > 0 AND w.cash = ".strval($cash)." AND tt.amount <= w.balance
+            AND r.id_trans IS NULL
+            ORDER BY tt.created ASC
+        ";
+        $rows = mysqli_query($db, $query);
+        $results = [];
+        while ($row = mysqli_fetch_array($rows, MYSQLI_ASSOC)) {
+            array_push($results, $row);
+        }
+        return $results;
+    }
 
     function getFinances($db)  {
         $query = "
@@ -96,6 +125,15 @@
         $query = "
              INSERT IGNORE INTO `1c_requests.finances` (`id_finance`, `id_request`, `id_response`, `status`, `created`, `message`) VALUES ('".$id_finance."', ".(!empty($id_request)?'\''.$id_request.'\'':'NULL').", ".(!empty($id_response)?'\''.$id_response.'\'':'NULL').", '".$status."', CURRENT_TIME(), ".(!empty($message)?'\''.$message.'\'':'NULL').")
              ON DUPLICATE KEY UPDATE `id_finance`=LAST_INSERT_ID(id_finance), `id_request`=".(!empty($id_request)?'\''.$id_request.'\'':'NULL').", `id_response`=".(!empty($id_response)?'\''.$id_response.'\'':'NULL').", `message`=".(!empty($message)?'\''.$message.'\'':'NULL');
+
+        mysqli_query($db, $query);
+        return mysqli_insert_id($db);
+
+    }
+    function setRequestTrans($db, $id_finance, $id_request, $id_response, $status=0, $message='') {
+        $query = "
+                 INSERT IGNORE INTO `1c_requests.trans` (`id_trans`, `id_request`, `id_response`, `status`, `created`, `message`) VALUES ('".$id_finance."', ".(!empty($id_request)?'\''.$id_request.'\'':'NULL').", ".(!empty($id_response)?'\''.$id_response.'\'':'NULL').", '".$status."', CURRENT_TIME(), ".(!empty($message)?'\''.$message.'\'':'NULL').")
+                 ON DUPLICATE KEY UPDATE `id_trans`=LAST_INSERT_ID(id_trans), `id_request`=".(!empty($id_request)?'\''.$id_request.'\'':'NULL').", `id_response`=".(!empty($id_response)?'\''.$id_response.'\'':'NULL').", `message`=".(!empty($message)?'\''.$message.'\'':'NULL');
 
         mysqli_query($db, $query);
         return mysqli_insert_id($db);
@@ -229,6 +267,13 @@
                 WHERE f.id = ".$id;
         mysqli_query($db, $q);
     }
+    function setNumberTrans($db, $id, $number) {
+        $q = "
+                    UPDATE `1c_trans.tills` t
+                    SET t.`number` = '".$number."'
+                    WHERE t.id = ".$id;
+        mysqli_query($db, $q);
+    }
 
     /*Синхронизация названий мест хранения денег из 1С при наличии их в промежуточной таблице*/
     function updateWallets($db) {
@@ -276,6 +321,7 @@
     $config = parse_ini_file('config.ini', true);
     $db =  connect('development', $config); mysqli_select_db($db, $config['development']['dbname']);
     $buh = new Get1C;
+    $api = new Get1C;
     $store = new Store;
 
     $lists = array(array('ExpenseList'=>'1c_expenses'), array('DDSList'=>'1c_dds'));
@@ -289,6 +335,50 @@
 
     updateWallets($db);
 
+    /*Перенос средств с безналичных счетов*/
+    $transfers = getTransfers($db);
+    foreach($transfers as $key => $transfer)   {
+        $id = $transfer['id'];
+        unset($transfer['id']);
+        $api->list = 'MoveMoney';
+        $api->data = json_encode($transfer, JSON_UNESCAPED_UNICODE);
+        $response = $api->sendItem();
+        $response = str_replace(array('\t','\n'),'',$response);
+
+        $store->list = 'rest';
+        $store->data = $api->data;
+        $request = $store->set();
+
+        /*echo "Запрос:"."\n";
+        echo $request;
+        echo "\n";
+        echo "\n";*/
+        $request = json_decode($request, true);
+
+        $store->data = $response;
+        $response = $store->set();
+
+        /*echo "Ответ:"."\n";
+        echo $response;
+        echo "\n";
+        echo "\n";*/
+        $response = json_decode($response, true);
+
+
+        $data = json_decode($store->data, true);
+
+        $message = '';
+        if(!isset($request['hash_before']) || !isset($response['hash_before'])) $message .= '<br>Ошибка записи лога;';
+        if($data === null) $message .= '<br>В ответе нет информации;';
+
+        $status = -1;
+        if($data !== null && isset($data['info'])) $status = ($data['info']['state']=='Проведен'?1:$status);
+        /*if(isset($request['hash_before']) || isset($response['hash_before']))*/ setRequestTrans($db, $transfers[$key]['id'], $request['hash_before'], $response['hash_before'], $status, $message);
+        if ($data !== null && isset($data['info']['id'])) setNumberTrans($db, $id, $data['info']['id']);
+
+
+    }
+
     $finances = getFinances($db);
     foreach($finances as $key => $finance)   {
         $id = $finance['id'];
@@ -301,11 +391,6 @@
 
 
 
-        /*$response = preg_replace(
-            '/(:"[^#:]*?)"([^#:]*?)"([^#:]*?"[,}])/',
-            '$1\'$2\'$3',
-            $response
-        );*/
 
         $store->list = 'rest';
 
@@ -342,6 +427,6 @@
         /*if(isset($request['hash_before']) || isset($response['hash_before']))*/ setRequest($db, $finances[$key]['id'], $request['hash_before'], $response['hash_before'], $status, $message);
         if ($data !== null && isset($data['info']['id'])) setNumberFinance($db, $id, $data['info']['id']);
 
-        die();
+
     }
 ?>
