@@ -77,8 +77,8 @@
             IF(w.cash=1, NULL, tw.id_1c_till) as `till`,
             IF(w.cash=1, NULL, f.amount) as `sum`,
             IF(w.cash=1, NULL, ss.id_1c_staff) as `staff`,
-            DATE_FORMAT(f.created,\"%Y-%m-%dT%T\") as `date`,
-            e.id as expense,
+            DATE_FORMAT(f.created,\"%Y-%m-%dT%T\") as `date`,            
+            IF(w.cash=1, e.name, e.id) as expense,
             REPLACE(f.comment, \"\n\", \" \") as comment,
             IF(w.cash=1, NULL, d.id) as dds    
             FROM
