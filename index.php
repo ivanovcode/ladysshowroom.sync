@@ -576,6 +576,8 @@
     foreach($lists as $key => $list) setTills($db, $api, $list);
 
     $lists = array(array('GetMoneyStaff'=>'1c_cash'));
+    mysqli_query($db, 'TRUNCATE 1c_cash');
+
     foreach($lists as $key => $list) setMoneys($db, $api, $list);
 
     updateWallets($db);
