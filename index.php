@@ -72,7 +72,7 @@
             f.id,
             IF(w.cash=1, '1', NULL) as roleid,
             IF(w.cash=1, f.amount, NULL) as expensesum,
-            IF(w.cash=1, ss.id_1c_staff, NULL) as staffid,
+            IF(w.cash=1, cwa.id_1c_staff, NULL) as staffid,
             IF(w.cash=1, NULL, ty.name) as `type`,
             IF(w.cash=1, NULL, tw.id_1c_till) as `till`,
             IF(w.cash=1, NULL, f.amount) as `sum`,
@@ -95,6 +95,7 @@
             LEFT JOIN `1c_tills.bot_wallets` tw ON tw.id_bot_wallet = w.id
             LEFT JOIN `1c_tills` t ON t.id = tw.id_1c_till
             LEFT JOIN `1c_staffs.staffs` ss ON ss.id_staff = f.staff_id
+            LEFT JOIN `1c_cash.wallets` cwa ON cwa.id_wallet = f.wallet
             WHERE f.category REGEXP '^[0-9]+$' AND f.full > 0 AND f.created >= '2019-02-15T17:32:50' AND f.amount <= w.balance
             AND r.id_request IS NULL
             ORDER BY f.created ASC
