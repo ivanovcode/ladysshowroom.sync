@@ -577,7 +577,7 @@
 
     $lists = array(array('GetMoneyStaff'=>'1c_cash'));
     mysqli_query($db, 'TRUNCATE 1c_cash');
-
+    mysqli_query($db, "UPDATE `wallets` SET `balance` = '0' WHERE `wallets`.`cash` = 1;");
     foreach($lists as $key => $list) setMoneys($db, $api, $list);
 
     updateWallets($db);
