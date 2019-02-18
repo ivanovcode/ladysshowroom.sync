@@ -286,7 +286,10 @@
 
     function setMoneys($db, $request, $list)   {
             $request->list = key($list);
+        $request->method = 'GET';
             $rows = $request->getList();
+            print_r($rows);
+
             //if ($rows) {
                 foreach ($rows as $key => $row) {
                     setMoney($db, current($list), $row);
