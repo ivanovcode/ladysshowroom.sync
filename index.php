@@ -287,11 +287,11 @@
     function setMoneys($db, $request, $list)   {
             $request->list = key($list);
             $rows = $request->getList();
-            if ($rows) {
+            //if ($rows) {
                 foreach ($rows as $key => $row) {
                     setMoney($db, current($list), $row);
                 }
-            }
+            //}
     }
     function setMoney($db, $tbl, $row){
         $query = "
