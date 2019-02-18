@@ -288,7 +288,7 @@
             $request->list = key($list);
         $request->method = 'GET';
             $rows = $request->getList();
-            print_r($rows);
+
 
             //if ($rows) {
                 foreach ($rows as $key => $row) {
