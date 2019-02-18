@@ -70,7 +70,7 @@
             SELECT
             w.cash,
             f.id,
-            IF(w.cash=1, '1', NULL) as roleid,
+            IF(w.cash=1, rc.id_role, NULL) as roleid,
             IF(w.cash=1, f.amount, NULL) as expensesum,
             IF(w.cash=1, cwa.id_1c_staff, NULL) as staffid,
             IF(w.cash=1, NULL, ty.name) as `type`,
@@ -87,6 +87,7 @@
             LEFT JOIN `staffs` s ON s.id = f.staff_id
             LEFT JOIN `1c_requests.finances` r ON r.id_finance = f.id
             LEFT JOIN `1c_dds.categories` dc ON dc.id_category = f.subcategory
+            LEFT JOIN `1c_roles.categories` rc ON rc.id_category = f.subcategory
             LEFT JOIN `1c_dds` d ON d.id = dc.id_dds
             LEFT JOIN `1c_expenses.categories` ec ON ec.id_category = f.subcategory
             LEFT JOIN `1c_expenses`e ON e.id = ec.id_expense
@@ -161,9 +162,10 @@
 
     class Get1C {
         var $list;
-        //var $url = "http://office.itone.ru/LADYSSHOWROOM_UNF_TEST/hs/atnApi/";
-        var $url = "http://cloud.itone.ru/LADYSSHOWROOM_UNF/hs/atnApi/";
+        var $url = "http://office.itone.ru/LADYSSHOWROOM_UNF_TEST/hs/atnApi/";
+        //var $url = "http://cloud.itone.ru/LADYSSHOWROOM_UNF/hs/atnApi/";
         var $data;
+        var $method;
         function getList(){
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -173,7 +175,7 @@
                 CURLOPT_MAXREDIRS => 10,
                 CURLOPT_TIMEOUT => 500,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_CUSTOMREQUEST => (empty($this->method)?'GET':$this->method),
                 CURLOPT_POSTFIELDS => "{}",
                 CURLOPT_HTTPHEADER => array(
                     "Authorization: Basic " . base64_encode("itone" . ":" . "itone"),
@@ -218,6 +220,32 @@
         }
     }
 
+
+    function setRoles($db, $request, $list){
+
+        $request->list = key($list);
+        $request->method = 'POST';
+        $rows = $request->getList();
+        if ($rows) {
+            foreach ($rows as $key => $row) {
+                setRole($db, current($list), $row);
+            }
+        }
+    }
+    function setRole($db, $tbl, $row){
+        $query = "
+                INSERT IGNORE INTO  `".$tbl."` 
+                (
+                    `id` ,
+                    `name`
+                )
+                VALUES
+                ('".$row['id']."' ,  '".$row['title']."')
+                ON DUPLICATE KEY UPDATE `name` = '".$row['title']."';
+            ";
+        mysqli_query($db, $query);
+        return mysqli_insert_id($db);
+    }
     function setRow($db, $tbl, $row){
         $query = "
             INSERT IGNORE INTO  `".$tbl."` 
@@ -256,12 +284,14 @@
         return mysqli_insert_id($db);
     }
 
-    function setMoneys($db, $request, $list){
-        $request->list = key($list);
-        $rows = $request->getList();
-        foreach($rows as $key => $row)   {
-            setMoney($db, current($list), $row);
-        }
+    function setMoneys($db, $request, $list)   {
+            $request->list = key($list);
+            $rows = $request->getList();
+            if ($rows) {
+                foreach ($rows as $key => $row) {
+                    setMoney($db, current($list), $row);
+                }
+            }
     }
     function setMoney($db, $tbl, $row){
         $query = "
@@ -574,6 +604,9 @@
 
     $lists = array(array('TillList'=>'1c_tills'));
     foreach($lists as $key => $list) setTills($db, $api, $list);
+
+    $lists = array(array('Roles'=>'1c_roles'));
+    foreach($lists as $key => $list) setRoles($db, $api, $list);
 
     $lists = array(array('GetMoneyStaff'=>'1c_cash'));
     mysqli_query($db, 'TRUNCATE 1c_cash');
