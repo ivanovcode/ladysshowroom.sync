@@ -80,7 +80,8 @@
             DATE_FORMAT(f.created,\"%Y-%m-%dT%T\") as `date`,            
             IF(w.cash=1, e.name, e.id) as expense,
             REPLACE(f.comment, \"\n\", \" \") as comment,
-            IF(w.cash=1, NULL, d.id) as dds    
+            IF(w.cash=1, NULL, d.id) as dds,
+            f.recipient as accountable   
             FROM
             finances f
             LEFT JOIN `wallets` w ON w.id = f.wallet
@@ -386,6 +387,7 @@
             unset($finance['sum']);
             unset($finance['staff']);
             unset($finance['dds']);
+            unset($finance['accountable']);
             $api->list = 'AdvanceReport';
         }
         if(!$finance['cash']) {
@@ -394,7 +396,9 @@
             unset($finance['staffid']);
             $api->list = 'CashFlow';
         }
-
+        if(empty($finance['accountable'])) {
+            unset($finance['accountable']);
+        }
         unset($finance['cash']);
 
 
