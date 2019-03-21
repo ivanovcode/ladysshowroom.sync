@@ -154,7 +154,8 @@ $products = $rows['products'];
 $_results = [];
 $showroom_id = '5';
 foreach ($products as $product_key => $product) {
-    $_sizes = [];
+echo "id: ".$product['id']." ";  
+  $_sizes = [];
     $sizes = $product['sizes'][0]['values'];
     foreach ($sizes as $size_key => $size) {
         $_size = $size['onhand'];
