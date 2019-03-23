@@ -37,38 +37,68 @@ function clearOrders($db) {
 
 }
 
+function addGroup($db, $row){
 
-function addCertificate($db, $row){
     $query = "
-        INSERT IGNORE INTO  `catalog`
+        INSERT IGNORE INTO  `1c_groups`
         (
             `id` ,
-            `product_id` ,
-            `size_id` ,
-            `showroom_id` ,
-            `place_id` ,
-            `quantity`
+            `name`
         )
         VALUES
-        (NULL ,  '" . $row['product_id'] . "',  '" . $row['size_id'] . "',  '" . $row['showroom_id'] . "',  NULL,  '" . $row['amount'] . "')
-        ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id);
+        ('" . $row['id'] . "',  '" . $row['name'] . "')
+        ON DUPLICATE KEY UPDATE `1c_groups`.id =  '" . $row['id'] . "', `1c_groups`.name =  '" . $row['name'] . "';
     ";
     mysqli_query($db, $query);
     return mysqli_insert_id($db);
 }
 
-function getCertificatesFrom1C(){
+function addParent($db, $row){
+
+    $query = "
+        INSERT IGNORE INTO  `1c_staffs.groups`
+        (
+            `id_1c_staff` ,
+            `id_group`
+        )
+        VALUES
+        ('" . $row['id_1c_staff'] . "',  '" . $row['id_group'] . "')
+        ON DUPLICATE KEY UPDATE `1c_staffs.groups`.id_1c_staff =  '" . $row['id_1c_staff'] . "', `1c_staffs.groups`.id_group =  '" . $row['id_group'] . "';
+    ";
+    mysqli_query($db, $query);
+    return mysqli_insert_id($db);
+}
+
+function addStaff($db, $row){
+
+    $query = "
+        INSERT IGNORE INTO  `1c_staffs`
+        (
+            `id` ,
+            `name` ,
+            `firstname`
+        )
+        VALUES
+        ('" . $row['id'] . "',  '" . $row['name'] . "',  '" . $row['firstname'] . "')
+        ON DUPLICATE KEY UPDATE `1c_staffs`.id =  '" . $row['id'] . "', `1c_staffs`.name =  '" . $row['name'] . "', `1c_staffs`.firstname =  '" . $row['firstname'] . "';
+    ";
+    mysqli_query($db, $query);
+    return mysqli_insert_id($db);
+}
+
+function getStaffsFrom1C(){
     if (!_iscurl()) push('curl is disabled', 'error', true);
     $curl = curl_init();
+
     curl_setopt_array($curl, array(
-        CURLOPT_URL => "http://cloud.itone.ru/LADYSSHOWROOM_UNF/hs/atnApi/Certificates",
+        CURLOPT_URL => "http://cloud.itone.ru/LADYSSHOWROOM_UNF/hs/atnApi/StaffList",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "UTF-8",
         CURLOPT_MAXREDIRS => 10,
         CURLOPT_TIMEOUT => 500,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_POSTFIELDS => "{\"product\": \"\"}",
+        CURLOPT_CUSTOMREQUEST => "GET",
+        //CURLOPT_POSTFIELDS => "{\"product\": \"\"}",
         CURLOPT_HTTPHEADER => array(
             "Authorization: Basic " . base64_encode("itone" . ":" . "itone"),
             "cache-control: no-cache",
@@ -80,22 +110,50 @@ function getCertificatesFrom1C(){
     return json_decode($data, true);
 }
 
-
+function firstname($name) {
+    $n = explode(' ',trim($name));
+    return ((!isset($n[1]) || empty($n))?$n[0]:$n[1]);
+}
 
 $config = parse_ini_file('config.ini', true);
 $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
 
-$certificates = getCertificatesFrom1C();
-if(empty($certificates)) push('response empty', 'error', true);
-clearCertificates($db);
+$rows = getStaffsFrom1C();
+//if(empty($staffs)) push('staffs no records', 'error', true);
 
-foreach ($certificates as $key => $certificate) {
 
+$groups = [];
+$parents = [];
+$staffs = [];
+foreach ($rows as $key => $row) {
+    if(!empty($row['staff']) && !empty($row['id'])) {
+        $staffs[$row['id']] = array("id"=>$row['id'], "name"=>$row['staff']);
+    }
+    if(!empty($row['parent'])) {
+        $groups[$row['parent']['id']] = array("id"=>$row['parent']['id'], "name"=>$row['parent']['name']);
+        $parents[$row['id']] = array("id_1c_staff"=>$row['id'], "id_group"=>$row['parent']['id']);
+    }
 }
 
-disconnect($db);
-/*$response = [];
-echo json_encode($response, JSON_UNESCAPED_UNICODE );*/
+foreach ($groups as $key => $group) {
+    addGroup($db, $group);
+}
+
+foreach ($parents as $key => $parent) {
+    addParent($db, $parent);
+}
+
+foreach ($staffs as $key => $staff) {
+    $staff['firstname'] = firstname($staff['name'])."-".$staff['id'];
+    addStaff($db, $staff);
+}
+
+
+/*print_r($groups);
+print_r($parents);
+print_r($staffs);*/
+
+disconnect($db);  /*$response = []; echo json_encode($response, JSON_UNESCAPED_UNICODE );*/
 
 ?>
