@@ -80,7 +80,7 @@ function addStaff($db, $row){
         )
         VALUES
         ('" . $row['id'] . "',  '" . $row['name'] . "',  '" . $row['firstname'] . "')
-        ON DUPLICATE KEY UPDATE `1c_staffs`.id =  '" . $row['id'] . "', `1c_staffs`.name =  '" . $row['name'] . "', `1c_staffs`.firstname =  '" . $row['firstname'] . "';
+        ON DUPLICATE KEY UPDATE `1c_staffs`.id =  '" . $row['id'] . "', `1c_staffs`.name =  '" . $row['name'] . "';
     ";
     mysqli_query($db, $query);
     return mysqli_insert_id($db);
@@ -116,8 +116,8 @@ function firstname($name) {
 }
 
 $config = parse_ini_file('config.ini', true);
-$db =  connect('development', $config);
-mysqli_select_db($db, $config['development']['dbname']);
+$db =  connect('production', $config);
+mysqli_select_db($db, $config['production']['dbname']);
 
 $rows = getStaffsFrom1C();
 //if(empty($staffs)) push('staffs no records', 'error', true);
