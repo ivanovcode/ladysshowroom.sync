@@ -53,6 +53,13 @@ function addGroup($db, $row){
     return mysqli_insert_id($db);
 }
 
+
+function clearParent($db){
+    $query = "
+        TRUNCATE 1c_staffs.groups
+    ";
+    mysqli_query($db, $query);
+}
 function addParent($db, $row){
 
     $query = "
@@ -140,6 +147,7 @@ foreach ($groups as $key => $group) {
     addGroup($db, $group);
 }
 
+clearParent($db);
 foreach ($parents as $key => $parent) {
     addParent($db, $parent);
 }
