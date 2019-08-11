@@ -317,7 +317,7 @@ function send_order($json){
     if (!_iscurl()) push('curl is disabled', 'error', true);
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_URL => $GLOBALS['config']['development']['api']."/hs/atnApi/Order",
+        CURLOPT_URL => $GLOBALS['config']['production']['api']."/hs/atnApi/Order",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "UTF-8",
         CURLOPT_MAXREDIRS => 10,
@@ -342,7 +342,7 @@ function sizes_sync(){
     if (!_iscurl()) push('curl is disabled', 'error', true);
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_URL => $GLOBALS['config']['development']['api']."/hs/atnApi/Sizes",
+        CURLOPT_URL => $GLOBALS['config']['production']['api']."/hs/atnApi/Sizes",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "",
         CURLOPT_MAXREDIRS => 10,
