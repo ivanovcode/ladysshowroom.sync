@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `sync.orders` (
   `id_shopkeeper` int(11) NOT NULL,
-  `number` int(11) DEFAULT NULL,
+  `number` varchar(25) DEFAULT NULL,
   `last_response` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Таблица синхронизированных с 1С заказов';
 
