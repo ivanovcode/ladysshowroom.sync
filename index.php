@@ -298,6 +298,12 @@ function send_orders() {
         $json = json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $arr= json_decode($json, true);
 
+        $message = "<b>Новый заказ с сайта!</b>";
+        $message .= " \n ";
+        if(!empty($arr['']['Номер'])) { $message .= "в 1С заказу присвоен номер: "."<i>".$arr['']['Номер']."</i>"; }
+        if(empty($arr['']['Номер'])) { $message .= "⚠ c 1С пришла ошибка: "."\n"."<i>".$json."</i>"; }
+        sendTelegramMessage('-283140968', $message);
+
         /*echo '\n';
         echo '\n';
         echo 'Исходник: \n';
@@ -371,8 +377,7 @@ function read_size_sync($title){
     return mysqli_fetch_all($rows,MYSQLI_ASSOC);
 }
 
-/*$message = '⚠ <b>Тестирование уведомлений!</b> С  <i>сайта iampijama.ru</i>';
-sendTelegramMessage('-283140968', $message);*/
+
 
 
 $GLOBALS['config'] = parse_ini_file('config.ini', true);
