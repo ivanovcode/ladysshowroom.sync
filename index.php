@@ -169,7 +169,7 @@ function get_json_products($row){
 
 function get_json_order($row){
     $response = [];
-    $response['status'] = "1";
+    $response['status'] = "11";
     $response['discount'] = $row['discount'];
     $response['total_sum'] = $row['total_sum'];
     $response['overwrite'] = "false";
