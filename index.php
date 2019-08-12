@@ -197,10 +197,10 @@ function get_json_delivery($row){
 
 function get_json_payment($row){
     $response = [];
-    $response['id'] = "2";
+    $response['id'] = $row['id'];
     $response['amount'] = $row['amount'];
-    $response['title'] = "Наличные";
-    $response['wallet_id'] = "1";
+    $response['title'] = $row['title'];
+    $response['wallet_id'] = $row['wallet_id'];
     return $response;
 }
 
@@ -208,8 +208,13 @@ function get_json_payments($row){
     $response = [];
     $products = get_json_products($row);
     $total_sum = get_order_total_sum($row, $products);
+    $payment = unserialize($row['short_txt']);
+
     array_push($response, get_json_payment(array(
-        'amount'=>$total_sum
+        'id'=>(($payment['payment']=='карта' && strval($row['status'])=='6')?'6':'2'),
+        'amount'=>$total_sum,
+        'title'=>(($payment['payment']=='карта' && strval($row['status'])=='6')?'Экваринг':'Наличные'),
+        'wallet_id'=>(($payment['payment']=='карта' && strval($row['status'])=='6')?'8':'1')
     )));
     return $response;
 }
@@ -294,6 +299,16 @@ function create_sizes($rows){
 function send_orders() {
     $rows = read_shopkeeper();
     foreach ($rows as $key => $row) {
+
+        /*echo '\n';
+        echo '\n';
+        echo 'Исходник: \n';
+        $row['short_txt'] = unserialize($row['short_txt']);
+        $row['content'] = unserialize($row['content']);
+        $row['addit'] = unserialize($row['addit']);
+        print_r($row);
+        die();*/
+
         $result = send_order(json_encode(get_json_collection($row), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         $json = json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $arr= json_decode($json, true);
@@ -304,13 +319,6 @@ function send_orders() {
         if(empty($arr['']['Номер'])) { $message .= "⚠ c 1С пришла ошибка: "; $message .= " \n "; $message .= "<i>".$json."</i>"; }
         sendTelegramMessage('-283140968', $message);
 
-        /*echo '\n';
-        echo '\n';
-        echo 'Исходник: \n';
-        $row['short_txt'] = unserialize($row['short_txt']);
-        $row['content'] = unserialize($row['content']);
-        $row['addit'] = unserialize($row['addit']);
-        print_r($row);*/
         $query = "
             INSERT IGNORE INTO `sync.orders` (`id_shopkeeper`, `number`, `last_response`) VALUES ('".$row['id']."', ".(!empty($arr['']['Номер'])?'\''.$arr['']['Номер'].'\'':'NULL').", ".(empty($arr['']['Номер'])?'\''.$json.'\'':'NULL').") ON DUPLICATE KEY UPDATE `number` = ".(!empty($arr['']['Номер'])?'\''.$arr['']['Номер'].'\'':'NULL').", `last_response` = ".(empty($arr['']['Номер'])?'\''.$json.'\'':'NULL')."
         ";
