@@ -371,6 +371,10 @@ function read_size_sync($title){
     return mysqli_fetch_all($rows,MYSQLI_ASSOC);
 }
 
+$message = '⚠ <b>Тестирование уведомлений!</b> С  <i>сайта iampijama.ru</i>';
+sendTelegramMessage('-283140968', $message);
+
+
 $GLOBALS['config'] = parse_ini_file('config.ini', true);
 $GLOBALS['db'] =  connect('development', $GLOBALS['config']);
 mysqli_select_db($GLOBALS['db'], $GLOBALS['config']['development']['dbname']);
@@ -383,6 +387,6 @@ send_orders();
 /*$result = str_replace('{"collection":{"orders":[', '{"collection":{"orders":{', $result);
 $result = str_replace(']}}', '}}}', $result);*/
 
-disconnect($db);
+disconnect($GLOBALS['db']);
 
 ?>
