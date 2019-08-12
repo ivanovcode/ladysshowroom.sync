@@ -223,8 +223,8 @@ function get_json_client($row){
 
 function get_json_staff(){
     $response = [];
-    $response['id'] = "20";
-    $response['name'] = "Иванов Владимир Викторович";
+    $response['id'] = "10003";
+    $response['name'] = "Сайт I am Pijama";
     return $response;
 }
 
