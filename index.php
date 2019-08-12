@@ -301,7 +301,7 @@ function send_orders() {
         $message = "<b>Новый заказ с сайта!</b>";
         $message .= " \n ";
         if(!empty($arr['']['Номер'])) { $message .= "в 1С заказу присвоен номер: "."<i>".$arr['']['Номер']."</i>"; }
-        if(empty($arr['']['Номер'])) { $message .= "⚠ c 1С пришла ошибка: "."\n"."<i>".$json."</i>"; }
+        if(empty($arr['']['Номер'])) { $message .= "⚠ c 1С пришла ошибка: "; $message .= " \n "; $message .= "<i>".$json."</i>"; }
         sendTelegramMessage('-283140968', $message);
 
         /*echo '\n';
