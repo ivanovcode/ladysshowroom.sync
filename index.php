@@ -262,7 +262,7 @@ function get_json_orders($row){
         $response['orders'] = array(""=>get_json_order(array(
             'discount'=>"0",
             'total_sum'=>$total_sum,
-            'comment'=>"Рабочая заявка с сайта iampijama.ru. Проверить все данные, возможны ошибки функционал тестируется",
+            'comment'=>"Заказ с сайта, уточнить дату и время доставки - для курьерских",
             'products'=>$products,
             'delivery'=>$delivery,
             'client'=>$client,
