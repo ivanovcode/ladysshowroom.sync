@@ -37,12 +37,12 @@ function sendTelegramMessage($chat_id=NULL, $message=NULL) {
         $response['text'] = $message;
     }
     if (!_iscurl()) push('curl is disabled', 'error', true);
-    $proxy = 'de360.nordvpn.com:80';
-    $proxyauth = 'development@ivanov.site:ivan0vv0va';
+    /*$proxy = 'de360.nordvpn.com:80';
+    $proxyauth = 'development@ivanov.site:ivan0vv0va';*/
     $fp = fopen('./curl.log', 'w');
     $ch = curl_init('https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/sendMessage');
-    curl_setopt($ch, CURLOPT_PROXY, $proxy);
-    curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxyauth);
+    /*curl_setopt($ch, CURLOPT_PROXY, $proxy);
+    curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxyauth);*/
     curl_setopt($ch, CURLOPT_HEADER, false);
     curl_setopt($ch, CURLOPT_ENCODING, "UTF-8");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
