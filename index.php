@@ -371,8 +371,8 @@ function read_size_sync($title){
     return mysqli_fetch_all($rows,MYSQLI_ASSOC);
 }
 
-$message = '⚠ <b>Тестирование уведомлений!</b> С  <i>сайта iampijama.ru</i>';
-sendTelegramMessage('-283140968', $message);
+/*$message = '⚠ <b>Тестирование уведомлений!</b> С  <i>сайта iampijama.ru</i>';
+sendTelegramMessage('-283140968', $message);*/
 
 
 $GLOBALS['config'] = parse_ini_file('config.ini', true);
