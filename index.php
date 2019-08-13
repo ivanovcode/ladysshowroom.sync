@@ -313,7 +313,7 @@ function send_orders() {
         $json = json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $arr= json_decode($json, true);
 
-        $message = "<b>Новый заказ с сайта!</b>";
+        $message = "<b>Новый заказ на IamPijama.ru!</b>";
         $message .= " \n ";
         if(!empty($arr['']['Номер'])) { $message .= "в 1С заказу присвоен номер: "."<i>".$arr['']['Номер']."</i>"; }
         if(empty($arr['']['Номер'])) { $message .= "⚠ c 1С пришла ошибка: "; $message .= " \n "; $message .= "<i>".$json."</i>"; }
