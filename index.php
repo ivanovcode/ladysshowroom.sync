@@ -172,7 +172,7 @@ function get_json_order($row){
     $response['status'] = "11";
     $response['discount'] = $row['discount'];
     $response['total_sum'] = $row['total_sum'];
-    $response['overwrite'] = "false";
+    $response['overwrite'] = "true";
     $response['comment'] = $row['comment'];
     $response['products'] = $row['products'];
     $response['delivery'] = $row['delivery'];
