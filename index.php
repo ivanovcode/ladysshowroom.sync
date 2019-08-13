@@ -309,7 +309,8 @@ function send_orders() {
         print_r($row);
         die();*/
 
-        $result = send_order(json_encode(get_json_collection($row), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $request = json_encode(get_json_collection($row), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $result = send_order($request);
         $json = json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $arr= json_decode($json, true);
 
@@ -320,7 +321,7 @@ function send_orders() {
         sendTelegramMessage('-283140968', $message);
 
         $query = "
-            INSERT IGNORE INTO `sync.orders` (`id_shopkeeper`, `number`, `last_response`) VALUES ('".$row['id']."', ".(!empty($arr['']['Номер'])?'\''.$arr['']['Номер'].'\'':'NULL').", ".(empty($arr['']['Номер'])?'\''.$json.'\'':'NULL').") ON DUPLICATE KEY UPDATE `number` = ".(!empty($arr['']['Номер'])?'\''.$arr['']['Номер'].'\'':'NULL').", `last_response` = ".(empty($arr['']['Номер'])?'\''.$json.'\'':'NULL')."
+            INSERT IGNORE INTO `sync.orders` (`id_shopkeeper`, `number`, `last_response`, `last_request`) VALUES ('".$row['id']."', ".(!empty($arr['']['Номер'])?'\''.$arr['']['Номер'].'\'':'NULL').", ".(empty($arr['']['Номер'])?'\''.$json.'\'':'NULL').", ".(!empty($request)?'\''.$request.'\'':'NULL').") ON DUPLICATE KEY UPDATE `number` = ".(!empty($arr['']['Номер'])?'\''.$arr['']['Номер'].'\'':'NULL').", `last_response` = ".(empty($arr['']['Номер'])?'\''.$json.'\'':'NULL').", `last_request` = ".(!empty($request)?'\''.$request.'\'':'NULL')."
         ";
         mysqli_query($GLOBALS['db'], $query);
         echo $query.PHP_EOL;
