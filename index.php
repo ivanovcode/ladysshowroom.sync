@@ -212,7 +212,7 @@ function get_json_payments($row){
     $total_sum = get_order_total_sum($row, $products);
     $payment = unserialize($row['short_txt']);
 
-    if ($payment['payment']=='карта') {  // При оплате картой отправлять информацию только когда оплачено
+    if (mb_strtolower($payment['payment'])=='карта') {  // При оплате картой отправлять информацию только когда оплачено
         if (strval($row['status']) == "6") {
             array_push($response, get_json_payment(array(
                 'id' => '6',
@@ -294,7 +294,8 @@ function get_json_orders($row){
             'payments'=>$payments
         )));
     } else { // Заказ отправляется впервые
-        $response['orders'] = array(""=>get_json_order(array(
+        $response['orders'] = array($row['id']=>get_json_order(array(
+            'id'=>$row['id'],
             'created'=>$now,
             'discount'=>"0",
             'total_sum'=>$total_sum,
@@ -331,7 +332,6 @@ function send_orders() {
     $rows = read_shopkeeper();
     foreach ($rows as $key => $row) {
 
-
         /*echo '\n';
         echo '\n';
         echo 'Исходник: \n';
@@ -360,7 +360,7 @@ function send_orders() {
 
 
         $query = "
-            INSERT IGNORE INTO `sync.orders` (`id_shopkeeper`, `number`, `last_response`, `last_request`, `is_complete`) VALUES ('".$row['id']."', ".(!empty($number)?'\''.$number.'\'':'NULL').", ".(empty($number)?'\''.$json.'\'':'NULL').", ".(!empty($request)?'\''.$request.'\'':'NULL').", ".((($row['payment']=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными'))?'1':'0').") ON DUPLICATE KEY UPDATE `number` = ".(!empty($number)?'\''.$number.'\'':'NULL').", `last_response` = ".(empty($number)?'\''.$json.'\'':'NULL').", `last_request` = ".(!empty($request)?'\''.$request.'\'':'NULL').", `is_complete` = ".((($row['payment']=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными'))?'1':'0')."
+            INSERT IGNORE INTO `sync.orders` (`id_shopkeeper`, `number`, `last_response`, `last_request`, `is_complete`) VALUES ('".$row['id']."', ".(!empty($number)?'\''.$number.'\'':'NULL').", ".(empty($number)?'\''.$json.'\'':'NULL').", ".(!empty($request)?'\''.$request.'\'':'NULL').", ".(((mb_strtolower($row['payment'])=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными'))?'1':'0').") ON DUPLICATE KEY UPDATE `number` = ".(!empty($number)?'\''.$number.'\'':'NULL').", `last_response` = ".(empty($number)?'\''.$json.'\'':'NULL').", `last_request` = ".(!empty($request)?'\''.$request.'\'':'NULL').", `is_complete` = ".((mb_strtolower($row['payment'])=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными')?'1':'0')."
         ";
         mysqli_query($GLOBALS['db'], $query);
         echo $query.PHP_EOL;
