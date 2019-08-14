@@ -345,7 +345,7 @@ function send_orders() {
         $result = send_order($request);
         $json = json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $arr= json_decode($json, true);
-        $number = (!empty($row['number'])?$row['number']:$arr['']['Номер']);
+        $number = (!empty($row['number'])?$row['number']:$arr[$row['id']]['Номер']);
 
         if(!empty($row['number'])) {
             $message = "<b>По заказу на IamPijama.ru #".$number." поступила оплата.</b>";
