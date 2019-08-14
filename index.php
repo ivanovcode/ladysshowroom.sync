@@ -99,7 +99,7 @@ function read_shopkeeper(){
         modx_manager_shopkeeper as s
         LEFT JOIN `sync.orders` so ON so.id_shopkeeper = s.id
         WHERE s.id > 0
-        AND so.number IS NULL
+        AND (so.number IS NULL OR (so.number IS NOT NULL AND so.is_complete = 0 AND s.status = 6))
         AND s.date > '2019-08-10 17:01:30'
     ";
     $rows = mysqli_query($GLOBALS['db'], $query);
@@ -210,12 +210,23 @@ function get_json_payments($row){
     $total_sum = get_order_total_sum($row, $products);
     $payment = unserialize($row['short_txt']);
 
-    array_push($response, get_json_payment(array(
-        'id'=>(($payment['payment']=='карта' && strval($row['status'])=='6')?'6':'2'),
-        'amount'=>$total_sum,
-        'title'=>(($payment['payment']=='карта' && strval($row['status'])=='6')?'Экваринг':'Наличные'),
-        'wallet_id'=>(($payment['payment']=='карта' && strval($row['status'])=='6')?'8':'1')
-    )));
+    if ($payment['payment']=='карта') {  // При оплате картой отправлять информацию только когда оплачено
+        if (strval($row['status']) == "6") {
+            array_push($response, get_json_payment(array(
+                'id' => '6',
+                'amount' => $total_sum,
+                'title' => 'Экваринг',
+                'wallet_id' => '8'
+            )));
+        }
+    } else { // Наличные
+        array_push($response, get_json_payment(array(
+            'id'=>'2',
+            'amount'=>$total_sum,
+            'title'=>'Наличные',
+            'wallet_id'=>'1'
+        )));
+    }
     return $response;
 }
 
@@ -255,26 +266,44 @@ function get_json_deliveries($row){
 }
 
 function get_json_orders($row){
+
     $response = [];
     $response['orders'] = [];
+    $products = get_json_products($row);
+    $delivery = get_json_deliveries($row);
+    $payments = get_json_payments($row);
+    $staff = get_json_staff();
+    $total_sum = get_order_total_sum($row, $products);
+    $client = get_json_clients($row);
+    $comment = "Заказ с сайта, уточнить дату и время доставки - для курьерских";
+    $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
 
-        $products = get_json_products($row);
-        $delivery = get_json_deliveries($row);
-        $payments = get_json_payments($row);
-        $staff = get_json_staff();
-        $total_sum = get_order_total_sum($row, $products);
-        $client = get_json_clients($row);
-        $response['orders'] = array(""=>get_json_order(array(
+    if(!empty($row['number'])) { // Признак того что заказ уже имеет номер был отправлен в 1С и ожидает теперь изменения
+        $response['orders'] = array($row['id']=>get_json_order(array(
+            'id'=>$row['id'],
+            'number'=>$row['number'],
             'discount'=>"0",
             'total_sum'=>$total_sum,
-            'comment'=>"Заказ с сайта, уточнить дату и время доставки - для курьерских",
+            'comment'=>$comment,
             'products'=>$products,
             'delivery'=>$delivery,
             'client'=>$client,
             'staff'=>$staff,
             'payments'=>$payments
-
         )));
+    } else { // Заказ отправляется впервые
+        $response['orders'] = array(""=>get_json_order(array(
+            'created'=>$now,
+            'discount'=>"0",
+            'total_sum'=>$total_sum,
+            'comment'=>$comment,
+            'products'=>$products,
+            'delivery'=>$delivery,
+            'client'=>$client,
+            'staff'=>$staff,
+            'payments'=>$payments
+        )));
+    }
 
     return $response;
 }
@@ -300,6 +329,7 @@ function send_orders() {
     $rows = read_shopkeeper();
     foreach ($rows as $key => $row) {
 
+
         /*echo '\n';
         echo '\n';
         echo 'Исходник: \n';
@@ -313,15 +343,16 @@ function send_orders() {
         $result = send_order($request);
         $json = json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $arr= json_decode($json, true);
+        $number = (!empty($row['number'])?$row['number']:$arr['']['Номер']);
 
         $message = "<b>Новый заказ на IamPijama.ru!</b>";
         $message .= " \n ";
-        if(!empty($arr['']['Номер'])) { $message .= "в 1С заказу присвоен номер: "."<i>".$arr['']['Номер']."</i>"; }
-        if(empty($arr['']['Номер'])) { $message .= "⚠ c 1С пришла ошибка: "; $message .= " \n "; $message .= "<i>".$json."</i>"; }
+        if(!empty($number)) { $message .= "в 1С заказу присвоен номер: "."<i>".$number."</i>"; }
+        if(empty($number)) { $message .= "⚠ c 1С пришла ошибка: "; $message .= " \n "; $message .= "<i>".$json."</i>"; }
         sendTelegramMessage('-283140968', $message);
 
         $query = "
-            INSERT IGNORE INTO `sync.orders` (`id_shopkeeper`, `number`, `last_response`, `last_request`) VALUES ('".$row['id']."', ".(!empty($arr['']['Номер'])?'\''.$arr['']['Номер'].'\'':'NULL').", ".(empty($arr['']['Номер'])?'\''.$json.'\'':'NULL').", ".(!empty($request)?'\''.$request.'\'':'NULL').") ON DUPLICATE KEY UPDATE `number` = ".(!empty($arr['']['Номер'])?'\''.$arr['']['Номер'].'\'':'NULL').", `last_response` = ".(empty($arr['']['Номер'])?'\''.$json.'\'':'NULL').", `last_request` = ".(!empty($request)?'\''.$request.'\'':'NULL')."
+            INSERT IGNORE INTO `sync.orders` (`id_shopkeeper`, `number`, `last_response`, `last_request`, `is_complete`) VALUES ('".$row['id']."', ".(!empty($number)?'\''.$number.'\'':'NULL').", ".(empty($number)?'\''.$json.'\'':'NULL').", ".(!empty($request)?'\''.$request.'\'':'NULL').", ".((($row['payment']=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными'))?'1':'0').") ON DUPLICATE KEY UPDATE `number` = ".(!empty($number)?'\''.$number.'\'':'NULL').", `last_response` = ".(empty($number)?'\''.$json.'\'':'NULL').", `last_request` = ".(!empty($request)?'\''.$request.'\'':'NULL').", `is_complete` = ".((($row['payment']=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными'))?'1':'0')."
         ";
         mysqli_query($GLOBALS['db'], $query);
         echo $query.PHP_EOL;
