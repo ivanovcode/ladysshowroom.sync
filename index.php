@@ -345,7 +345,7 @@ function send_orders() {
         $arr= json_decode($json, true);
         $number = (!empty($row['number'])?$row['number']:$arr['']['Номер']);
 
-        if(!empty($row['number']) && strval($row['status']=="6")) {
+        if(!empty($row['number'])) {
             $message = "<b>По заказу на IamPijama.ru #".$number." поступила оплата.</b>";
             sendTelegramMessage('-283140968', $message);
         } else {
