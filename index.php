@@ -345,11 +345,17 @@ function send_orders() {
         $arr= json_decode($json, true);
         $number = (!empty($row['number'])?$row['number']:$arr['']['Номер']);
 
-        $message = "<b>Новый заказ на IamPijama.ru!</b>";
-        $message .= " \n ";
-        if(!empty($number)) { $message .= "в 1С заказу присвоен номер: "."<i>".$number."</i>"; }
-        if(empty($number)) { $message .= "⚠ c 1С пришла ошибка: "; $message .= " \n "; $message .= "<i>".$json."</i>"; }
-        sendTelegramMessage('-283140968', $message);
+        if(!empty($row['number']) && strval($row['status']=="6")) {
+            $message = "<b>По заказу на IamPijama.ru #".$number." поступила оплата.</b>";
+            sendTelegramMessage('-283140968', $message);
+        } else {
+            $message = "<b>Новый заказ на IamPijama.ru!</b>";
+            $message .= " \n ";
+            if(!empty($number)) { $message .= "в 1С заказу присвоен номер: "."<i>".$number."</i>"; }
+            if(empty($number)) { $message .= "⚠ c 1С пришла ошибка: "; $message .= " \n "; $message .= "<i>".$json."</i>"; }
+            sendTelegramMessage('-283140968', $message);
+        }
+
 
         $query = "
             INSERT IGNORE INTO `sync.orders` (`id_shopkeeper`, `number`, `last_response`, `last_request`, `is_complete`) VALUES ('".$row['id']."', ".(!empty($number)?'\''.$number.'\'':'NULL').", ".(empty($number)?'\''.$json.'\'':'NULL').", ".(!empty($request)?'\''.$request.'\'':'NULL').", ".((($row['payment']=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными'))?'1':'0').") ON DUPLICATE KEY UPDATE `number` = ".(!empty($number)?'\''.$number.'\'':'NULL').", `last_response` = ".(empty($number)?'\''.$json.'\'':'NULL').", `last_request` = ".(!empty($request)?'\''.$request.'\'':'NULL').", `is_complete` = ".((($row['payment']=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными'))?'1':'0')."
