@@ -351,16 +351,19 @@ function send_orders() {
             $message = "<b>По заказу на IamPijama.ru #".$number." поступила оплата.</b>";
             sendTelegramMessage('-283140968', $message);
         } else {
+            $error = "";
             $message = "<b>Новый заказ на IamPijama.ru!</b>";
             $message .= " \n ";
             if(!empty($number)) { $message .= "в 1С заказу присвоен номер: "."<i>".$number."</i>"; }
-            if(empty($number)) { $message .= "⚠ c 1С пришла ошибка: "; $message .= " \n "; $message .= "<i>".$json."</i>"; }
+            if(empty($number)) {
+                $message .= "⚠ c 1С пришла ошибка: "; $message .= " \n "; $message .= "<i>".$json."</i>";
+                $error = "ID".$row['number']."ОШИБКА";
+            }
+
             sendTelegramMessage('-283140968', $message);
         }
-
-
         $query = "
-            INSERT IGNORE INTO `sync.orders` (`id_shopkeeper`, `number`, `last_response`, `last_request`, `is_complete`) VALUES ('".$row['id']."', ".(!empty($number)?'\''.$number.'\'':'NULL').", ".(empty($number)?'\''.$json.'\'':'NULL').", ".(!empty($request)?'\''.$request.'\'':'NULL').", ".(((mb_strtolower($row['payment'])=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными'))?'1':'0').") ON DUPLICATE KEY UPDATE `number` = ".(!empty($number)?'\''.$number.'\'':'NULL').", `last_response` = ".(empty($number)?'\''.$json.'\'':'NULL').", `last_request` = ".(!empty($request)?'\''.$request.'\'':'NULL').", `is_complete` = ".((mb_strtolower($row['payment'])=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными')?'1':'0')."
+            INSERT IGNORE INTO `sync.orders` (`id_shopkeeper`, `number`, `last_response`, `last_request`, `is_complete`) VALUES ('".$row['id']."', ".(!empty($error)?$error:(!empty($number)?'\''.$number.'\'':'NULL')).", ".(empty($number)?'\''.$json.'\'':'NULL').", ".(!empty($request)?'\''.$request.'\'':'NULL').", ".(((mb_strtolower($row['payment'])=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными'))?'1':'0').") ON DUPLICATE KEY UPDATE `number` = ".(!empty($error)?$error:(!empty($number)?'\''.$number.'\'':'NULL')).", `last_response` = ".(empty($number)?'\''.$json.'\'':'NULL').", `last_request` = ".(!empty($request)?'\''.$request.'\'':'NULL').", `is_complete` = ".((mb_strtolower($row['payment'])=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными')?'1':'0')."
         ";
         mysqli_query($GLOBALS['db'], $query);
         echo $query.PHP_EOL;
