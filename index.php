@@ -99,7 +99,7 @@ function read_shopkeeper(){
         modx_manager_shopkeeper as s
         LEFT JOIN `sync.orders` so ON so.id_shopkeeper = s.id
         WHERE s.id > 0
-        AND (so.number IS NULL OR (so.number IS NOT NULL AND so.is_complete = 0 AND s.status = 6))
+        AND ((so.number IS NULL AND s.status <> 5) OR (so.number IS NOT NULL AND so.is_complete = 0 AND s.status = 6))
         AND s.date > '2019-08-10 17:01:30'
     ";
     $rows = mysqli_query($GLOBALS['db'], $query);
