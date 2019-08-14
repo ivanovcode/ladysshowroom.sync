@@ -169,6 +169,8 @@ function get_json_products($row){
 
 function get_json_order($row){
     $response = [];
+    (!empty($row['id'])?$response['id'] = $row['id']:'');
+    (!empty($row['number'])?$response['number'] = $row['number']:'');
     $response['status'] = "11";
     $response['discount'] = $row['discount'];
     $response['total_sum'] = $row['total_sum'];
