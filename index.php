@@ -357,7 +357,7 @@ function send_orders() {
             if(!empty($number)) { $message .= "в 1С заказу присвоен номер: "."<i>".$number."</i>"; }
             if(empty($number)) {
                 $message .= "⚠ c 1С пришла ошибка: "; $message .= " \n "; $message .= "<i>".$json."</i>";
-                $error = "ID".$row['number']."ОШИБКА";
+                $error = "ID".$row['number']."ОШИБКА"; //В случае ошибки проставлять номер что бы не повторять запрос
             }
 
             sendTelegramMessage('-283140968', $message);
