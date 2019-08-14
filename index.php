@@ -99,7 +99,7 @@ function read_shopkeeper(){
         modx_manager_shopkeeper as s
         LEFT JOIN `sync.orders` so ON so.id_shopkeeper = s.id
         WHERE s.id > 0
-        AND ((so.number IS NULL AND s.status <> 5) OR (so.number IS NOT NULL AND so.is_complete = 0 AND s.status = 6))
+        AND (so.number IS NULL OR (so.number IS NOT NULL AND so.is_complete = 0 AND s.status = 6))
         AND s.date > '2019-08-10 17:01:30'
     ";
     $rows = mysqli_query($GLOBALS['db'], $query);
@@ -280,9 +280,11 @@ function get_json_orders($row){
     $comment = "Заказ с сайта, уточнить дату и время доставки - для курьерских";
     $now = date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
 
+
+
     if(!empty($row['number'])) { // Признак того что заказ уже имеет номер был отправлен в 1С и ожидает теперь изменения
-        $response['orders'] = array($row['id']=>get_json_order(array(
-            'id'=>$row['id'],
+        $response['orders'] = array($GLOBALS['prefix'].$row['id']=>get_json_order(array(
+            'id'=>$GLOBALS['prefix'].$row['id'],
             'number'=>$row['number'],
             'discount'=>"0",
             'total_sum'=>$total_sum,
@@ -294,8 +296,8 @@ function get_json_orders($row){
             'payments'=>$payments
         )));
     } else { // Заказ отправляется впервые
-        $response['orders'] = array($row['id']=>get_json_order(array(
-            'id'=>$row['id'],
+        $response['orders'] = array($GLOBALS['prefix'].$row['id']=>get_json_order(array(
+            'id'=>$GLOBALS['prefix'].$row['id'],
             'created'=>$now,
             'discount'=>"0",
             'total_sum'=>$total_sum,
@@ -342,10 +344,11 @@ function send_orders() {
         die();*/
 
         $request = json_encode(get_json_collection($row), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
         $result = send_order($request);
         $json = json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $arr= json_decode($json, true);
-        $number = (!empty($row['number'])?$row['number']:$arr[$row['id']]['Номер']);
+        $number = (!empty($row['number'])?$row['number']:$arr[$GLOBALS['prefix'].$row['id']]['Номер']);
 
         if(!empty($row['number'])) {
             $message = "<b>По заказу на IamPijama.ru #".$number." поступила оплата.</b>";
@@ -357,13 +360,13 @@ function send_orders() {
             if(!empty($number)) { $message .= "в 1С заказу присвоен номер: "."<i>".$number."</i>"; }
             if(empty($number)) {
                 $message .= "⚠ c 1С пришла ошибка: "; $message .= " \n "; $message .= "<i>".$json."</i>";
-                $error = "ID".$row['number']."ОШИБКА"; //В случае ошибки проставлять номер что бы не повторять запрос
+                $error = "IP".$row['id']."-ОШИБКА"; //В случае ошибки проставлять номер что бы не повторять запрос
             }
 
             sendTelegramMessage('-283140968', $message);
         }
         $query = "
-            INSERT IGNORE INTO `sync.orders` (`id_shopkeeper`, `number`, `last_response`, `last_request`, `is_complete`) VALUES ('".$row['id']."', ".(!empty($error)?$error:(!empty($number)?'\''.$number.'\'':'NULL')).", ".(empty($number)?'\''.$json.'\'':'NULL').", ".(!empty($request)?'\''.$request.'\'':'NULL').", ".(((mb_strtolower($row['payment'])=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными'))?'1':'0').") ON DUPLICATE KEY UPDATE `number` = ".(!empty($error)?$error:(!empty($number)?'\''.$number.'\'':'NULL')).", `last_response` = ".(empty($number)?'\''.$json.'\'':'NULL').", `last_request` = ".(!empty($request)?'\''.$request.'\'':'NULL').", `is_complete` = ".((mb_strtolower($row['payment'])=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными')?'1':'0')."
+            INSERT IGNORE INTO `sync.orders` (`id_shopkeeper`, `number`, `last_response`, `last_request`, `is_complete`) VALUES ('".$row['id']."', ".(!empty($error)?'\''.$error.'\'':(!empty($number)?'\''.$number.'\'':'NULL')).", ".(empty($number)?'\''.$json.'\'':'NULL').", ".(!empty($request)?'\''.$request.'\'':'NULL').", ".(((mb_strtolower($row['payment'])=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными'))?'1':'0').") ON DUPLICATE KEY UPDATE `number` = ".(!empty($error)?'\''.$error.'\'':(!empty($number)?'\''.$number.'\'':'NULL')).", `last_response` = ".(empty($number)?'\''.$json.'\'':'NULL').", `last_request` = ".(!empty($request)?'\''.$request.'\'':'NULL').", `is_complete` = ".((mb_strtolower($row['payment'])=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными')?'1':'0')."
         ";
         mysqli_query($GLOBALS['db'], $query);
         echo $query.PHP_EOL;
@@ -428,9 +431,7 @@ function read_size_sync($title){
     return mysqli_fetch_all($rows,MYSQLI_ASSOC);
 }
 
-
-
-
+$GLOBALS['prefix'] = "IP";
 $GLOBALS['config'] = parse_ini_file('config.ini', true);
 $GLOBALS['db'] =  connect('development', $GLOBALS['config']);
 mysqli_select_db($GLOBALS['db'], $GLOBALS['config']['development']['dbname']);

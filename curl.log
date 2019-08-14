@@ -1,2 +1,9 @@
-* Could not resolve proxy: de360.nordvpn.com
+*   Trying 149.154.167.220...
+* Connected to api.telegram.org (149.154.167.220) port 443 (#0)
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /etc/ssl/certs/ca-certificates.crt
+  CApath: /etc/ssl/certs
+* Unknown SSL protocol error in connection to api.telegram.org:443 
 * Closing connection 0
