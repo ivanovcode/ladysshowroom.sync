@@ -355,7 +355,7 @@ function send_orders() {
         $number = (!empty($row['number'])?$row['number']:$arr[$GLOBALS['prefix'].$row['id']]['Номер']);
 
         if(!empty($row['number'])) {
-            $message = "<b>По заказу на IamPijama.ru #".$number." поступила оплата.</b>";
+            $message = "<b>По заказу на IamPijama.ru #".$number." поступила оплата в размере: ".$row['price']." руб.</b>";
             sendTelegramMessage('-283140968', $message);
         } else {
             $error = "";
