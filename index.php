@@ -334,7 +334,7 @@ function send_orders() {
     $rows = read_shopkeeper();
     foreach ($rows as $key => $row) {
 
-        echo '\n';
+        /*echo '\n';
         echo '\n';
         echo 'Исходник: \n';
         $row['short_txt'] = unserialize($row['short_txt']);
@@ -342,7 +342,8 @@ function send_orders() {
         $row['addit'] = unserialize($row['addit']);
         print_r($row);
         echo $row['content'][0][0];
-        die();
+        die();*/
+        $id_product = $row['content'][0][0];
 
 
 
@@ -363,7 +364,7 @@ function send_orders() {
             if(!empty($number)) { $message .= "в 1С заказу присвоен номер: "."<i>".$number."</i>"; }
             if(empty($number)) {
                 $message .= "⚠ c 1С пришла ошибка: "; $message .= " \n "; $message .= "<i>".$json."</i>";
-                if(!empty($row['content'][0][0])) { $message .= " \n "; $message .= "ID товара на сайте: <i>".$row['content'][0][0]."</i>"; }
+                if(!empty(strval($id_product))) { $message .= " \n "; $message .= "ID товара на сайте: <i>".strval($id_product)."</i>"; }
                 $error = "IP".$row['id']."-ОШИБКА"; //В случае ошибки проставлять номер что бы не повторять запрос
             }
 
