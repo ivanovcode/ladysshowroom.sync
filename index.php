@@ -341,7 +341,10 @@ function send_orders() {
         $row['content'] = unserialize($row['content']);
         $row['addit'] = unserialize($row['addit']);
         print_r($row);
+        echo $row['content'][0][0];
         die();*/
+
+
 
         $request = json_encode(get_json_collection($row), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
@@ -360,6 +363,7 @@ function send_orders() {
             if(!empty($number)) { $message .= "в 1С заказу присвоен номер: "."<i>".$number."</i>"; }
             if(empty($number)) {
                 $message .= "⚠ c 1С пришла ошибка: "; $message .= " \n "; $message .= "<i>".$json."</i>";
+                if(!empty($row['content'][0][0])) { $message .= " \n "; $message .= "ID товара на сайте: <i>".$row['content'][0][0]."</i>"; }
                 $error = "IP".$row['id']."-ОШИБКА"; //В случае ошибки проставлять номер что бы не повторять запрос
             }
 
