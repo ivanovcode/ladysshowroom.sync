@@ -338,12 +338,13 @@ function send_orders() {
         echo '\n';
         echo 'Исходник: \n';
         $row['short_txt'] = unserialize($row['short_txt']);*/
-        $row['content'] = unserialize($row['content']);
+        /*$row['content'] = unserialize($row['content']);*/
         /* $row['addit'] = unserialize($row['addit']);
         print_r($row);
         echo $row['content'][0][0];
         die();*/
-        $id_product = $row['content'][0][0];
+        $content = unserialize($row['content']);
+        $id_product = $content[0][0];
 
 
 
