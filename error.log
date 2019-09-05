@@ -8,3 +8,4 @@ curl request failed: Unknown SSL protocol error in connection to api.telegram.or
 curl request failed: Unknown SSL protocol error in connection to api.telegram.org:443 
 curl request failed: Unknown SSL protocol error in connection to api.telegram.org:443 
 curl request failed: Unknown SSL protocol error in connection to api.telegram.org:443 
+no connection to the database

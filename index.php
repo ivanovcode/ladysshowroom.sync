@@ -334,7 +334,7 @@ function send_orders() {
     $rows = read_shopkeeper();
     foreach ($rows as $key => $row) {
 
-        /*echo '\n';
+        echo '\n';
         echo '\n';
         echo 'Исходник: \n';
         $row['short_txt'] = unserialize($row['short_txt']);
@@ -342,7 +342,7 @@ function send_orders() {
         $row['addit'] = unserialize($row['addit']);
         print_r($row);
         echo $row['content'][0][0];
-        die();*/
+        die();
 
 
 
