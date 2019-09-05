@@ -337,9 +337,9 @@ function send_orders() {
         /*echo '\n';
         echo '\n';
         echo 'Исходник: \n';
-        $row['short_txt'] = unserialize($row['short_txt']);
+        $row['short_txt'] = unserialize($row['short_txt']);*/
         $row['content'] = unserialize($row['content']);
-        $row['addit'] = unserialize($row['addit']);
+        /* $row['addit'] = unserialize($row['addit']);
         print_r($row);
         echo $row['content'][0][0];
         die();*/
@@ -353,9 +353,9 @@ function send_orders() {
         $json = json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $arr= json_decode($json, true);
         $number = (!empty($row['number'])?$row['number']:$arr[$GLOBALS['prefix'].$row['id']]['Номер']);
-
+        echo strval($id_product);
         if(!empty($row['number'])) {
-            $message = "<b>По заказу на IamPijama.ru #".$number." поступила оплата в размере: ".$row['price']." руб.</b>";
+            $message = "<b>По заказу на IamPijama.ru #".$number." поступила оплата в размере ".$row['price']." руб.</b>";
             sendTelegramMessage('-283140968', $message);
         } else {
             $error = "";
@@ -367,7 +367,6 @@ function send_orders() {
                 if(!empty(strval($id_product))) { $message .= " \n "; $message .= "ID товара на сайте: <i>".strval($id_product)."</i>"; }
                 $error = "IP".$row['id']."-ОШИБКА"; //В случае ошибки проставлять номер что бы не повторять запрос
             }
-
             sendTelegramMessage('-283140968', $message);
         }
         $query = "
