@@ -355,7 +355,7 @@ function send_orders() {
             sendTelegramMessage('-283140968', $message);
         } else {
             $error = "";
-            $message = "<b>Новый заказ на IamPijama.ru!</b>";
+            $message = "<b>Новый заказ #".$row['id']." на IamPijama.ru!</b>";
             $message .= " \n ";
             if(!empty($number)) { $message .= "в 1С заказу присвоен номер: "."<i>".$number."</i>"; }
             if(empty($number)) {
