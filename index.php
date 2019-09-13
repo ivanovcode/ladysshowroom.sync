@@ -167,6 +167,7 @@ foreach ($staffs as $key => $staff) {
     addStaff($db, $staff);
     array_push($staff_inserts, $staff['id']);
 }
+echo implode(", ", $staff_inserts);
 deleteStaffs($staff_inserts);
 
 
