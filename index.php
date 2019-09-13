@@ -152,8 +152,9 @@ foreach ($parents as $key => $parent) {
     addParent($db, $parent);
 }
 
+$staff_inserts = [];
 foreach ($staffs as $key => $staff) {
-    $staff_inserts = [];
+
     $staff['firstname'] = firstname($staff['name'])."-".$staff['id'];
     addStaff($db, $staff);
     array_push($staff_inserts, $staff['id']);
