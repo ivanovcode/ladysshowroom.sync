@@ -153,9 +153,13 @@ foreach ($parents as $key => $parent) {
 }
 
 foreach ($staffs as $key => $staff) {
+    $staff_inserts = [];
     $staff['firstname'] = firstname($staff['name'])."-".$staff['id'];
     addStaff($db, $staff);
+    array_push($staff_inserts, $staff['id']);
 }
+
+echo implode (", ", $staff_inserts);
 
 
 /*print_r($groups);
