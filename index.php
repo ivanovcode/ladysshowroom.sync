@@ -97,7 +97,6 @@ function deleteStaffs($db, $ids){
     $query = "
         UPDATE `1c_staffs` s SET s.delete = 1 WHERE s.id NOT IN (".implode(", ", $ids).");
     ";
-    echo $query;
     mysqli_query($db, $query);
 }
 
@@ -167,8 +166,7 @@ foreach ($staffs as $key => $staff) {
     addStaff($db, $staff);
     array_push($staff_inserts, $staff['id']);
 }
-echo implode(", ", $staff_inserts);
-deleteStaffs($staff_inserts);
+deleteStaffs($db, $staff_inserts);
 
 
 
