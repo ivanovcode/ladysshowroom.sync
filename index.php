@@ -93,6 +93,15 @@ function addStaff($db, $row){
     return mysqli_insert_id($db);
 }
 
+function deleteStaffs($db, $ids){
+    $ids = implode (", ", $ids);
+    $query = "
+        UPDATE `1c_staffs` s SET s.delete = 1 WHERE s.id NOT IN (".$ids.");
+    ";
+    mysqli_query($db, $query);
+    return mysqli_insert_id($db);
+}
+
 function getStaffsFrom1C(){
     if (!_iscurl()) push('curl is disabled', 'error', true);
     $curl = curl_init();
@@ -159,8 +168,12 @@ foreach ($staffs as $key => $staff) {
     addStaff($db, $staff);
     array_push($staff_inserts, $staff['id']);
 }
+deleteStaffs($staff_inserts);
 
-echo implode (", ", $staff_inserts);
+
+
+
+
 
 
 /*print_r($groups);
