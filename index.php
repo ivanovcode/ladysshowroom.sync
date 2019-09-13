@@ -98,6 +98,7 @@ function deleteStaffs($db, $ids){
     $query = "
         UPDATE `1c_staffs` s SET s.delete = 1 WHERE s.id NOT IN (".$ids.");
     ";
+    echo $query;
     mysqli_query($db, $query);
 }
 
