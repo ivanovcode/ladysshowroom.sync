@@ -438,6 +438,10 @@ function read_size_sync($title){
 
 $GLOBALS['prefix'] = "IP";
 $GLOBALS['config'] = parse_ini_file('config.ini', true);
+
+sendTelegramMessage('-283140968', "Тестирование");
+die("Тестирование");
+
 $GLOBALS['db'] =  connect('development', $GLOBALS['config']);
 mysqli_select_db($GLOBALS['db'], $GLOBALS['config']['development']['dbname']);
 
