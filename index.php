@@ -357,7 +357,7 @@ function send_orders() {
         echo strval($id_product);
         if(!empty($row['number'])) {
             $message = "<b>По заказу на IamPijama.ru #".$number." поступила оплата в размере ".$row['price']." руб.</b>";
-            sendTelegramMessage('-283140968', $message);
+            sendTelegramMessage('-1001343327875', $message);
         } else {
             $error = "";
             $message = "<b>Новый заказ #".$row['id']." на IamPijama.ru!</b>";
@@ -368,7 +368,7 @@ function send_orders() {
                 if(!empty(strval($id_product))) { $message .= " \n "; $message .= "ID товара на сайте: <i>".strval($id_product)."</i>"; }
                 $error = "IP".$row['id']."-ОШИБКА"; //В случае ошибки проставлять номер что бы не повторять запрос
             }
-            sendTelegramMessage('-283140968', $message);
+            sendTelegramMessage('-1001343327875', $message);
         }
         $query = "
             INSERT IGNORE INTO `sync.orders` (`id_shopkeeper`, `number`, `last_response`, `last_request`, `is_complete`) VALUES ('".$row['id']."', ".(!empty($error)?'\''.$error.'\'':(!empty($number)?'\''.$number.'\'':'NULL')).", ".(empty($number)?'\''.$json.'\'':'NULL').", ".(!empty($request)?'\''.$request.'\'':'NULL').", ".(((mb_strtolower($row['payment'])=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными'))?'1':'0').") ON DUPLICATE KEY UPDATE `number` = ".(!empty($error)?'\''.$error.'\'':(!empty($number)?'\''.$number.'\'':'NULL')).", `last_response` = ".(empty($number)?'\''.$json.'\'':'NULL').", `last_request` = ".(!empty($request)?'\''.$request.'\'':'NULL').", `is_complete` = ".((mb_strtolower($row['payment'])=='карта' && strval($row['status'])=='6') || ($row['payment']=='Наличными')?'1':'0')."
@@ -438,9 +438,6 @@ function read_size_sync($title){
 
 $GLOBALS['prefix'] = "IP";
 $GLOBALS['config'] = parse_ini_file('config.ini', true);
-
-sendTelegramMessage('-283140968', "Тестирование");
-die("Тестирование");
 
 $GLOBALS['db'] =  connect('development', $GLOBALS['config']);
 mysqli_select_db($GLOBALS['db'], $GLOBALS['config']['development']['dbname']);
