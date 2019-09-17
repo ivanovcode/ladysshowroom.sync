@@ -92,7 +92,12 @@ function addStaff($db, $row){
     mysqli_query($db, $query);
     return mysqli_insert_id($db);
 }
-
+function showAllStaffs($db){
+    $query = "
+        UPDATE `1c_staffs` s SET s.delete = 0;
+    ";
+    mysqli_query($db, $query);
+}
 function deleteStaffs($db, $ids){
     $query = "
         UPDATE `1c_staffs` s SET s.delete = 1 WHERE s.id NOT IN (".implode(", ", $ids).");
@@ -166,6 +171,8 @@ foreach ($staffs as $key => $staff) {
     addStaff($db, $staff);
     array_push($staff_inserts, $staff['id']);
 }
+
+showAllStaffs($db);
 deleteStaffs($db, $staff_inserts);
 
 
