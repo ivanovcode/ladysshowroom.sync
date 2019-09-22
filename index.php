@@ -1,9 +1,6 @@
 <?php
 header('Access-Control-Allow-Origin: *');
-error_reporting(0);
-set_time_limit(0);
-ini_set("display_errors",1);
-error_reporting(E_ALL);
+error_reporting(E_ALL ^ E_NOTICE);
 
 function push($data, $name, $die=false, $clear=false, $msg=''){
     if ($clear) unlink($name.'.log');
@@ -263,7 +260,7 @@ echo "<table>";
     echo "<td>ID с Сайта</td>";
     echo "</tr>";
 foreach ($c1 as $key => $row) {
-    echo "<tr>";
+    echo "<tr style='".(!empty($ip[$row['id']]['modx'])?"background:lightgreen;":"")."'>";
     $i++;
     echo "<td>".$i."</td>";
     echo "<td>".$row['title']."</td>";
