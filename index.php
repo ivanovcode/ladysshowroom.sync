@@ -235,9 +235,11 @@ $rows = getQuantitiesFrom1C();
 $list = $rows['products'];
 $c1 = [];
 foreach ($list as $key => $item) {
-    $c1[$item['id']] = [];
-    $c1[$item['id']]['id'] = $item['id'];
-    $c1[$item['id']]['title'] = $item['title'];
+    if(strval($item['brand']['id'])=="2") {
+        $c1[$item['id']] = [];
+        $c1[$item['id']]['id'] = $item['id'];
+        $c1[$item['id']]['title'] = $item['title'];
+    }
 }
 
 
