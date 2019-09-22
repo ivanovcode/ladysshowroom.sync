@@ -167,10 +167,18 @@
         var $url = "http://cloud.itone.ru/LADYSSHOWROOM_UNF/hs/atnApi/";
         var $data;
         var $method;
+        var $params;
         function getList(){
+
+            if(!empty($this->params)) {
+                $params = '';
+                foreach($this->params as $key=>$value) $params .= $key.'='.$value.'&';
+                $params = trim($params, '&');
+            }
+
             $curl = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL => $this->url.$this->list,
+                CURLOPT_URL => $this->url.$this->list.(empty($this->method)&&!empty($params)?'?'.$params:''),
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "UTF-8",
                 CURLOPT_MAXREDIRS => 3,
@@ -219,6 +227,12 @@
         foreach($rows as $key => $row)   {
             setRow($db, current($list), $row);
         }
+
+        $request->params = array ('type' => 'CashMachines');
+        $rows = $request->getList();
+        print_r($rows);
+        die();
+
     }
 
 
@@ -264,10 +278,12 @@
 
     function setTills($db, $request, $list){
         $request->list = key($list);
+
         $rows = $request->getList();
         foreach($rows as $key => $row)   {
             setTill($db, current($list), $row);
         }
+
     }
     function setTill($db, $tbl, $row){
         $query = "
