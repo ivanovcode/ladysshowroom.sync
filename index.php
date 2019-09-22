@@ -228,6 +228,7 @@ $list = readList();
 $ip = [];
 foreach ($list as $key => $item) {
     $ip[$item['id_1C']] = [];
+    $ip[$item['id_1C']]['id'] = $item['id_1C'];
     $ip[$item['id_1C']]['title'] = $item['pagetitle'];
     $ip[$item['id_1C']]['modx'] = $item['id_modx'];
 }
@@ -238,6 +239,7 @@ $list = $rows['products'];
 $c1 = [];
 foreach ($list as $key => $item) {
     $c1[$item['id']] = [];
+    $c1[$item['id']]['id'] = $item['id'];
     $c1[$item['id']]['title'] = $item['title'];
 }
 
