@@ -113,6 +113,26 @@ function updatePJPrice($db, $id, $price){
     }
 }
 
+function updatePJOptPrice($db, $id, $price){
+    if(!empty($price)) {
+        $query = "
+            UPDATE modx_site_tmplvar_contentvalues modx
+            LEFT OUTER JOIN `sync.modx_site_content` sync 
+                ON modx.contentid = sync.id_modx AND modx.tmplvarid = 10
+            SET modx.`value` = '" . $price . "'
+            WHERE sync.id_1c = " . $id . ";
+        ";
+        $result = mysqli_query($db, $query);
+        $info = mysqli_info($db);
+        preg_match('/^\D+(\d+)\D+(\d+)\D+(\d+)$/', $info, $matches);
+        $_matches = [];
+        $_matches['matched'] = $matches[1];
+        $_matches['changed'] = $matches[2];
+        $_matches['warnings'] = $matches[3];
+        return $_matches;
+    }
+}
+
 function updatePJArticle($db, $id, $article){
     $query = "
         UPDATE modx_site_tmplvar_contentvalues modx
@@ -216,6 +236,7 @@ echo "id: ".$product['id']." ";
 
         updatePJPrice($db, $product['id'], $product['price'][0]['retail']);
         updatePJTitle($db, $product['id'], $product['title']);
+        updatePJOptPrice($db, $product['id'], $product['price'][0]['retail']);
     }
     if(!empty($product['article']))  {
         updatePJArticle($db, $product['id'], $product['article']);
