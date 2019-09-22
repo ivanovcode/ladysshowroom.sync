@@ -212,7 +212,9 @@ echo "id: ".$product['id']." ";
         $results = updatePJQuantity($db, $product['id'], implode ("||", $_sizes));
         array_push($_results, $results);
         enablePJProduct($db, $product['id']);
-        updatePJPrice($db, $product['id'], $product['price']['retail']);
+        print_r($product);
+
+        //updatePJPrice($db, $product['id'], $product['price']['retail']);
         updatePJTitle($db, $product['id'], $product['title']);
     }
     if(!empty($product['article']))  {
