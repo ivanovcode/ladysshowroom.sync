@@ -268,7 +268,7 @@ foreach ($c1 as $key => $row) {
     echo "<td>".$i."</td>";
     echo "<td>".$row['title']."</td>";
     echo "<td>".$row['id']."</td>";
-    echo "<td>".$ip[$row['id']]."</td>";
+    echo "<td>".$ip[$row['id']]['modx']."</td>";
     echo "</tr>";
 }
 echo "</table>";
