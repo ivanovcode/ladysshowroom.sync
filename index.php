@@ -227,12 +227,6 @@
         foreach($rows as $key => $row)   {
             setRow($db, current($list), $row);
         }
-
-        $request->params = array ('type' => 'CashMachines');
-        $rows = $request->getList();
-        print_r($rows);
-        die();
-
     }
 
 
@@ -283,6 +277,11 @@
         foreach($rows as $key => $row)   {
             setTill($db, current($list), $row);
         }
+
+        $request->params = array ('type' => 'CashMachines');
+        $rows = $request->getList();
+        print_r($rows);
+        die();
 
     }
     function setTill($db, $tbl, $row){
