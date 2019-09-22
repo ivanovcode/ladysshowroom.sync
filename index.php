@@ -224,7 +224,24 @@ $config = parse_ini_file('config.ini', true);
 $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
 
-$rows = readList();
+$list = readList();
+$ip = [];
+foreach ($list as $key => $item) {
+    $ip[$item['id_1C']] = [];
+    $ip[$item['id_1C']]['title'] = $item['pagetitle'];
+    $ip[$item['id_1C']]['modx'] = $item['id_modx'];
+}
+
+
+$rows = getQuantitiesFrom1C();
+$list = $rows['products'];
+$c1 = [];
+foreach ($list as $key => $item) {
+    $c1[$item['id']] = [];
+    $c1[$item['id']]['title'] = $item['title'];
+}
+
+
 $i=0;
 echo "
 <!DOCTYPE html>
@@ -243,13 +260,13 @@ echo "<table>";
     echo "<td>ID из 1C</td>";
     echo "<td>ID с Сайта</td>";
     echo "</tr>";
-foreach ($rows as $key => $row) {
+foreach ($c1 as $key => $row) {
     echo "<tr>";
     $i++;
     echo "<td>".$i."</td>";
-    echo "<td>".$row['pagetitle']."</td>";
-    echo "<td>".$row['id_1C']."</td>";
-    echo "<td>".$row['id_modx']."</td>";
+    echo "<td>".$row['title']."</td>";
+    echo "<td>".$row['id']."</td>";
+    echo "<td>".$ip[$row['id']]."</td>";
     echo "</tr>";
 }
 echo "</table>";
