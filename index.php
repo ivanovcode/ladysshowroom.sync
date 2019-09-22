@@ -237,6 +237,12 @@ echo "
 <body>";
 
 echo "<table>";
+    echo "<tr>";
+    echo "<td>№</td>";
+    echo "<td>Название</td>";
+    echo "<td>ID из 1C</td>";
+    echo "<td>ID с Сайта</td>";
+    echo "</tr>";
 foreach ($rows as $key => $row) {
     echo "<tr>";
     $i++;
