@@ -72,6 +72,39 @@ function updatePJQuantity($db, $id, $quantities){
     $_matches['matched'] = $matches[1]; $_matches['changed'] = $matches[2]; $_matches['warnings'] = $matches[3];
     return $_matches;
 }
+
+function updatePJTitle($db, $id, $value){
+    $query = "
+        UPDATE modx_site_content modx
+        LEFT OUTER JOIN `sync.modx_site_content` sync 
+            ON modx.id = sync.id_modx 
+        SET modx.`pagetitle` = '".$value."'
+        WHERE sync.id_1c = ".$id.";
+    ";
+    $result = mysqli_query($db, $query);
+    $info = mysqli_info($db);
+    preg_match('/^\D+(\d+)\D+(\d+)\D+(\d+)$/',$info,$matches);
+    $_matches = [];
+    $_matches['matched'] = $matches[1]; $_matches['changed'] = $matches[2]; $_matches['warnings'] = $matches[3];
+    return $_matches;
+}
+
+function updatePJPrice($db, $id, $price){
+    $query = "
+        UPDATE modx_site_tmplvar_contentvalues modx
+        LEFT OUTER JOIN `sync.modx_site_content` sync 
+            ON modx.contentid = sync.id_modx AND modx.tmplvarid = 9
+        SET modx.`value` = '".$price."'
+        WHERE sync.id_1c = ".$id.";
+    ";
+    $result = mysqli_query($db, $query);
+    $info = mysqli_info($db);
+    preg_match('/^\D+(\d+)\D+(\d+)\D+(\d+)$/',$info,$matches);
+    $_matches = [];
+    $_matches['matched'] = $matches[1]; $_matches['changed'] = $matches[2]; $_matches['warnings'] = $matches[3];
+    return $_matches;
+}
+
 function updatePJArticle($db, $id, $article){
     $query = "
         UPDATE modx_site_tmplvar_contentvalues modx
@@ -171,6 +204,8 @@ echo "id: ".$product['id']." ";
         $results = updatePJQuantity($db, $product['id'], implode ("||", $_sizes));
         array_push($_results, $results);
         enablePJProduct($db, $product['id']);
+        updatePJPrice($db, $product['id'], $product['price']['retail']);
+        updatePJTitle($db, $product['id'], $product['title']);
     }
     if(!empty($product['article']))  {
         updatePJArticle($db, $product['id'], $product['article']);
