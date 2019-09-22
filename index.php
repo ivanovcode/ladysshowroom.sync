@@ -206,75 +206,38 @@ function getQuantitiesFrom1C(){
     return json_decode($data, true);
 }
 
+
+function readList(){
+    $query = "
+        SELECT
+        content.pagetitle,
+        sync.id_1C,
+        sync.id_modx
+        FROM `sync.modx_site_content` as sync
+        LEFT JOIN modx_site_content as content ON content.id = sync.id_modx
+    ";
+    $rows = mysqli_query($GLOBALS['db'], $query);
+    if(!$rows) push('readList(): no records', 'error');
+    return mysqli_fetch_all($rows,MYSQLI_ASSOC);
+}
+
 $config = parse_ini_file('config.ini', true);
 $db =  connect('development', $config);
 mysqli_select_db($db, $config['development']['dbname']);
-disablePJAllProducts($db);
-$rows = getQuantitiesFrom1C();
-$products = $rows['products'];
-$_results = [];
-$showroom_id = '5';
-foreach ($products as $product_key => $product) {
-echo "id: ".$product['id']." ";  
-  $_sizes = [];
-    $sizes = $product['sizes'][0]['values'];
-    foreach ($sizes as $size_key => $size) {
-        $_size = $size['onhand'];
-        /* filter showroom */
-        $_size = array_filter($_size, function ($var) use ($showroom_id) {
-            return ($var['warehouse_id'] == $showroom_id);
-        });
-        $qty = array_sum(array_column($_size, 'qty'));
-        if($qty>0) array_push($_sizes, $size['title']."::".$qty);
-    }
-    if(!empty($product['id']) && !empty($_sizes)) {
-        echo implode ("||", $_sizes)."\n";
-        $results = updatePJQuantity($db, $product['id'], implode ("||", $_sizes));
-        array_push($_results, $results);
-        enablePJProduct($db, $product['id']);
-        //print_r($product);
 
-        updatePJPrice($db, $product['id'], $product['price'][0]['retail']);
-        updatePJTitle($db, $product['id'], $product['title']);
-        updatePJOptPrice($db, $product['id'], $product['price'][0]['retail']);
-    }
-    if(!empty($product['article']))  {
-        updatePJArticle($db, $product['id'], $product['article']);
-    }
-    unset($_sizes);
+$rows = readList();
+$i=0;
+echo "<table>";
+foreach ($rows as $key => $row) {
+    echo "<tr>";
+    $i++;
+    echo "<td>".$i."</td>";
+    echo "<td>".$row['pagetitle']."</td>";
+    echo "<td>".$row['id_1C']."</td>";
+    echo "<td>".$row['id_modx']."</td>";
+    echo "</tr>";
 }
-
-
-/*$message  = 'Результат обновления сайта iampijama.ru с 1С:';
-$message .= " \n ";
-$message .= '✔ Всего записей: <b>'.array_sum(array_column($_results, 'matched')).'</b>  🔃 Обновлено: <b>'.array_sum(array_column($_results, 'changed')).'</b>  ✖ Ошибки: <b>'.array_sum(array_column($_results, 'warnings')).'</b>';
-sendTelegramMessage('-283140968', $message);*/
-
-/*$message = '⚠ <b>Тестирование уведомлений!</b> В синхронизации <i>1С и iampijama.ru</i> обнаружена ошибка.';
-sendTelegramMessage('-283140968', $message);*/
+echo "</table>";
 
 disconnect($db);
-/*$response = [];l
-echo json_encode($response, JSON_UNESCAPED_UNICODE );sd*/
-
-
-
-/*$rows = array_map('str_getcsv', file('1C.iampijama.csv'));
-foreach ($rows as $key => $row) {
-    addSync($db, $row);
-}*/
-
-/*$file = fopen("iampijama.csv","w");
-$products = $rows['products'];
-foreach ($products as $key => $product) {
-    $_product = [];
-    $_product['id'] = $product['id'];
-    $_product['title'] = $product['title'];
-    $_product['article'] = $product['article'];
-    if($product['brand'][0]['id']=='2') {
-        fputcsv($file, $_product);
-    }
-}
-fclose($file);
-die();*/
 ?>
