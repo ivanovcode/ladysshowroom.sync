@@ -267,7 +267,7 @@ echo "</tr>";
     echo "<td>Название товара на Сайте</td>";
     echo "</tr>";
 foreach ($c1 as $key => $row) {
-    echo "<tr style='".(!empty($ip[$row['id']]['modx']) && !empty($ip[$row['id']]['title'])?"background:lightgreen;":(!empty($ip[$row['id']]['modx'])?"background:lightred;":""))."'>";
+    echo "<tr style='".(!empty($ip[$row['id']]['modx']) && !empty($ip[$row['id']]['title'])?"background:lightgreen;":(!empty($ip[$row['id']]['modx'])?"background:lightpink;":""))."'>";
     $i++;
     echo "<td>".$i."</td>";
     echo "<td>".$row['title']."</td>";
