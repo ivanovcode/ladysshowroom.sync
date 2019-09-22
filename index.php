@@ -227,6 +227,16 @@ mysqli_select_db($db, $config['development']['dbname']);
 
 $rows = readList();
 $i=0;
+echo "
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hello, world</title>
+</head>
+
+<body>";
+
 echo "<table>";
 foreach ($rows as $key => $row) {
     echo "<tr>";
@@ -238,6 +248,11 @@ foreach ($rows as $key => $row) {
     echo "</tr>";
 }
 echo "</table>";
+
+echo "
+</body>
+
+</html>";
 
 disconnect($db);
 ?>
