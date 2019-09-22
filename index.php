@@ -275,13 +275,16 @@
 
         $rows = $request->getList();
         foreach($rows as $key => $row)   {
+            $row['type'] = 'CashRegisters';
             setTill($db, current($list), $row);
         }
 
         $request->params = array ('type' => 'CashMachines');
         $rows = $request->getList();
-        print_r($rows);
-        die();
+        foreach($rows as $key => $row)   {
+            $row['type'] = 'CashMachines';
+            setTill($db, current($list), $row);
+        }
 
     }
     function setTill($db, $tbl, $row){
@@ -290,11 +293,12 @@
                 (
                     `id` ,
                     `name` ,
-                    `amount`
+                    `amount`,
+                    `type`
                 )
                 VALUES
-                ('".$row['id']."' ,  '".$row['name']."',  '".(!empty($row['balance'])?$row['balance']:0)."')
-                ON DUPLICATE KEY UPDATE `name` = '".$row['name']."',  `amount` = '".(!empty($row['balance'])?$row['balance']:0)."';
+                ('".$row['id']."' ,  '".$row['name']."',  '".(!empty($row['balance'])?$row['balance']:0)."',  ".(!empty($row['type'])?'\''.$row['type'].'\'':'NULL').")
+                ON DUPLICATE KEY UPDATE `name` = '".$row['name']."',  `amount` = '".(!empty($row['balance'])?$row['balance']:0)."',  `type` = ".(!empty($row['type'])?'\''.$row['type'].'\'':'NULL').";
             ";
         mysqli_query($db, $query);
         return mysqli_insert_id($db);
