@@ -98,8 +98,8 @@
             LEFT JOIN `1c_tills` t ON t.id = tw.id_1c_till
             LEFT JOIN `1c_staffs.staffs` ss ON ss.id_staff = f.staff_id
             LEFT JOIN `1c_cash.wallets` cwa ON cwa.id_wallet = f.wallet
-            WHERE f.category REGEXP '^[0-9]+$' AND f.full > 0 AND f.created >= '2019-02-15T17:32:50' AND f.amount <= w.balance
-            AND r.id_request IS NULL
+            WHERE f.category REGEXP '^[0-9]+$' AND f.full > 0 AND f.created >= '2019-07-03T00:00:00' AND f.amount <= w.balance
+            AND r.id_finance IS NULL
             ORDER BY f.created ASC
         ";
         $rows = mysqli_query($db, $query);
