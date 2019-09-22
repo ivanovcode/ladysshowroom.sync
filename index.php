@@ -1,6 +1,5 @@
 <?php
 header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json; charset=utf-8');
 error_reporting(0);
 set_time_limit(0);
 ini_set("display_errors",1);
@@ -232,7 +231,7 @@ echo "
 <html>
 
 <head>
-    <title>Hello, world</title>
+    <title>Список товаров Сайта и 1С</title>
 </head>
 
 <body>";
