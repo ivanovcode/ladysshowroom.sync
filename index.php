@@ -364,7 +364,7 @@
             LEFT JOIN `1c_cash` ca ON ca.id_staff = cw.id_1c_staff
             LEFT JOIN `1c_staffs` st ON st.id = cw.id_1c_staff
             SET w.title = CASE WHEN t.id IS NULL THEN CONCAT('Наличные ', st.firstname) ELSE t.`name` END, w.balance = CASE WHEN t.id IS NULL THEN ca.remained ELSE t.amount END
-            WHERE (tw.`update` = 1 OR cw.`update` = 1) AND (ca.remained IS NOT NULL OR t.amount IS NOT NULL)
+            WHERE t.type = 'CashRegisters' AND (tw.`update` = 1 OR cw.`update` = 1) AND (ca.remained IS NOT NULL OR t.amount IS NOT NULL)
         ";
         mysqli_query($db, $q);
     }
