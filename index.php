@@ -29,6 +29,7 @@ function disconnect($db){
     mysqli_close($db);
 }
 
+//curl -X POST "https://api.telegram.org/bot735731689:AAHEZzTKNBUJcURAxOtG6ikj6kNwc7h064c/sendMessage" -d "chat_id=-1001343327875&text=my sample text"
 function sendTelegramMessage($chat_id=NULL, $message=NULL) {
     if (!empty($chat_id) && !empty($message)) {
         $response = [];
@@ -293,7 +294,8 @@ function get_json_orders($row){
             'delivery'=>$delivery,
             'client'=>$client,
             'staff'=>$staff,
-            'payments'=>$payments
+            'payments'=>$payments,
+            'roleid'=>'37'
         )));
     } else { // Заказ отправляется впервые
         $response['orders'] = array($GLOBALS['prefix'].$row['id']=>get_json_order(array(
@@ -306,7 +308,8 @@ function get_json_orders($row){
             'delivery'=>$delivery,
             'client'=>$client,
             'staff'=>$staff,
-            'payments'=>$payments
+            'payments'=>$payments,
+            'roleid'=>'37'
         )));
     }
 
