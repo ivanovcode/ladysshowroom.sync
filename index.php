@@ -279,12 +279,12 @@
             setTill($db, current($list), $row);
         }
 
-        $request->params = array ('type' => 'CashMachines');
+        /*$request->params = array ('type' => 'CashMachines');
         $rows = $request->getList();
         foreach($rows as $key => $row)   {
             $row['type'] = 'CashMachines';
             setTill($db, current($list), $row);
-        }
+        }*/
 
     }
     function setTill($db, $tbl, $row){
