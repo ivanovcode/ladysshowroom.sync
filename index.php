@@ -65,6 +65,8 @@ function updatePJQuantity($db, $id, $quantities){
         SET modx.`value` = '".$quantities."'
         WHERE sync.id_1c = ".$id.";
     ";
+    echo $query;
+    die();
     $result = mysqli_query($db, $query);
     $info = mysqli_info($db);
     preg_match('/^\D+(\d+)\D+(\d+)\D+(\d+)$/',$info,$matches);
