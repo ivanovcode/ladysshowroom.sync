@@ -233,10 +233,10 @@ mysqli_select_db($db, $config['development']['dbname']);
 $list = readList();
 $ip = [];
 foreach ($list as $key => $item) {
-    $ip[$item['id_1C']] = [];
-    $ip[$item['id_1C']]['id'] = $item['id_1C'];
-    $ip[$item['id_1C']]['title'] = $item['pagetitle'];
-    $ip[$item['id_1C']]['modx'] = $item['id_modx'];
+    $ip[$item['id_modx']] = [];
+    $ip[$item['id_modx']]['id'] = $item['id_modx'];
+    $ip[$item['id_modx']]['title'] = $item['pagetitle'];
+    $ip[$item['id_modx']]['1c'] = $item['id_1C'];
 }
 
 
@@ -244,11 +244,11 @@ $rows = getQuantitiesFrom1C();
 $list = $rows['products'];
 $c1 = [];
 foreach ($list as $key => $item) {
-    if(strval($item['brand'][0]['id'])=="2") {
+
         $c1[$item['id']] = [];
         $c1[$item['id']]['id'] = $item['id'];
         $c1[$item['id']]['title'] = $item['title'];
-    }
+
 }
 
 
@@ -262,9 +262,8 @@ echo "
 </head>
 
 <body>";
-echo "<p>Зеленый - <i>есть в 1С в таблице соответствия и на Сайте есть товар.</i></p>";
-echo "<p>Красный - <i>есть в 1С в таблице соответствия но нет на Сайте самого товара.</i></p>";
-echo "<p>Белый - <i>есть в 1С но нет в таблице соответствия.</i></p>";
+echo "<p>Зеленый - <i>есть  на сайте и есть в таблице соответствия.</i></p>";
+echo "<p>Белый - <i>есть на сайте но нет в таблице соответствия.</i></p>";
 
 echo "<table>";
 echo "<tr style='background:lightgray;font-weight: bold'>";
@@ -281,7 +280,7 @@ echo "</tr>";
     echo "<td>Название товара на Сайте</td>";
     echo "</tr>";
 foreach ($c1 as $key => $row) {
-    echo "<tr style='".(!empty($ip[$row['id']]['modx']) && !empty($ip[$row['id']]['title'])?"background:lightgreen;":(!empty($ip[$row['id']]['modx'])?"background:lightpink;":""))."'>";
+    echo "<tr style='".(!empty($ip[$row['id']]['1c']) && !empty($ip[$row['id']]['id'])?"background:lightgreen;":"background:lightpink;")."'>";
     $i++;
     echo "<td>".$i."</td>";
     echo "<td>".$row['title']."</td>";
