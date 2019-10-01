@@ -204,13 +204,22 @@ function getQuantitiesFrom1C(){
 
 
 function readList(){
+    mysqli_query($GLOBALS['db'], "SET sql_mode = '';");
     $query = "
         SELECT
-        content.pagetitle,
-        sync.id_1C,
-        sync.id_modx
-        FROM `sync.modx_site_content` as sync
-        LEFT JOIN modx_site_content as content ON content.id = sync.id_modx
+        msc.pagetitle,
+        msc.id as id_modx,
+        sync.id_1C
+        FROM modx_site_content as msc
+        LEFT JOIN (
+            SELECT
+            GROUP_CONCAT(msc.id SEPARATOR ', ') as list
+            FROM modx_site_content as msc
+            WHERE
+            msc.parent = 2
+            GROUP BY msc.parent
+        ) g ON msc.parent IN (g.list)
+        LEFT JOIN `sync.modx_site_content` as sync ON sync.id_modx = msc.id
     ";
     $rows = mysqli_query($GLOBALS['db'], $query);
     if(!$rows) push('readList(): no records', 'error');
