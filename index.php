@@ -260,6 +260,7 @@ echo "<td>Таблица соответствия</td>";
 echo "</tr>";
 
     echo "<tr style='background:lightgray;font-weight: bold'>";
+    echo "<td></td>";
     echo "<td>ID</td>";
     echo "<td>Название</td>";
     echo "<td>ID из 1C</td>";
@@ -267,6 +268,7 @@ echo "</tr>";
 foreach ($ip as $key => $row) {
     echo "<tr style='".(!empty($ip[$row['id']]['1c'])?"background:lightgreen;":"background:lightpink;")."'>";
     $i++;
+    echo "<td>".$i."</td>";
     echo "<td>".$row['id']."</td>";
     echo "<td>".$row['title']."</td>";
     echo "<td>".$ip[$row['id']]['1c']."</td>";
