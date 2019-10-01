@@ -220,6 +220,7 @@ function readList(){
             GROUP BY msc.parent
         ) g ON msc.parent IN (g.list)
         LEFT JOIN `sync.modx_site_content` as sync ON sync.id_modx = msc.id
+        WHERE g.list IS NULL
     ";
     $rows = mysqli_query($GLOBALS['db'], $query);
     if(!$rows) push('readList(): no records', 'error');
