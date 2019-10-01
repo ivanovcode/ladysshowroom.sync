@@ -255,7 +255,7 @@ echo "<p>Красный - <i>есть на сайте но нет в табли�
 
 echo "<table>";
 echo "<tr style='background:lightgray;font-weight: bold'>";
-echo "<td rowspan='2'>#</td>";
+
 echo "<td colspan='2'>Сайт</td>";
 echo "<td>Таблица соответствия</td>";
 echo "</tr>";
@@ -268,7 +268,7 @@ echo "</tr>";
 foreach ($ip as $key => $row) {
     echo "<tr style='".(!empty($ip[$row['id']]['1c'])?"background:lightgreen;":"background:lightpink;")."'>";
     $i++;
-    echo "<td>".$i."</td>";
+
     echo "<td>".$row['id']."</td>";
     echo "<td>".$row['title']."</td>";
     echo "<td>".$ip[$row['id']]['1c']."</td>";
