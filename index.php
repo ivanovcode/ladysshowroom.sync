@@ -264,7 +264,7 @@ echo "</tr>";
     echo "<td>Название</td>";
     echo "<td>ID из 1C</td>";
     echo "</tr>";
-foreach ($list as $key => $row) {
+foreach ($ip as $key => $row) {
     echo "<tr style='".(!empty($ip[$row['id']]['1c'])?"background:lightgreen;":"background:lightpink;")."'>";
     $i++;
     echo "<td>".$row['id']."</td>";
