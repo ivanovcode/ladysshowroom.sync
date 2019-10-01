@@ -210,17 +210,10 @@ function readList(){
         msc.pagetitle,
         msc.id as id_modx,
         sync.id_1C
-        FROM modx_site_content as msc
-        LEFT JOIN (
-            SELECT
-            GROUP_CONCAT(msc.id SEPARATOR ', ') as list
-            FROM modx_site_content as msc
-            WHERE
-            msc.parent = 2
-            GROUP BY msc.parent
-        ) g ON msc.parent IN (g.list)
+        FROM
+        modx_site_content as msc
         LEFT JOIN `sync.modx_site_content` as sync ON sync.id_modx = msc.id
-        WHERE g.list IS NULL
+        WHERE msc.parent IN ('11','12','13','14','203','361','455')
     ";
     $rows = mysqli_query($GLOBALS['db'], $query);
     if(!$rows) push('readList(): no records', 'error');
