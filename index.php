@@ -255,12 +255,12 @@ echo "<p>Белый - <i>есть на сайте но нет в таблице 
 
 echo "<table>";
 echo "<tr style='background:lightgray;font-weight: bold'>";
+echo "<td rowspan='2'>#</td>";
 echo "<td colspan='2'>Сайт</td>";
 echo "<td>Таблица соответствия</td>";
 echo "</tr>";
 
     echo "<tr style='background:lightgray;font-weight: bold'>";
-    echo "<td></td>";
     echo "<td>ID</td>";
     echo "<td>Название</td>";
     echo "<td>ID из 1C</td>";
