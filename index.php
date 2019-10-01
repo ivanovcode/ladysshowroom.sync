@@ -234,7 +234,7 @@ echo "id: ".$product['id']." ";
         enablePJProduct($db, $product['id']);
         //print_r($product);
 
-        updatePJPrice($db, $product['id'], $product['price'][0]['oldprice']);
+        updatePJPrice($db, $product['id'], $product['price'][0]['retail']);
         updatePJTitle($db, $product['id'], $product['title']);
         updatePJOptPrice($db, $product['id'], $product['price'][0]['oldprice']);
     }
