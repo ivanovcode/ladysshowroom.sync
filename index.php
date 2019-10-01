@@ -240,19 +240,6 @@ foreach ($list as $key => $item) {
 }
 
 
-$rows = getQuantitiesFrom1C();
-$list = $rows['products'];
-$c1 = [];
-foreach ($list as $key => $item) {
-
-        $c1[$item['id']] = [];
-        $c1[$item['id']]['id'] = $item['id'];
-        $c1[$item['id']]['title'] = $item['title'];
-        $c1[$item['id']]['1c'] = $item['1c'];
-
-}
-
-
 $i=0;
 echo "
 <!DOCTYPE html>
@@ -268,21 +255,18 @@ echo "<p>Белый - <i>есть на сайте но нет в таблице 
 
 echo "<table>";
 echo "<tr style='background:lightgray;font-weight: bold'>";
-echo "<td rowspan='2'>#</td>";
 echo "<td colspan='2'>Сайт</td>";
 echo "<td>Таблица соответствия</td>";
 echo "</tr>";
 
     echo "<tr style='background:lightgray;font-weight: bold'>";
-    echo "<td></td>";
     echo "<td>ID</td>";
     echo "<td>Название</td>";
     echo "<td>ID из 1C</td>";
     echo "</tr>";
-foreach ($c1 as $key => $row) {
+foreach ($list as $key => $row) {
     echo "<tr style='".(!empty($ip[$row['id']]['1c'])?"background:lightgreen;":"background:lightpink;")."'>";
     $i++;
-    echo "<td>".$i."</td>";
     echo "<td>".$row['id']."</td>";
     echo "<td>".$row['title']."</td>";
     echo "<td>".$ip[$row['id']]['1c']."</td>";
