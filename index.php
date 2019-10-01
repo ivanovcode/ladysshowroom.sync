@@ -248,6 +248,7 @@ foreach ($list as $key => $item) {
         $c1[$item['id']] = [];
         $c1[$item['id']]['id'] = $item['id'];
         $c1[$item['id']]['title'] = $item['title'];
+        $c1[$item['id']]['1c'] = $item['1c'];
 
 }
 
@@ -279,7 +280,7 @@ echo "</tr>";
     echo "<td>ID из 1C</td>";
     echo "</tr>";
 foreach ($c1 as $key => $row) {
-    echo "<tr style='".(!empty($ip[$row['id']]['1c']) && !empty($ip[$row['id']]['id'])?"background:lightgreen;":"background:lightpink;")."'>";
+    echo "<tr style='".(!empty($ip[$row['id']]['1c'])?"background:lightgreen;":"background:lightpink;")."'>";
     $i++;
     echo "<td>".$i."</td>";
     echo "<td>".$row['id']."</td>";
