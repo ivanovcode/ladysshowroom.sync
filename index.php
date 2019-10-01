@@ -262,31 +262,29 @@ echo "
 </head>
 
 <body>";
-echo "<p>Зеленый - <i>есть  на сайте и есть в таблице соответствия.</i></p>";
+echo "<p>Зеленый - <i>есть  на сайте и есть в таблице соответствия</i></p>";
 echo "<p>Белый - <i>есть на сайте но нет в таблице соответствия.</i></p>";
 
 echo "<table>";
 echo "<tr style='background:lightgray;font-weight: bold'>";
-echo "<td colspan='2'>1C</td>";
-echo "<td colspan='2'>Таблица соответствия</td>";
-echo "<td colspan='1'>Сайт</td>";
+echo "<td rowspan='2'>#</td>";
+echo "<td colspan='2'>Сайт</td>";
+echo "<td>Таблица соответствия</td>";
 echo "</tr>";
 
     echo "<tr style='background:lightgray;font-weight: bold'>";
-    echo "<td>№</td>";
+    echo "<td></td>";
+    echo "<td>ID</td>";
     echo "<td>Название</td>";
     echo "<td>ID из 1C</td>";
-    echo "<td>ID с Сайта</td>";
-    echo "<td>Название товара на Сайте</td>";
     echo "</tr>";
 foreach ($c1 as $key => $row) {
     echo "<tr style='".(!empty($ip[$row['id']]['1c']) && !empty($ip[$row['id']]['id'])?"background:lightgreen;":"background:lightpink;")."'>";
     $i++;
     echo "<td>".$i."</td>";
-    echo "<td>".$row['title']."</td>";
     echo "<td>".$row['id']."</td>";
-    echo "<td>".$ip[$row['id']]['modx']."</td>";
-    echo "<td>".$ip[$row['id']]['title']."</td>";
+    echo "<td>".$row['title']."</td>";
+    echo "<td>".$ip[$row['id']]['1c']."</td>";
     echo "</tr>";
 }
 echo "</table>";
